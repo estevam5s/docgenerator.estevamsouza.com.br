@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocGen Pro</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --dark-bg: #030712;
+            --card-bg: #111827;
+            --text-color: #e2e8f0;
+            --accent-color: #22d3ee;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: var(--dark-bg);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 2rem;
+            background: linear-gradient(135deg, #030712 0%, #1e1b4b 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+            filter: blur(20px);
+            opacity: 0.15;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .required::after {
+            content: '*';
+            color: var(--error-color);
+            margin-left: 4px;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+            line-height: 1.4;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+        }
+
+        .image-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload:hover {
+            border-color: var(--accent-color);
+        }
+
+        .image-preview {
+            max-width: 200px;
+            margin: 1rem auto;
+            display: none;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .preview-container {
+            background: var(--card-bg);
+            padding: 3rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .preview-content {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .preview-content h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .preview-content h2 {
+            color: var(--accent-color);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.5rem;
+        }
+
+        .preview-content img {
+            display: block;
+            margin: 2rem auto;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-content ul {
+            list-style-type: none;
+            padding-left: 1.5rem;
+        }
+
+        .preview-content li {
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-content li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: -1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .preview-container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="glow"></div>
+            <div class="logo">📚</div>
+            <h1>DocGen Pro</h1>
+            <p class="subtitle">Create stunning project documentation in minutes</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-info-circle"></i>
+                    Project Basics
+                </div>
+                
+                <div class="form-group">
+                    <label for="projectImage" class="required">Project Logo/Image</label>
+                    <div class="image-upload" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                        <p>Click to upload project image</p>
+                        <input type="file" id="imageInput" accept="image/*" style="display: none" onchange="handleImageUpload(event)">
+                    </div>
+                    <img id="imagePreview" class="image-preview">
+                    <p class="help-text">Upload a logo or representative image for your project (recommended: 240x240px)</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="projectTitle" class="required">Project Title</label>
+                    <input type="text" id="projectTitle" name="projectTitle" placeholder="e.g., Awesome Project Name">
+                    <p class="help-text">Choose a memorable and descriptive name for your project</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description" class="required">Description</label>
+                    <textarea id="description" name="description" placeholder="e.g., A powerful web application that helps developers..."></textarea>
+                    <p class="help-text">Provide a clear, concise overview of what your project does and why it's useful</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-list-check"></i>
+                    Features & Technical Details
+                </div>
+                
+                <div class="form-group">
+                    <label for="features">Features</label>
+                    <textarea id="features" name="features" placeholder="- User authentication with JWT&#10;- Real-time data synchronization&#10;- Responsive design for all devices"></textarea>
+                    <p class="help-text">List the key features of your project using bullet points (-)</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="concepts">Technical Concepts</label>
+                    <textarea id="concepts" name="concepts" placeholder="- RESTful API architecture&#10;- MVC design pattern&#10;- Microservices architecture"></textarea>
+                    <p class="help-text">Outline the main technical concepts, patterns, or methodologies used</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-code"></i>
+                    Setup & Technologies
+                </div>
+                
+                <div class="form-group">
+                    <label for="installation" class="required">Installation Guide</label>
+                    <textarea id="installation" name="installation" placeholder="1. Clone the repository&#10;2. Install dependencies: `npm install`&#10;3. Configure environment variables&#10;4. Run the application: `npm start`"></textarea>
+                    <p class="help-text">Provide clear step-by-step instructions for setting up the project</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="technologies" class="required">Technologies</label>
+                    <textarea id="technologies" name="technologies" placeholder="- Frontend: React, Redux, Tailwind CSS&#10;- Backend: Node.js, Express&#10;- Database: MongoDB&#10;- Testing: Jest, Cypress"></textarea>
+                    <p class="help-text">List all major technologies, frameworks, and tools used</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-user-shield"></i>
+                    License & Attribution
+                </div>
+                
+                <div class="form-group">
+                    <label for="license">License</label>
+                    <textarea id="license" name="license" placeholder="MIT License&#10;Copyright (c) 2024 Your Name"></textarea>
+                    <p class="help-text">Specify the license type and any copyright information</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="authorName" class="required">Author Name</label>
+                    <input type="text" id="authorName" name="authorName" placeholder="Your Name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="authorLink">Author Link</label>
+                    <input type="text" id="authorLink" name="authorLink" placeholder="https://github.com/yourusername">
+                    <p class="help-text">Link to your GitHub profile or personal website</p>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button onclick="previewMarkdown()">
+                    <i class="fas fa-eye"></i> Preview
+                </button>
+                <button onclick="downloadMarkdown()">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+        
+        <div id="preview" class="preview-container">
+            <div class="preview-content"></div>
+        </div>
+    </div>
+
+    <script>
+        let projectImage = null;
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    projectImage = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = projectImage;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function convertMarkdownToHTML(markdown) {
+            let html = markdown
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/^\s*[-*+]\s+(.*)/gm, '<li>$1</li>')
+                .replace(/\n\n/g, '<br><br>');
+
+            // Wrap lists in ul tags
+            html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>reader.rea</ul>');
+            
+            return html;
+        }
+
+        function generateMarkdown() {
+            const formData = {
+                projectTitle: document.getElementById('projectTitle').value || 'Project Title',
+                description: document.getElementById('description').value || 'Project description goes here',
+                features: document.getElementById('features').value || 'List of features',
+                concepts: document.getElementById('concepts').value || 'Technical concepts used',
+                installation: document.getElementById('installation').value || 'Installation steps',
+                technologies: document.getElementById('technologies').value || 'Technologies used',
+                license: document.getElementById('license').value || 'License information',
+                authorName: document.getElementById('authorName').value || 'Author Name',
+                authorLink: document.getElementById('authorLink').value || '#'
+            };
+
+            return `# ${formData.projectTitle}
+
+<div align="center">
+    ${projectImage ? `<img src="${projectImage}" alt="Project Logo" width="240">` : '<img src="https://via.placeholder.com/240" alt="Project Logo" width="240">'}
+</div>
+
+## About
+${formData.description}
+
+## Features
+${formData.features}
+
+## Technical Concepts
+${formData.concepts}
+
+## Installation
+${formData.installation}
+
+## Technologies
+${formData.technologies}
+
+## License
+${formData.license}
+
+Made with 💜 by [${formData.authorName}](${formData.authorLink}) 🚀`;
+        }
+
+        function previewMarkdown() {
+            const preview = document.getElementById('preview');
+            const previewContent = preview.querySelector('.preview-content');
+            preview.style.display = 'block';
+            const markdown = generateMarkdown();
+            previewContent.innerHTML = convertMarkdownToHTML(markdown);
+            preview.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadMarkdown() {
+            const markdown = generateMarkdown();
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'README.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
