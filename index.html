@@ -3,259 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocGen Pro - Gerador de Documentação</title>
+    <title>DocGen Pro 3.0 - Gerador de Documentação Profissional</title>
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #6366f1;
-            --secondary-color: #8b5cf6;
-            --dark-bg: #0f172a;
-            --card-bg: #1e293b;
-            --text-color: #f1f5f9;
-            --accent-color: #06b6d4;
-            --error-color: #ef4444;
-            --success-color: #22c55e;
-            --warning-color: #eab308;
-            --glass-bg: rgba(30, 41, 59, 0.7);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #312e81 100%);
-            color: var(--text-color);
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding: 2rem;
-            background: var(--glass-bg);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0); }
-            50% { transform: translateY(-10px) rotate(5deg); }
-        }
-
-        .glow {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
-            filter: blur(30px);
-            opacity: 0.15;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        h1 {
-            font-size: 2.75rem;
-            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 1rem;
-        }
-
-        .form-container {
-            background: var(--glass-bg);
-            padding: 2.5rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .form-section {
-            margin-bottom: 2.5rem;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            background: rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-        }
-
-        .form-section:hover {
-            transform: translateY(-2px);
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            color: var(--accent-color);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 2rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.75rem;
-            font-weight: 500;
-        }
-
-        .required::after {
-            content: '*';
-            color: var(--error-color);
-            margin-left: 4px;
-        }
-
-        .help-text {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin-top: 0.5rem;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            background: rgba(15, 23, 42, 0.6);
-            color: var(--text-color);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.2);
-        }
-
-        .deployment-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .deployment-method {
-            padding: 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .deployment-method.active {
-            background: var(--primary-color);
-            border-color: var(--accent-color);
-        }
-
-        .buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            margin-top: 3rem;
-        }
-
-        button {
-            padding: 1.25rem 2.5rem;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .preview-container {
-            background: var(--glass-bg);
-            padding: 3rem;
-            border-radius: 20px;
-            margin-top: 3rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-        }
-
-        .tech-icons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .tech-icon {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            transition: all 0.3s ease;
-        }
-
-        .tech-icon:hover {
-            transform: scale(1.2);
-        }
-
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .buttons { flex-direction: column; }
-            button { width: 100%; }
-            .preview-container { padding: 1.5rem; }
-            .deployment-methods { grid-template-columns: 1fr; }
-        }
-    </style>
+    
+    <!-- Styles -->
+    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="glow"></div>
-            <div class="logo">📚</div>
-            <h1>DocGen Pro</h1>
-            <p class="subtitle">Crie documentações profissionais em minutos</p>
-        </div>
+        <!-- Header Section -->
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo-glow"></div>
+                <div class="logo">📚</div>
+            </div>
+            <h1>DocGen Pro 3.0</h1>
+            <p class="subtitle">Crie documentações profissionais com inteligência artificial</p>
+        </header>
 
-        <div class="form-container">
+        <!-- Main Form Container -->
+        <main class="form-container">
             <!-- Informações Básicas -->
-            <div class="form-section">
+            <section class="form-section" id="basic-info">
                 <div class="section-title">
                     <i class="fas fa-info-circle"></i>
                     Informações Básicas
                 </div>
                 
+                <div class="form-group">
+                    <label for="projectType" class="required">Tipo do Projeto</label>
+                    <select id="projectType" required onchange="handleProjectTypeChange()">
+                        <option value="">Selecione o tipo do projeto</option>
+                        <option value="website">Website</option>
+                        <option value="api">API / Web Service</option>
+                        <option value="mobile">Aplicativo Mobile</option>
+                        <option value="desktop">Aplicação Desktop</option>
+                        <option value="library">Biblioteca/Framework</option>
+                        <option value="other">Outro</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="projectImage" class="required">Logo do Projeto</label>
                     <div class="image-upload" onclick="document.getElementById('imageInput').click()">
@@ -263,80 +60,83 @@
                         <p>Clique para enviar a imagem</p>
                         <input type="file" id="imageInput" accept="image/*" style="display: none" onchange="handleImageUpload(event)">
                     </div>
-                    <img id="imagePreview" class="image-preview">
+                    <img id="imagePreview" class="image-preview" style="display: none;">
                     <p class="help-text">Envie um logo ou imagem representativa (recomendado: 240x240px)</p>
                 </div>
 
                 <div class="form-group">
                     <label for="projectTitle" class="required">Nome do Projeto</label>
-                    <input type="text" id="projectTitle" placeholder="Ex: Meu Projeto Incrível">
+                    <input type="text" id="projectTitle" placeholder="Ex: Meu Projeto Incrível" required>
                     <p class="help-text">Escolha um nome memorável e descritivo</p>
                 </div>
                 
                 <div class="form-group">
                     <label for="description" class="required">Descrição</label>
-                    <textarea id="description" rows="4" placeholder="Ex: Uma aplicação web poderosa que ajuda desenvolvedores..."></textarea>
+                    <textarea id="description" rows="4" placeholder="Ex: Uma aplicação web poderosa que ajuda desenvolvedores..." required></textarea>
                     <p class="help-text">Forneça uma visão geral clara e concisa do seu projeto</p>
                 </div>
-            </div>
+            </section>
 
-            <!-- Demonstração e Pré-requisitos -->
-            <div class="form-section">
+            <!-- Demonstração e Deploy -->
+            <section class="form-section" id="demo-deploy">
                 <div class="section-title">
                     <i class="fas fa-rocket"></i>
-                    Demonstração e Pré-requisitos
+                    Demonstração e Deploy
                 </div>
 
                 <div class="form-group">
                     <label for="demoUrl">URL da Demo</label>
-                    <input type="text" id="demoUrl" placeholder="https://seu-projeto.com">
+                    <input type="url" id="demoUrl" placeholder="https://seu-projeto.com">
                     <p class="help-text">Link para uma versão ao vivo do projeto</p>
                 </div>
 
                 <div class="form-group">
                     <label for="demoVideo">Vídeo de Demonstração</label>
-                    <input type="text" id="demoVideo" placeholder="URL do YouTube/Vimeo">
+                    <input type="url" id="demoVideo" placeholder="URL do YouTube/Vimeo">
                     <p class="help-text">Link para um vídeo demonstrativo do projeto</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="prerequisites" class="required">Pré-requisitos</label>
-                    <textarea id="prerequisites" rows="4" placeholder="- Node.js v14+&#10;- MongoDB&#10;- Redis"></textarea>
-                    <p class="help-text">Liste todos os requisitos necessários antes da instalação</p>
+                <div id="deployPlatforms" class="form-group" style="display: none;">
+                    <label>Plataformas de Deploy</label>
+                    <div class="platform-grid">
+                        <div class="platform-option" onclick="togglePlatform('vercel')">
+                            <i class="fas fa-triangle platform-icon"></i>
+                            <p>Vercel</p>
+                        </div>
+                        <div class="platform-option" onclick="togglePlatform('heroku')">
+                            <i class="fas fa-cloud platform-icon"></i>
+                            <p>Heroku</p>
+                        </div>
+                        <div class="platform-option" onclick="togglePlatform('netlify')">
+                            <i class="fas fa-square platform-icon"></i>
+                            <p>Netlify</p>
+                        </div>
+                        <div class="platform-option" onclick="togglePlatform('digitalocean')">
+                            <i class="fas fa-water platform-icon"></i>
+                            <p>Digital Ocean</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Estrutura do Projeto -->
-            <div class="form-section">
-                <div class="section-title">
-                    <i class="fas fa-folder-tree"></i>
-                    Estrutura do Projeto
-                </div>
-
-                <div class="form-group">
-                    <label for="directoryTree">Árvore de Diretórios</label>
-                    <textarea id="directoryTree" rows="10" placeholder="projeto/
-├── src/
-│   ├── components/
-│   ├── services/
-│   └── utils/
-├── tests/
-└── docs/"></textarea>
-                    <p class="help-text">Cole a estrutura de diretórios do seu projeto</p>
-                </div>
-            </div>
-
-            <!-- Configuração e Tecnologias -->
-            <div class="form-section">
+            <!-- Tecnologias e Configuração -->
+            <section class="form-section" id="tech-setup">
                 <div class="section-title">
                     <i class="fas fa-cogs"></i>
-                    Configuração e Tecnologias
+                    Tecnologias e Configuração
                 </div>
 
                 <div class="form-group">
-                    <label for="deploymentMethod">Método de Implantação</label>
+                    <label for="technologies" class="required">Stack Tecnológica</label>
+                    <textarea id="technologies" rows="4" placeholder="- Frontend: React, Redux, Tailwind CSS&#10;- Backend: Node.js, Express&#10;- Banco de Dados: MongoDB" required></textarea>
+                    <div id="techStackPreview" class="tech-stack-preview"></div>
+                    <p class="help-text">Liste as principais tecnologias, frameworks e ferramentas utilizadas</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Método de Implantação</label>
                     <div class="deployment-methods">
-                        <div class="deployment-method" onclick="selectDeployment('standard')">
+                        <div class="deployment-method active" onclick="selectDeployment('standard')">
                             <i class="fas fa-code"></i>
                             <p>Padrão</p>
                         </div>
@@ -368,94 +168,151 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="technologies" class="required">Tecnologias</label>
-                    <textarea id="technologies" rows="4" placeholder="- Frontend: React, Redux, Tailwind CSS&#10;- Backend: Node.js, Express&#10;- Banco de Dados: MongoDB"></textarea>
-                    <p class="help-text">Liste as principais tecnologias, frameworks e ferramentas utilizadas</p>
-                    <div id="techIconsPreview" class="tech-icons"></div>
+                    <label>Deseja incluir exemplos de código?</label>
+                    <div class="code-examples-toggle">
+                        <button onclick="toggleCodeExamples(true)" class="btn-toggle">Sim</button>
+                        <button onclick="toggleCodeExamples(false)" class="btn-toggle">Não</button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="installation" class="required">Guia de Instalação</label>
-                    <textarea id="installation" rows="6" placeholder="1. Clone o repositório&#10;2. Instale as dependências: `npm install`&#10;3. Configure as variáveis de ambiente&#10;4. Execute a aplicação: `npm start`"></textarea>
-                    <p class="help-text">Forneça instruções passo a passo para configurar o projeto</p>
+                <div id="codeExamples" class="form-group" style="display: none;">
+                    <label for="codeSnippets">Exemplos de Código</label>
+                    <textarea id="codeSnippets" rows="8" placeholder="```javascript&#10;// Exemplo de uso&#10;const client = new Client();&#10;```"></textarea>
+                    <p class="help-text">Adicione snippets de código relevantes com syntax highlighting</p>
                 </div>
-            </div>
+            </section>
 
-            <!-- Changelog -->
-            <div class="form-section">
+            <!-- Comunidade e Contribuição -->
+            <section class="form-section" id="community">
                 <div class="section-title">
-                    <i class="fas fa-history"></i>
-                    Histórico de Alterações
-                </div>
-                
-                <div class="form-group">
-                    <label for="changelog">Changelog</label>
-                    <textarea id="changelog" rows="6" placeholder="## [1.0.0] - 2024-03-20&#10;### Adicionado&#10;- Lançamento inicial&#10;- Funcionalidade A&#10;### Alterado&#10;- Atualização da dependência X"></textarea>
-                    <p class="help-text">Documente as versões e atualizações do projeto</p>
-                </div>
-            </div>
-
-            <!-- Licença e Atribuições -->
-            <div class="form-section">
-                <div class="section-title">
-                    <i class="fas fa-gavel"></i>
-                    Licença e Contribuições
-                </div>
-                
-                <div class="form-group">
-                    <label for="license">Licença</label>
-                    <textarea id="license" rows="4" placeholder="MIT License&#10;Copyright (c) 2024 Seu Nome"></textarea>
-                    <p class="help-text">Especifique o tipo de licença e informações de copyright</p>
-                </div>
-                
-                <div class="form-group">
-                    <label for="authorName" class="required">Nome do Autor</label>
-                    <input type="text" id="authorName" placeholder="Seu Nome">
-                </div>
-                
-                <div class="form-group">
-                    <label for="authorLink">Link do Autor</label>
-                    <input type="text" id="authorLink" placeholder="https://github.com/seunome">
-                    <p class="help-text">Link para seu perfil do GitHub ou site pessoal</p>
-                </div>
-
-                <div class="form-group">
-                    <label for="contributors">Contribuidores</label>
-                    <textarea id="contributors" rows="4" placeholder="- [Nome](https://github.com/usuario) - Funcionalidade X&#10;- [Nome2](https://github.com/usuario2) - Funcionalidade Y"></textarea>
-                    <p class="help-text">Liste os contribuidores do projeto e suas contribuições</p>
+                    <i class="fas fa-users"></i>
+                    Comunidade e Contribuição
                 </div>
 
                 <div class="form-group">
                     <label for="contributing">Como Contribuir</label>
                     <textarea id="contributing" rows="6" placeholder="1. Faça um fork do repositório&#10;2. Crie um branch para sua feature&#10;3. Faça commit das alterações&#10;4. Faça push para o branch&#10;5. Abra um Pull Request"></textarea>
-                    <p class="help-text">Instruções para novos contribuidores</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="communityInfo">Como Participar da Comunidade</label>
+                    <textarea id="communityInfo" rows="4" placeholder="- Entre no nosso Discord&#10;- Participe das discussões no GitHub&#10;- Assine nossa newsletter"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="codeOfConduct">Código de Conduta</label>
+                    <textarea id="codeOfConduct" rows="4" placeholder="Nós, como membros e contribuidores, nos comprometemos a..."></textarea>
+                </div>
+            </section>
+
+            <!-- Contato e Suporte -->
+            <section class="form-section" id="contact">
+                <div class="section-title">
+                    <i class="fas fa-envelope"></i>
+                    Contato e Suporte
+                </div>
+
+                <div class="form-group">
+                    <label for="authorName" class="required">Nome do Autor</label>
+                    <input type="text" id="authorName" placeholder="Seu Nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="authorEmail">Email de Contato</label>
+                    <input type="email" id="authorEmail" placeholder="seu@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="authorLink">Link do Autor</label>
+                    <input type="url" id="authorLink" placeholder="https://github.com/seunome">
                 </div>
 
                 <div class="form-group">
                     <label for="buymeacoffee">Link Buy Me a Coffee</label>
-                    <input type="text" id="buymeacoffee" placeholder="https://www.buymeacoffee.com/seunome">
-                    <p class="help-text">Link para apoiar o projeto</p>
+                    <input type="url" id="buymeacoffee" placeholder="https://www.buymeacoffee.com/seunome">
                 </div>
-            </div>
+            </section>
 
-            <div class="buttons">
-                <button onclick="previewMarkdown()">
-                    <i class="fas fa-eye"></i> Visualizar
+            <!-- Termos e Licença -->
+            <section class="form-section" id="terms">
+                <div class="section-title">
+                    <i class="fas fa-gavel"></i>
+                    Termos e Licença
+                </div>
+
+                <div class="form-group">
+                    <label for="license">Licença</label>
+                    <select id="license">
+                        <option value="mit">MIT License</option>
+                        <option value="apache">Apache License 2.0</option>
+                        <option value="gpl">GNU GPL v3</option>
+                        <option value="custom">Licença Personalizada</option>
+                    </select>
+                </div>
+
+                <div id="customLicense" class="form-group" style="display: none;">
+                    <label for="customLicenseText">Texto da Licença Personalizada</label>
+                    <textarea id="customLicenseText" rows="6"></textarea>
+                </div>
+            </section>
+
+            <!-- Changelog -->
+            <section class="form-section" id="changelog">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    Changelog
+                </div>
+                
+                <div class="form-group">
+                    <label for="changelogEntries">Histórico de Alterações</label>
+                    <textarea id="changelogEntries" rows="6" placeholder="## [1.0.0] - 2024-03-20&#10;### Adicionado&#10;- Lançamento inicial&#10;### Alterado&#10;- Atualização X"></textarea>
+                </div>
+            </section>
+
+            <!-- Créditos -->
+            <section class="form-section" id="credits">
+                <div class="section-title">
+                    <i class="fas fa-award"></i>
+                    Créditos
+                </div>
+
+                <div class="form-group">
+                    <label for="contributors">Contribuidores</label>
+                    <textarea id="contributors" rows="4" placeholder="- [Nome](https://github.com/usuario) - Funcionalidade X&#10;- [Nome2](https://github.com/usuario2) - Funcionalidade Y"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="acknowledgments">Agradecimentos</label>
+                    <textarea id="acknowledgments" rows="4" placeholder="Agradecimentos especiais a:&#10;- Pessoa/Empresa A por [contribuição]&#10;- Projeto B por [inspiração]"></textarea>
+                </div>
+            </section>
+
+            <!-- Botões de Ação -->
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="previewMarkdown()">
+                    <i class="fas fa-eye"></i>
+                    Visualizar
                 </button>
-                <button onclick="downloadMarkdown()">
-                    <i class="fas fa-download"></i> Baixar
+                <button class="btn btn-primary" onclick="downloadMarkdown()">
+                    <i class="fas-download"></i>
+                    Baixar
                 </button>
             </div>
-        </div>
+        </main>
         
+        <!-- Container de Visualização -->
         <div id="preview" class="preview-container">
             <div class="preview-content"></div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
+        // Variáveis globais
         let projectImage = null;
         let selectedDeployment = 'standard';
+        let selectedPlatforms = new Set();
+        let codeExamplesEnabled = false;
 
         // Mapeamento de tecnologias para ícones
         const techIcons = {
@@ -482,8 +339,45 @@
             'linux': 'fab fa-linux',
             'windows': 'fab fa-windows',
             'android': 'fab fa-android',
-            'apple': 'fab fa-apple'
+            'apple': 'fab fa-apple',
+            'laravel': 'fab fa-laravel',
+            'mysql': 'fas fa-database',
+            'mongodb': 'fas fa-leaf',
+            'postgresql': 'fas fa-database',
+            'redis': 'fas fa-database'
         };
+
+        // Mapeamento de plataformas de deploy para ícones
+        const deployPlatforms = {
+            'vercel': {
+                icon: 'fas fa-triangle',
+                color: '#000000'
+            },
+            'heroku': {
+                icon: 'fas fa-cloud',
+                color: '#430098'
+            },
+            'netlify': {
+                icon: 'fas fa-square',
+                color: '#00C7B7'
+            },
+            'digitalocean': {
+                icon: 'fas fa-water',
+                color: '#0080FF'
+            }
+        };
+
+        // Manipular mudança no tipo de projeto
+        function handleProjectTypeChange() {
+            const projectType = document.getElementById('projectType').value;
+            const deployPlatforms = document.getElementById('deployPlatforms');
+            
+            if (projectType === 'website' || projectType === 'api') {
+                deployPlatforms.style.display = 'block';
+            } else {
+                deployPlatforms.style.display = 'none';
+            }
+        }
 
         // Manipular upload de imagem
         function handleImageUpload(event) {
@@ -500,6 +394,18 @@
             }
         }
 
+        // Toggle plataforma de deploy
+        function togglePlatform(platform) {
+            const element = event.currentTarget;
+            if (selectedPlatforms.has(platform)) {
+                selectedPlatforms.delete(platform);
+                element.classList.remove('selected');
+            } else {
+                selectedPlatforms.add(platform);
+                element.classList.add('selected');
+            }
+        }
+
         // Selecionar método de deployment
         function selectDeployment(method) {
             selectedDeployment = method;
@@ -510,6 +416,16 @@
             
             document.getElementById('dockerCommands').style.display = method === 'docker' ? 'block' : 'none';
             document.getElementById('makefileCommands').style.display = method === 'makefile' ? 'block' : 'none';
+        }
+
+        // Toggle exemplos de código
+        function toggleCodeExamples(enabled) {
+            codeExamplesEnabled = enabled;
+            document.getElementById('codeExamples').style.display = enabled ? 'block' : 'none';
+            document.querySelectorAll('.btn-toggle').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
         }
 
         // Detectar e gerar ícones de tecnologias
@@ -526,20 +442,60 @@
             return icons.join(' ');
         }
 
+        // Gerar estrutura de diretórios inteligente
+        function generateDirectoryStructure() {
+            const projectType = document.getElementById('projectType').value;
+            const technologies = document.getElementById('technologies').value.toLowerCase();
+            
+            let structure = '';
+            
+            if (projectType === 'website' || projectType === 'api') {
+                structure += `${document.getElementById('projectTitle').value || 'project'}/\n`;
+                structure += '├── src/\n';
+                
+                if (technologies.includes('react') || technologies.includes('vue') || technologies.includes('angular')) {
+                    structure += '│   ├── components/\n';
+                    structure += '│   ├── pages/\n';
+                    structure += '│   ├── assets/\n';
+                    structure += '│   ├── styles/\n';
+                    structure += '│   ├── utils/\n';
+                    structure += '│   └── services/\n';
+                }
+                
+                if (projectType === 'api') {
+                    structure += '│   ├── controllers/\n';
+                    structure += '│   ├── models/\n';
+                    structure += '│   ├── routes/\n';
+                    structure += '│   ├── middleware/\n';
+                    structure += '│   └── config/\n';
+                }
+                
+                structure += '├── public/\n';
+                structure += '├── tests/\n';
+                structure += '├── docs/\n';
+                structure += '└── README.md\n';
+            }
+            
+            return structure;
+        }
+
         // Gerar sumário
         function generateTableOfContents() {
             const sections = [
                 'Sobre',
                 'Funcionalidades',
                 'Pré-requisitos',
-                'Estrutura de Diretórios',
+                'Estrutura do Projeto',
                 'Instalação',
                 'Configuração',
                 'Tecnologias',
                 'Demonstração',
                 'Como Contribuir',
+                'Comunidade',
+                'Contato',
                 'Changelog',
-                'Licença'
+                'Licença',
+                'Créditos'
             ];
 
             return sections.map(section => 
@@ -563,26 +519,28 @@
         function generateMarkdown() {
             const formData = {
                 projectTitle: document.getElementById('projectTitle').value || 'Nome do Projeto',
-                description: document.getElementById('description').value || 'Descrição do projeto',
-                prerequisites: document.getElementById('prerequisites').value || '',
-                directoryTree: document.getElementById('directoryTree').value || '',
-                installation: document.getElementById('installation').value || '',
+                description: document.getElementById('description').value || '',
                 technologies: document.getElementById('technologies').value || '',
                 demoUrl: document.getElementById('demoUrl').value || '',
                 demoVideo: document.getElementById('demoVideo').value || '',
-                changelog: document.getElementById('changelog').value || '',
-                license: document.getElementById('license').value || '',
-                authorName: document.getElementById('authorName').value || '',
-                authorLink: document.getElementById('authorLink').value || '',
-                contributors: document.getElementById('contributors').value || '',
+                envSetup: document.getElementById('envSetup').value || '',
                 contributing: document.getElementById('contributing').value || '',
+                communityInfo: document.getElementById('communityInfo').value || '',
+                codeOfConduct: document.getElementById('codeOfConduct').value || '',
+                authorName: document.getElementById('authorName').value || '',
+                authorEmail: document.getElementById('authorEmail').value || '',
+                authorLink: document.getElementById('authorLink').value || '',
                 buymeacoffee: document.getElementById('buymeacoffee').value || '',
-                envSetup: document.getElementById('envSetup').value || ''
+                license: document.getElementById('license').value || 'MIT',
+                changelogEntries: document.getElementById('changelogEntries').value || '',
+                contributors: document.getElementById('contributors').value || '',
+                acknowledgments: document.getElementById('acknowledgments').value || ''
             };
 
             const techStack = detectTechIcons(formData.technologies);
+            const directoryStructure = generateDirectoryStructure();
 
-            return `# ${formData.projectTitle}
+            let markdown = `# ${formData.projectTitle}
 
 <div align="center">
 
@@ -599,30 +557,9 @@ ${generateTableOfContents()}
 ## Sobre
 ${formData.description}
 
-## Pré-requisitos
-${formData.prerequisites}
-
-## Estrutura de Diretórios
+## Estrutura do Projeto
 \`\`\`
-${formData.directoryTree}
-\`\`\`
-
-## Instalação
-${formData.installation}
-
-${selectedDeployment === 'docker' ? `### Docker
-\`\`\`bash
-${document.getElementById('dockerInstructions').value}
-\`\`\`` : ''}
-
-${selectedDeployment === 'makefile' ? `### Makefile
-\`\`\`bash
-${document.getElementById('makefileInstructions').value}
-\`\`\`` : ''}
-
-### Configuração do Ambiente
-\`\`\`env
-${formData.envSetup}
+${directoryStructure}
 \`\`\`
 
 ## Tecnologias
@@ -635,23 +572,52 @@ ${techStack ? `\n### Stack Tecnológica\n${techStack}\n` : ''}
 ${formData.demoUrl ? `[Demo ao Vivo](${formData.demoUrl})\n` : ''}
 ${formData.demoVideo ? `[Vídeo Demonstrativo](${formData.demoVideo})\n` : ''}
 
+${selectedPlatforms.size > 0 ? `### Plataformas de Deploy\n${Array.from(selectedPlatforms).map(p => 
+    `- [${p.charAt(0).toUpperCase() + p.slice(1)}](https://${p}.com)`
+).join('\n')}\n` : ''}
+
+## Configuração
+\`\`\`env
+${formData.envSetup}
+\`\`\`
+
 ## Como Contribuir
 ${formData.contributing}
+
+## 🤝 Comunidade
+${formData.communityInfo}
+
+### Código de Conduta
+${formData.codeOfConduct}
+
+## Contato
+- Autor: ${formData.authorName}
+- Email: ${formData.authorEmail}
+- GitHub: [${formData.authorName}](${formData.authorLink})
+
+## Changelog
+${formData.changelogEntries}
+
+## Licença
+${formData.license === 'custom' ? document.getElementById('customLicenseText').value : `Este projeto está licenciado sob a ${formData.license} License`}
+
+## Créditos
 
 ### Contribuidores
 ${formData.contributors}
 
-## Changelog
-${formData.changelog}
+### Agradecimentos
+${formData.acknowledgments}
 
-## Licença
-${formData.license}
+${formData.buymeacoffee ? `\n[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](${formData.buymeacoffee})\n` : ''}
 
 ---
 
-Feito com 💜 por [${formData.authorName}](${formData.authorLink}) 🚀
+<div align="center">
+    Feito com 💜 por ${formData.authorName}
+</div>`;
 
-${formData.buymeacoffee ? `\n[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](${formData.buymeacoffee})\n` : ''}`;
+            return markdown;
         }
 
         // Visualizar documentação
@@ -676,10 +642,19 @@ ${formData.buymeacoffee ? `\n[!["Buy Me A Coffee"](https://www.buymeacoffee.com/
             URL.revokeObjectURL(url);
         }
 
-        // Atualizar ícones de tecnologia em tempo real
-        document.getElementById('technologies').addEventListener('input', function(e) {
-            const techIconsPreview = document.getElementById('techIconsPreview');
-            techIconsPreview.innerHTML = detectTechIcons(e.target.value);
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Atualizar ícones de tecnologia em tempo real
+            document.getElementById('technologies').addEventListener('input', function(e) {
+                const techStackPreview = document.getElementById('techStackPreview');
+                techStackPreview.innerHTML = detectTechIcons(e.target.value);
+            });
+
+            // Atualizar licença personalizada
+            document.getElementById('license').addEventListener('change', function(e) {
+                document.getElementById('customLicense').style.display = 
+                    e.target.value === 'custom' ? 'block' : 'none';
+            });
         });
     </script>
 </body>
