@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocGen Pro 3.0 - Gerador de Documentação Profissional</title>
+    <title>DocGen Pro 3.0 - Documentação Inteligente</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
@@ -18,7 +18,6 @@
     
     <!-- Styles -->
     <link href="styles.css" rel="stylesheet">
-    <link href="platform-icons.css" rel="stylesheet">
 
     <!-- Chatbot Config -->
     <script>
@@ -36,16 +35,7 @@
     </style>
 </head>
 <body>
-    <!-- Fixed Helper Button -->
-    <div class="helper-button">
-        <button class="btn-floating" onclick="toggleAIHelper()">
-            <i class="fas fa-robot"></i>
-            <span>Assistente IA</span>
-        </button>
-    </div>
-
     <div class="container">
-        <!-- Header Section -->
         <header class="header">
             <div class="logo-container">
                 <div class="logo-glow"></div>
@@ -55,10 +45,9 @@
             <p class="subtitle">Crie documentações profissionais com inteligência artificial</p>
         </header>
 
-        <!-- Main Form Container -->
         <main class="form-container">
             <!-- Informações Básicas -->
-            <section class="form-section" id="basic-info">
+            <section class="form-section">
                 <div class="section-title">
                     <i class="fas fa-info-circle"></i>
                     Informações Básicas
@@ -85,199 +74,128 @@
                         <input type="file" id="imageInput" accept="image/*" style="display: none" onchange="handleImageUpload(event)">
                     </div>
                     <img id="imagePreview" class="image-preview" style="display: none;">
-                    <p class="help-text">Envie um logo ou imagem representativa (recomendado: 240x240px)</p>
                 </div>
 
                 <div class="form-group">
                     <label for="projectTitle" class="required">Nome do Projeto</label>
-                    <input type="text" id="projectTitle" placeholder="Ex: Meu Projeto Incrível" required>
-                    <p class="help-text">Escolha um nome memorável e descritivo</p>
+                    <input type="text" id="projectTitle" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="description" class="required">Descrição</label>
-                    <textarea id="description" rows="4" placeholder="Ex: Uma aplicação web poderosa que ajuda desenvolvedores..." required></textarea>
-                    <p class="help-text">Forneça uma visão geral clara e concisa do seu projeto</p>
+                    <textarea id="description" rows="4" required></textarea>
                 </div>
             </section>
 
-            <!-- Demonstração e Deploy -->
-            <section class="form-section" id="demo-deploy">
+            <!-- Deploy & Demonstração -->
+            <section class="form-section" id="deploySection">
                 <div class="section-title">
                     <i class="fas fa-rocket"></i>
-                    Demonstração e Deploy
+                    Deploy & Demonstração
+                </div>
+
+                <div class="form-group">
+                    <label>Plataformas de Deploy</label>
+                    <div class="deploy-platforms">
+                        <div class="platform-card" onclick="togglePlatform('vercel')">
+                            <img src="https://www.vectorlogo.zone/logos/vercel/vercel-icon.svg" alt="Vercel" class="platform-icon">
+                            <p>Vercel</p>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform('heroku')">
+                            <img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" alt="Heroku" class="platform-icon">
+                            <p>Heroku</p>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform('netlify')">
+                            <img src="https://www.vectorlogo.zone/logos/netlify/netlify-icon.svg" alt="Netlify" class="platform-icon">
+                            <p>Netlify</p>
+                        </div>
+                        <div class="platform-card" onclick="togglePlatform('digitalocean')">
+                            <img src="https://www.vectorlogo.zone/logos/digitalocean/digitalocean-icon.svg" alt="Digital Ocean" class="platform-icon">
+                            <p>Digital Ocean</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="demoUrl">URL da Demo</label>
-                    <input type="url" id="demoUrl" placeholder="https://seu-projeto.com">
-                    <p class="help-text">Link para uma versão ao vivo do projeto</p>
+                    <input type="url" id="demoUrl">
                 </div>
 
                 <div class="form-group">
-                    <label for="demoVideo">Vídeo de Demonstração</label>
-                    <input type="url" id="demoVideo" placeholder="URL do YouTube/Vimeo">
-                    <p class="help-text">Link para um vídeo demonstrativo do projeto</p>
-                </div>
-
-                <!-- Opções de Deploy -->
-                <div id="deployPlatforms" class="platform-section">
-                    <h3>Plataformas de Deploy</h3>
-                    <div class="platform-grid">
-                        <!-- Vercel -->
-                        <div class="platform-card" data-platform="vercel">
-                            <div class="platform-icon">
-                                <i class="icon-vercel"></i>
-                            </div>
-                            <h4>Vercel</h4>
-                            <div class="platform-details">
-                                <textarea class="deploy-commands" placeholder="vercel login&#10;vercel --prod"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Heroku -->
-                        <div class="platform-card" data-platform="heroku">
-                            <div class="platform-icon">
-                                <i class="icon-heroku"></i>
-                            </div>
-                            <h4>Heroku</h4>
-                            <div class="platform-details">
-                                <textarea class="deploy-commands" placeholder="heroku login&#10;git push heroku main"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Netlify -->
-                        <div class="platform-card" data-platform="netlify">
-                            <div class="platform-icon">
-                                <i class="icon-netlify"></i>
-                            </div>
-                            <h4>Netlify</h4>
-                            <div class="platform-details">
-                                <textarea class="deploy-commands" placeholder="netlify deploy --prod"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Digital Ocean -->
-                        <div class="platform-card" data-platform="digitalocean">
-                            <div class="platform-icon">
-                                <i class="icon-digitalocean"></i>
-                            </div>
-                            <h4>Digital Ocean</h4>
-                            <div class="platform-details">
-                                <textarea class="deploy-commands" placeholder="doctl apps create --spec app.yaml"></textarea>
-                            </div>
-                        </div>
-                    </div>
+                    <label for="demoVideo">Vídeo Demo</label>
+                    <input type="url" id="demoVideo">
                 </div>
             </section>
 
-            <!-- Tecnologias e Configuração -->
-            <section class="form-section" id="tech-setup">
+            <!-- Tecnologias -->
+            <section class="form-section">
                 <div class="section-title">
-                    <i class="fas fa-cogs"></i>
-                    Tecnologias e Configuração
+                    <i class="fas fa-code"></i>
+                    Tecnologias
                 </div>
-
+                
                 <div class="form-group">
                     <label for="technologies" class="required">Stack Tecnológica</label>
-                    <textarea id="technologies" rows="4" placeholder="- Frontend: React, Redux, Tailwind CSS&#10;- Backend: Node.js, Express&#10;- Banco de Dados: MongoDB" required></textarea>
+                    <textarea id="technologies" rows="4" required></textarea>
                     <div id="techStackPreview" class="tech-stack-preview"></div>
-                    <p class="help-text">Liste as principais tecnologias, frameworks e ferramentas utilizadas</p>
                 </div>
 
                 <div class="form-group">
-                    <label>Método de Implantação</label>
+                    <label>Método de Deploy</label>
                     <div class="deployment-methods">
-                        <div class="deployment-method" data-method="standard">
+                        <div class="deploy-method" onclick="selectDeploy('standard')">
                             <i class="fas fa-code"></i>
                             <p>Padrão</p>
                         </div>
-                        <div class="deployment-method" data-method="docker">
+                        <div class="deploy-method" onclick="selectDeploy('docker')">
                             <i class="fab fa-docker"></i>
                             <p>Docker</p>
                         </div>
-                        <div class="deployment-method" data-method="makefile">
+                        <div class="deploy-method" onclick="selectDeploy('makefile')">
                             <i class="fas fa-file-code"></i>
                             <p>Makefile</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Configurações Específicas -->
-                <div id="dockerConfig" class="config-section" style="display: none;">
-                    <div class="form-group">
-                        <label for="dockerfile">Dockerfile</label>
-                        <textarea id="dockerfile" rows="6" placeholder="FROM node:16&#10;WORKDIR /app&#10;COPY . .&#10;RUN npm install&#10;EXPOSE 3000&#10;CMD ['npm', 'start']"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="dockerCompose">docker-compose.yml</label>
-                        <textarea id="dockerCompose" rows="6" placeholder="version: '3'&#10;services:&#10;  app:&#10;    build: .&#10;    ports:&#10;      - '3000:3000'"></textarea>
-                    </div>
-                </div>
-
-                <div id="makefileConfig" class="config-section" style="display: none;">
-                    <div class="form-group">
-                        <label for="makefile">Makefile</label>
-                        <textarea id="makefile" rows="6" placeholder="install:&#10;&#9;npm install&#10;&#10;build:&#10;&#9;npm run build&#10;&#10;start:&#10;&#9;npm start"></textarea>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="envSetup">Configuração de Ambiente (.env)</label>
-                    <textarea id="envSetup" rows="4" placeholder="DATABASE_URL=postgresql://localhost:5432/meudb&#10;API_KEY=sua_chave_api&#10;PORT=3000"></textarea>
-                    <p class="help-text">Adicione variáveis de ambiente e detalhes de configuração</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Exemplos de Código</label>
-                    <div class="code-toggle">
-                        <button class="btn btn-sm" onclick="toggleCodeExamples(true)">Sim</button>
-                        <button class="btn btn-sm" onclick="toggleCodeExamples(false)">Não</button>
-                    </div>
-                </div>
-
-                <div id="codeExamples" class="code-section" style="display: none;">
-                    <div class="form-group">
-                        <label for="installationExample">Exemplo de Instalação</label>
-                        <textarea id="installationExample" class="code-editor" rows="4" placeholder="npm install meu-projeto&#10;# ou&#10;yarn add meu-projeto"></textarea>
+                <div id="deployConfigSection" style="display: none;">
+                    <div class="form-group" id="dockerCommands" style="display: none;">
+                        <label>Comandos Docker</label>
+                        <textarea id="dockerInstructions" rows="4"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="usageExample">Exemplo de Uso</label>
-                        <textarea id="usageExample" class="code-editor" rows="6" placeholder="import { MinhaFuncao } from 'meu-projeto';&#10;&#10;const resultado = MinhaFuncao();&#10;console.log(resultado);"></textarea>
+                    <div class="form-group" id="makefileCommands" style="display: none;">
+                        <label>Comandos Makefile</label>
+                        <textarea id="makefileInstructions" rows="4"></textarea>
                     </div>
                 </div>
             </section>
 
-            <!-- Documentação da API -->
-            <section class="form-section" id="api-docs" style="display: none;">
+            <!-- Exemplos de Código -->
+            <section class="form-section">
                 <div class="section-title">
-                    <i class="fas fa-book"></i>
-                    Documentação da API
+                    <i class="fas fa-code"></i>
+                    Exemplos de Código
                 </div>
 
                 <div class="form-group">
-                    <label for="apiBase">URL Base da API</label>
-                    <input type="url" id="apiBase" placeholder="https://api.seu-projeto.com/v1">
+                    <label>Incluir exemplos de código?</label>
+                    <div class="toggle-buttons">
+                        <button onclick="toggleCodeExamples(true)" class="btn-toggle">Sim</button>
+                        <button onclick="toggleCodeExamples(false)" class="btn-toggle">Não</button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="authentication">Autenticação</label>
-                    <textarea id="authentication" rows="4" placeholder="Bearer Token&#10;Authorization: Bearer seu_token"></textarea>
+                <div id="codeExamplesSection" style="display: none;">
+                    <div class="form-group">
+                        <label>Exemplo de Código</label>
+                        <textarea id="codeSnippets" rows="8"></textarea>
+                    </div>
                 </div>
-
-                <div id="endpoints" class="endpoints-container">
-                    <!-- Endpoints serão adicionados dinamicamente -->
-                </div>
-
-                <button class="btn btn-sm" onclick="addEndpoint()">
-                    <i class="fas fa-plus"></i> Adicionar Endpoint
-                </button>
             </section>
 
             <!-- Comunidade -->
-            <section class="form-section" id="community">
+            <section class="form-section">
                 <div class="section-title">
                     <i class="fas fa-users"></i>
                     Comunidade
@@ -285,127 +203,68 @@
 
                 <div class="form-group">
                     <label for="contributing">Como Contribuir</label>
-                    <textarea id="contributing" rows="6" placeholder="1. Faça um fork do repositório&#10;2. Crie um branch para sua feature&#10;3. Faça commit das alterações&#10;4. Faça push para o branch&#10;5. Abra um Pull Request"></textarea>
+                    <textarea id="contributing" rows="6"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="codeOfConduct">Código de Conduta</label>
-                    <textarea id="codeOfConduct" rows="4" placeholder="Compromisso com respeito mútuo..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="communityLinks">Links da Comunidade</label>
-                    <div class="community-links">
-                        <input type="url" placeholder="Discord" class="community-link">
-                        <input type="url" placeholder="Fórum" class="community-link">
-                        <input type="url" placeholder="Chat" class="community-link">
-                    </div>
+                    <label for="communityGuide">Como Participar da Comunidade</label>
+                    <textarea id="communityGuide" rows="4"></textarea>
                 </div>
             </section>
 
             <!-- Contato -->
-            <section class="form-section" id="contact">
+            <section class="form-section">
                 <div class="section-title">
                     <i class="fas fa-envelope"></i>
-                    Contato e Suporte
+                    Contato
                 </div>
 
                 <div class="form-group">
                     <label for="authorName" class="required">Nome do Autor</label>
-                    <input type="text" id="authorName" placeholder="Seu Nome" required>
+                    <input type="text" id="authorName" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="authorEmail">Email de Contato</label>
-                    <input type="email" id="authorEmail" placeholder="seu@email.com">
+                    <label for="authorEmail">Email</label>
+                    <input type="email" id="authorEmail">
                 </div>
 
                 <div class="form-group">
-                    <label for="socialLinks">Redes Sociais</label>
-                    <div class="social-links">
-                        <input type="url" placeholder="GitHub" class="social-link">
-                        <input type="url" placeholder="LinkedIn" class="social-link">
-                        <input type="url" placeholder="Twitter" class="social-link">
-                    </div>
+                    <label for="authorLink">Link do Autor</label>
+                    <input type="url" id="authorLink">
                 </div>
 
                 <div class="form-group">
                     <label for="buymeacoffee">Buy Me a Coffee</label>
-                    <div class="buymeacoffee-wrapper">
-                        <input type="url" id="buymeacoffee" placeholder="https://www.buymeacoffee.com/seunome">
-                        <div class="buymeacoffee-preview">
-                            <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" class="buymeacoffee-button">
-                        </div>
-                    </div>
+                    <input type="url" id="buymeacoffee">
                 </div>
             </section>
 
-            <!-- Changelog -->
-            <section class="form-section" id="changelog">
-                <div class="section-title">
-                    <i class="fas fa-history"></i>
-                    Changelog
-                </div>
-                
-                <div class="form-group">
-                    <label for="version">Versão Atual</label>
-                    <input type="text" id="version" placeholder="1.0.0">
-                </div>
-
-                <div class="form-group">
-                    <label for="releaseDate">Data do Release</label>
-                    <input type="date" id="releaseDate">
-                </div>
-
-                <div class="form-group">
-                    <label for="changelogEntries">Alterações</label>
-                    <div class="changelog-entries">
-                        <div class="entry-type">
-                            <h4>Adicionado</h4>
-                            <textarea placeholder="- Nova funcionalidade X&#10;- Suporte para Y"></textarea>
-                        </div>
-                        <div class="entry-type">
-                            <h4>Alterado</h4>
-                            <textarea placeholder="- Melhorias na performance&#10;- Atualização na UI"></textarea>
-                        </div>
-                        <div class="entry-type">
-                            <h4>Corrigido</h4>
-                            <textarea placeholder="- Bug na funcionalidade Z&#10;- Problema de compatibilidade"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Terms and License -->
-            <section class="form-section" id="terms">
+            <!-- Licença -->
+            <section class="form-section">
                 <div class="section-title">
                     <i class="fas fa-gavel"></i>
-                    Termos e Licença
+                    Licença
                 </div>
 
                 <div class="form-group">
-                    <label for="license">Licença</label>
-                    <select id="license" class="license-select">
-                        <option value="mit">MIT License</option>
-                        <option value="apache">Apache License 2.0</option>
+                    <label for="license">Tipo de Licença</label>
+                    <select id="license">
+                        <option value="mit">MIT</option>
+                        <option value="apache">Apache 2.0</option>
                         <option value="gpl">GNU GPL v3</option>
-                        <option value="custom">Licença Personalizada</option>
+                        <option value="custom">Personalizada</option>
                     </select>
                 </div>
 
-                <div id="customLicense" class="form-group" style="display: none;">
-                    <label for="customLicenseText">Texto da Licença Personalizada</label>
+                <div id="customLicenseSection" class="form-group" style="display: none;">
+                    <label>Licença Personalizada</label>
                     <textarea id="customLicenseText" rows="6"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="termsOfUse">Termos de Uso</label>
-                    <textarea id="termsOfUse" rows="4" placeholder="Descreva os termos de uso do seu projeto..."></textarea>
                 </div>
             </section>
 
-            <!-- Credits -->
-            <section class="form-section" id="credits">
+            <!-- Créditos -->
+            <section class="form-section">
                 <div class="section-title">
                     <i class="fas fa-award"></i>
                     Créditos
@@ -413,58 +272,34 @@
 
                 <div class="form-group">
                     <label for="contributors">Contribuidores</label>
-                    <div class="contributors-list">
-                        <div class="contributor-entry">
-                            <input type="text" placeholder="Nome do Contribuidor">
-                            <input type="url" placeholder="Link do GitHub">
-                            <textarea placeholder="Descrição da contribuição"></textarea>
-                        </div>
-                        <button class="btn btn-sm" onclick="addContributor()">
-                            <i class="fas fa-plus"></i> Adicionar Contribuidor
-                        </button>
-                    </div>
+                    <textarea id="contributors" rows="4"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="acknowledgments">Agradecimentos</label>
-                    <textarea id="acknowledgments" rows="4" placeholder="Agradecimentos especiais a:&#10;- Projeto A por [contribuição]&#10;- Pessoa B por [suporte]"></textarea>
+                    <textarea id="acknowledgments" rows="4"></textarea>
                 </div>
             </section>
 
-            <!-- Preview and Download -->
-            <div class="action-buttons">
-                <button class="btn btn-primary" onclick="previewMarkdown()">
+            <!-- Botões -->
+            <div class="button-group">
+                <button class="btn btn-preview" onclick="previewDoc()">
                     <i class="fas fa-eye"></i>
                     Visualizar
                 </button>
-                <button class="btn btn-primary" onclick="downloadMarkdown()">
+                <button class="btn btn-download" onclick="downloadDoc()">
                     <i class="fas fa-download"></i>
                     Baixar README.md
                 </button>
             </div>
         </main>
 
-        <!-- Preview Container -->
+        <!-- Preview -->
         <div id="preview" class="preview-container">
-            <div class="preview-header">
-                <h2>Preview da Documentação</h2>
-                <button class="btn btn-sm" onclick="closePreview()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
             <div class="preview-content"></div>
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-        <p>Gerando documentação...</p>
-    </div>
-
-    <!-- Scripts -->
-    <script src="app.js"></script>
-    <script src="markdown-generator.js"></script>
-    <script src="platform-handler.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
