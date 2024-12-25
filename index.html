@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocGen Pro 3.0 - Documentação Inteligente</title>
+    <title>DocGen Pro 3.0 - Gerador de Documentação Profissional</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
@@ -18,24 +18,10 @@
     
     <!-- Styles -->
     <link href="styles.css" rel="stylesheet">
-
-    <!-- Chatbot Config -->
-    <script>
-        window.difyChatbotConfig = { token: 'SHSExuFO0XD8jAZj' }
-    </script>
-    <script src="https://udify.app/embed.min.js" id="SHSExuFO0XD8jAZj" defer></script>
-    <style>
-        #dify-chatbot-bubble-button {
-            background-color: #1C64F2 !important;
-        }
-        #dify-chatbot-bubble-window {
-            width: 24rem !important;
-            height: 40rem !important;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header Section -->
         <header class="header">
             <div class="logo-container">
                 <div class="logo-glow"></div>
@@ -45,9 +31,10 @@
             <p class="subtitle">Crie documentações profissionais com inteligência artificial</p>
         </header>
 
+        <!-- Main Form Container -->
         <main class="form-container">
             <!-- Informações Básicas -->
-            <section class="form-section">
+            <section class="form-section" id="basic-info">
                 <div class="section-title">
                     <i class="fas fa-info-circle"></i>
                     Informações Básicas
@@ -74,197 +61,216 @@
                         <input type="file" id="imageInput" accept="image/*" style="display: none" onchange="handleImageUpload(event)">
                     </div>
                     <img id="imagePreview" class="image-preview" style="display: none;">
+                    <p class="help-text">Envie um logo ou imagem representativa (recomendado: 240x240px)</p>
                 </div>
 
                 <div class="form-group">
                     <label for="projectTitle" class="required">Nome do Projeto</label>
-                    <input type="text" id="projectTitle" required>
+                    <input type="text" id="projectTitle" placeholder="Ex: Meu Projeto Incrível" required>
+                    <p class="help-text">Escolha um nome memorável e descritivo</p>
                 </div>
                 
                 <div class="form-group">
                     <label for="description" class="required">Descrição</label>
-                    <textarea id="description" rows="4" required></textarea>
+                    <textarea id="description" rows="4" placeholder="Ex: Uma aplicação web poderosa que ajuda desenvolvedores..." required></textarea>
+                    <p class="help-text">Forneça uma visão geral clara e concisa do seu projeto</p>
                 </div>
             </section>
 
-            <!-- Deploy & Demonstração -->
-            <section class="form-section" id="deploySection">
+            <!-- Demonstração e Deploy -->
+            <section class="form-section" id="demo-deploy">
                 <div class="section-title">
                     <i class="fas fa-rocket"></i>
-                    Deploy & Demonstração
-                </div>
-
-                <div class="form-group">
-                    <label>Plataformas de Deploy</label>
-                    <div class="deploy-platforms">
-                        <div class="platform-card" onclick="togglePlatform('vercel')">
-                            <img src="https://www.vectorlogo.zone/logos/vercel/vercel-icon.svg" alt="Vercel" class="platform-icon">
-                            <p>Vercel</p>
-                        </div>
-                        <div class="platform-card" onclick="togglePlatform('heroku')">
-                            <img src="https://www.vectorlogo.zone/logos/heroku/heroku-icon.svg" alt="Heroku" class="platform-icon">
-                            <p>Heroku</p>
-                        </div>
-                        <div class="platform-card" onclick="togglePlatform('netlify')">
-                            <img src="https://www.vectorlogo.zone/logos/netlify/netlify-icon.svg" alt="Netlify" class="platform-icon">
-                            <p>Netlify</p>
-                        </div>
-                        <div class="platform-card" onclick="togglePlatform('digitalocean')">
-                            <img src="https://www.vectorlogo.zone/logos/digitalocean/digitalocean-icon.svg" alt="Digital Ocean" class="platform-icon">
-                            <p>Digital Ocean</p>
-                        </div>
-                    </div>
+                    Demonstração e Deploy
                 </div>
 
                 <div class="form-group">
                     <label for="demoUrl">URL da Demo</label>
-                    <input type="url" id="demoUrl">
+                    <input type="url" id="demoUrl" placeholder="https://seu-projeto.com">
+                    <p class="help-text">Link para uma versão ao vivo do projeto</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="demoVideo">Vídeo Demo</label>
-                    <input type="url" id="demoVideo">
+                    <label for="demoVideo">Vídeo de Demonstração</label>
+                    <input type="url" id="demoVideo" placeholder="URL do YouTube/Vimeo">
+                    <p class="help-text">Link para um vídeo demonstrativo do projeto</p>
+                </div>
+
+                <div id="deployPlatforms" class="form-group" style="display: none;">
+                    <label>Plataformas de Deploy</label>
+                    <div class="platform-grid">
+                        <div class="platform-option" onclick="togglePlatform('vercel')">
+                            <i class="fas fa-triangle platform-icon"></i>
+                            <p>Vercel</p>
+                        </div>
+                        <div class="platform-option" onclick="togglePlatform('heroku')">
+                            <i class="fas fa-cloud platform-icon"></i>
+                            <p>Heroku</p>
+                        </div>
+                        <div class="platform-option" onclick="togglePlatform('netlify')">
+                            <i class="fas fa-square platform-icon"></i>
+                            <p>Netlify</p>
+                        </div>
+                        <div class="platform-option" onclick="togglePlatform('digitalocean')">
+                            <i class="fas fa-water platform-icon"></i>
+                            <p>Digital Ocean</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Tecnologias -->
-            <section class="form-section">
+            <!-- Tecnologias e Configuração -->
+            <section class="form-section" id="tech-setup">
                 <div class="section-title">
-                    <i class="fas fa-code"></i>
-                    Tecnologias
-                </div>
-                
-                <div class="form-group">
-                    <label for="technologies" class="required">Stack Tecnológica</label>
-                    <textarea id="technologies" rows="4" required></textarea>
-                    <div id="techStackPreview" class="tech-stack-preview"></div>
+                    <i class="fas fa-cogs"></i>
+                    Tecnologias e Configuração
                 </div>
 
                 <div class="form-group">
-                    <label>Método de Deploy</label>
+                    <label for="technologies" class="required">Stack Tecnológica</label>
+                    <textarea id="technologies" rows="4" placeholder="- Frontend: React, Redux, Tailwind CSS&#10;- Backend: Node.js, Express&#10;- Banco de Dados: MongoDB" required></textarea>
+                    <div id="techStackPreview" class="tech-stack-preview"></div>
+                    <p class="help-text">Liste as principais tecnologias, frameworks e ferramentas utilizadas</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Método de Implantação</label>
                     <div class="deployment-methods">
-                        <div class="deploy-method" onclick="selectDeploy('standard')">
+                        <div class="deployment-method active" onclick="selectDeployment('standard')">
                             <i class="fas fa-code"></i>
                             <p>Padrão</p>
                         </div>
-                        <div class="deploy-method" onclick="selectDeploy('docker')">
+                        <div class="deployment-method" onclick="selectDeployment('docker')">
                             <i class="fab fa-docker"></i>
                             <p>Docker</p>
                         </div>
-                        <div class="deploy-method" onclick="selectDeploy('makefile')">
+                        <div class="deployment-method" onclick="selectDeployment('makefile')">
                             <i class="fas fa-file-code"></i>
                             <p>Makefile</p>
                         </div>
                     </div>
                 </div>
 
-                <div id="deployConfigSection" style="display: none;">
-                    <div class="form-group" id="dockerCommands" style="display: none;">
-                        <label>Comandos Docker</label>
-                        <textarea id="dockerInstructions" rows="4"></textarea>
-                    </div>
-
-                    <div class="form-group" id="makefileCommands" style="display: none;">
-                        <label>Comandos Makefile</label>
-                        <textarea id="makefileInstructions" rows="4"></textarea>
-                    </div>
+                <div id="dockerCommands" class="form-group" style="display: none;">
+                    <label for="dockerInstructions">Comandos Docker</label>
+                    <textarea id="dockerInstructions" rows="4" placeholder="docker-compose up -d&#10;docker build -t meuapp ."></textarea>
                 </div>
-            </section>
 
-            <!-- Exemplos de Código -->
-            <section class="form-section">
-                <div class="section-title">
-                    <i class="fas fa-code"></i>
-                    Exemplos de Código
+                <div id="makefileCommands" class="form-group" style="display: none;">
+                    <label for="makefileInstructions">Comandos Makefile</label>
+                    <textarea id="makefileInstructions" rows="4" placeholder="make install&#10;make build&#10;make run"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label>Incluir exemplos de código?</label>
-                    <div class="toggle-buttons">
+                    <label for="envSetup">Configuração de Ambiente</label>
+                    <textarea id="envSetup" rows="4" placeholder="DATABASE_URL=postgresql://localhost:5432/meudb&#10;API_KEY=sua_chave_api&#10;PORT=3000"></textarea>
+                    <p class="help-text">Adicione variáveis de ambiente e detalhes de configuração</p>
+                </div>
+
+                <div class="form-group">
+                    <label>Deseja incluir exemplos de código?</label>
+                    <div class="code-examples-toggle">
                         <button onclick="toggleCodeExamples(true)" class="btn-toggle">Sim</button>
                         <button onclick="toggleCodeExamples(false)" class="btn-toggle">Não</button>
                     </div>
                 </div>
 
-                <div id="codeExamplesSection" style="display: none;">
-                    <div class="form-group">
-                        <label>Exemplo de Código</label>
-                        <textarea id="codeSnippets" rows="8"></textarea>
-                    </div>
+                <div id="codeExamples" class="form-group" style="display: none;">
+                    <label for="codeSnippets">Exemplos de Código</label>
+                    <textarea id="codeSnippets" rows="8" placeholder="```javascript&#10;// Exemplo de uso&#10;const client = new Client();&#10;```"></textarea>
+                    <p class="help-text">Adicione snippets de código relevantes com syntax highlighting</p>
                 </div>
             </section>
 
-            <!-- Comunidade -->
-            <section class="form-section">
+            <!-- Comunidade e Contribuição -->
+            <section class="form-section" id="community">
                 <div class="section-title">
                     <i class="fas fa-users"></i>
-                    Comunidade
+                    Comunidade e Contribuição
                 </div>
 
                 <div class="form-group">
                     <label for="contributing">Como Contribuir</label>
-                    <textarea id="contributing" rows="6"></textarea>
+                    <textarea id="contributing" rows="6" placeholder="1. Faça um fork do repositório&#10;2. Crie um branch para sua feature&#10;3. Faça commit das alterações&#10;4. Faça push para o branch&#10;5. Abra um Pull Request"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="communityGuide">Como Participar da Comunidade</label>
-                    <textarea id="communityGuide" rows="4"></textarea>
+                    <label for="communityInfo">Como Participar da Comunidade</label>
+                    <textarea id="communityInfo" rows="4" placeholder="- Entre no nosso Discord&#10;- Participe das discussões no GitHub&#10;- Assine nossa newsletter"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="codeOfConduct">Código de Conduta</label>
+                    <textarea id="codeOfConduct" rows="4" placeholder="Nós, como membros e contribuidores, nos comprometemos a..."></textarea>
                 </div>
             </section>
 
-            <!-- Contato -->
-            <section class="form-section">
+            <!-- Contato e Suporte -->
+            <section class="form-section" id="contact">
                 <div class="section-title">
                     <i class="fas fa-envelope"></i>
-                    Contato
+                    Contato e Suporte
                 </div>
 
                 <div class="form-group">
                     <label for="authorName" class="required">Nome do Autor</label>
-                    <input type="text" id="authorName" required>
+                    <input type="text" id="authorName" placeholder="Seu Nome" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="authorEmail">Email</label>
-                    <input type="email" id="authorEmail">
+                    <label for="authorEmail">Email de Contato</label>
+                    <input type="email" id="authorEmail" placeholder="seu@email.com">
                 </div>
 
                 <div class="form-group">
                     <label for="authorLink">Link do Autor</label>
-                    <input type="url" id="authorLink">
+                    <input type="url" id="authorLink" placeholder="https://github.com/seunome">
                 </div>
 
                 <div class="form-group">
-                    <label for="buymeacoffee">Buy Me a Coffee</label>
-                    <input type="url" id="buymeacoffee">
+                    <label for="buymeacoffee">Link Buy Me a Coffee</label>
+                    <input type="url" id="buymeacoffee" placeholder="https://www.buymeacoffee.com/seunome">
                 </div>
             </section>
 
-            <!-- Licença -->
-            <section class="form-section">
+            <!-- Termos e Licença -->
+            <section class="form-section" id="terms">
                 <div class="section-title">
                     <i class="fas fa-gavel"></i>
-                    Licença
+                    Termos e Licença
                 </div>
 
                 <div class="form-group">
-                    <label for="license">Tipo de Licença</label>
+                    <label for="license">Licença</label>
                     <select id="license">
-                        <option value="mit">MIT</option>
-                        <option value="apache">Apache 2.0</option>
+                        <option value="mit">MIT License</option>
+                        <option value="apache">Apache License 2.0</option>
                         <option value="gpl">GNU GPL v3</option>
-                        <option value="custom">Personalizada</option>
+                        <option value="custom">Licença Personalizada</option>
                     </select>
                 </div>
 
-                <div id="customLicenseSection" class="form-group" style="display: none;">
-                    <label>Licença Personalizada</label>
+                <div id="customLicense" class="form-group" style="display: none;">
+                    <label for="customLicenseText">Texto da Licença Personalizada</label>
                     <textarea id="customLicenseText" rows="6"></textarea>
                 </div>
             </section>
 
+            <!-- Changelog -->
+            <section class="form-section" id="changelog">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    Changelog
+                </div>
+                
+                <div class="form-group">
+                    <label for="changelogEntries">Histórico de Alterações</label>
+                    <textarea id="changelogEntries" rows="6" placeholder="## [1.0.0] - 2024-03-20&#10;### Adicionado&#10;- Lançamento inicial&#10;### Alterado&#10;- Atualização X"></textarea>
+                </div>
+            </section>
+
             <!-- Créditos -->
-            <section class="form-section">
+            <section class="form-section" id="credits">
                 <div class="section-title">
                     <i class="fas fa-award"></i>
                     Créditos
@@ -272,34 +278,384 @@
 
                 <div class="form-group">
                     <label for="contributors">Contribuidores</label>
-                    <textarea id="contributors" rows="4"></textarea>
+                    <textarea id="contributors" rows="4" placeholder="- [Nome](https://github.com/usuario) - Funcionalidade X&#10;- [Nome2](https://github.com/usuario2) - Funcionalidade Y"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="acknowledgments">Agradecimentos</label>
-                    <textarea id="acknowledgments" rows="4"></textarea>
+                    <textarea id="acknowledgments" rows="4" placeholder="Agradecimentos especiais a:&#10;- Pessoa/Empresa A por [contribuição]&#10;- Projeto B por [inspiração]"></textarea>
                 </div>
             </section>
 
-            <!-- Botões -->
+            <!-- Botões de Ação -->
             <div class="button-group">
-                <button class="btn btn-preview" onclick="previewDoc()">
+                <button class="btn btn-primary" onclick="previewMarkdown()">
                     <i class="fas fa-eye"></i>
                     Visualizar
                 </button>
-                <button class="btn btn-download" onclick="downloadDoc()">
-                    <i class="fas fa-download"></i>
-                    Baixar README.md
+                <button class="btn btn-primary" onclick="downloadMarkdown()">
+                    <i class="fas-download"></i>
+                    Baixar
                 </button>
             </div>
         </main>
-
-        <!-- Preview -->
+        
+        <!-- Container de Visualização -->
         <div id="preview" class="preview-container">
             <div class="preview-content"></div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Scripts -->
+    <script>
+        // Variáveis globais
+        let projectImage = null;
+        let selectedDeployment = 'standard';
+        let selectedPlatforms = new Set();
+        let codeExamplesEnabled = false;
+
+        // Mapeamento de tecnologias para ícones
+        const techIcons = {
+            'react': 'fab fa-react',
+            'vue': 'fab fa-vuejs',
+            'angular': 'fab fa-angular',
+            'node': 'fab fa-node-js',
+            'javascript': 'fab fa-js',
+            'typescript': 'fab fa-js',
+            'python': 'fab fa-python',
+            'java': 'fab fa-java',
+            'php': 'fab fa-php',
+            'docker': 'fab fa-docker',
+            'aws': 'fab fa-aws',
+            'github': 'fab fa-github',
+            'git': 'fab fa-git-alt',
+            'css': 'fab fa-css3-alt',
+            'html': 'fab fa-html5',
+            'sass': 'fab fa-sass',
+            'bootstrap': 'fab fa-bootstrap',
+            'wordpress': 'fab fa-wordpress',
+            'npm': 'fab fa-npm',
+            'yarn': 'fab fa-yarn',
+            'linux': 'fab fa-linux',
+            'windows': 'fab fa-windows',
+            'android': 'fab fa-android',
+            'apple': 'fab fa-apple',
+            'laravel': 'fab fa-laravel',
+            'mysql': 'fas fa-database',
+            'mongodb': 'fas fa-leaf',
+            'postgresql': 'fas fa-database',
+            'redis': 'fas fa-database'
+        };
+
+        // Mapeamento de plataformas de deploy para ícones
+        const deployPlatforms = {
+            'vercel': {
+                icon: 'fas fa-triangle',
+                color: '#000000'
+            },
+            'heroku': {
+                icon: 'fas fa-cloud',
+                color: '#430098'
+            },
+            'netlify': {
+                icon: 'fas fa-square',
+                color: '#00C7B7'
+            },
+            'digitalocean': {
+                icon: 'fas fa-water',
+                color: '#0080FF'
+            }
+        };
+
+        // Manipular mudança no tipo de projeto
+        function handleProjectTypeChange() {
+            const projectType = document.getElementById('projectType').value;
+            const deployPlatforms = document.getElementById('deployPlatforms');
+            
+            if (projectType === 'website' || projectType === 'api') {
+                deployPlatforms.style.display = 'block';
+            } else {
+                deployPlatforms.style.display = 'none';
+            }
+        }
+
+        // Manipular upload de imagem
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    projectImage = e.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = projectImage;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Toggle plataforma de deploy
+        function togglePlatform(platform) {
+            const element = event.currentTarget;
+            if (selectedPlatforms.has(platform)) {
+                selectedPlatforms.delete(platform);
+                element.classList.remove('selected');
+            } else {
+                selectedPlatforms.add(platform);
+                element.classList.add('selected');
+            }
+        }
+
+        // Selecionar método de deployment
+        function selectDeployment(method) {
+            selectedDeployment = method;
+            document.querySelectorAll('.deployment-method').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            document.getElementById('dockerCommands').style.display = method === 'docker' ? 'block' : 'none';
+            document.getElementById('makefileCommands').style.display = method === 'makefile' ? 'block' : 'none';
+        }
+
+        // Toggle exemplos de código
+        function toggleCodeExamples(enabled) {
+            codeExamplesEnabled = enabled;
+            document.getElementById('codeExamples').style.display = enabled ? 'block' : 'none';
+            document.querySelectorAll('.btn-toggle').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // Detectar e gerar ícones de tecnologias
+        function detectTechIcons(technologies) {
+            const techList = technologies.toLowerCase();
+            const icons = [];
+            
+            Object.entries(techIcons).forEach(([tech, iconClass]) => {
+                if (techList.includes(tech)) {
+                    icons.push(`<i class="${iconClass}" title="${tech.charAt(0).toUpperCase() + tech.slice(1)}"></i>`);
+                }
+            });
+            
+            return icons.join(' ');
+        }
+
+        // Gerar estrutura de diretórios inteligente
+        function generateDirectoryStructure() {
+            const projectType = document.getElementById('projectType').value;
+            const technologies = document.getElementById('technologies').value.toLowerCase();
+            
+            let structure = '';
+            
+            if (projectType === 'website' || projectType === 'api') {
+                structure += `${document.getElementById('projectTitle').value || 'project'}/\n`;
+                structure += '├── src/\n';
+                
+                if (technologies.includes('react') || technologies.includes('vue') || technologies.includes('angular')) {
+                    structure += '│   ├── components/\n';
+                    structure += '│   ├── pages/\n';
+                    structure += '│   ├── assets/\n';
+                    structure += '│   ├── styles/\n';
+                    structure += '│   ├── utils/\n';
+                    structure += '│   └── services/\n';
+                }
+                
+                if (projectType === 'api') {
+                    structure += '│   ├── controllers/\n';
+                    structure += '│   ├── models/\n';
+                    structure += '│   ├── routes/\n';
+                    structure += '│   ├── middleware/\n';
+                    structure += '│   └── config/\n';
+                }
+                
+                structure += '├── public/\n';
+                structure += '├── tests/\n';
+                structure += '├── docs/\n';
+                structure += '└── README.md\n';
+            }
+            
+            return structure;
+        }
+
+        // Gerar sumário
+        function generateTableOfContents() {
+            const sections = [
+                'Sobre',
+                'Funcionalidades',
+                'Pré-requisitos',
+                'Estrutura do Projeto',
+                'Instalação',
+                'Configuração',
+                'Tecnologias',
+                'Demonstração',
+                'Como Contribuir',
+                'Comunidade',
+                'Contato',
+                'Changelog',
+                'Licença',
+                'Créditos'
+            ];
+
+            return sections.map(section => 
+                `- [${section}](#${section.toLowerCase().replace(/\s+/g, '-')})`
+            ).join('\n');
+        }
+
+        // Converter Markdown para HTML
+        function convertMarkdownToHTML(markdown) {
+            return markdown
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/`{3}(\w+)?\n([\s\S]*?)\n`{3}/gm, '<pre><code class="language-$1">$2</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^\s*[-*+]\s+(.*)/gm, '<li>$1</li>')
+                .replace(/\n\n/g, '<br><br>');
+        }
+
+        // Gerar documentação em Markdown
+        function generateMarkdown() {
+            const formData = {
+                projectTitle: document.getElementById('projectTitle').value || 'Nome do Projeto',
+                description: document.getElementById('description').value || '',
+                technologies: document.getElementById('technologies').value || '',
+                demoUrl: document.getElementById('demoUrl').value || '',
+                demoVideo: document.getElementById('demoVideo').value || '',
+                envSetup: document.getElementById('envSetup').value || '',
+                contributing: document.getElementById('contributing').value || '',
+                communityInfo: document.getElementById('communityInfo').value || '',
+                codeOfConduct: document.getElementById('codeOfConduct').value || '',
+                authorName: document.getElementById('authorName').value || '',
+                authorEmail: document.getElementById('authorEmail').value || '',
+                authorLink: document.getElementById('authorLink').value || '',
+                buymeacoffee: document.getElementById('buymeacoffee').value || '',
+                license: document.getElementById('license').value || 'MIT',
+                changelogEntries: document.getElementById('changelogEntries').value || '',
+                contributors: document.getElementById('contributors').value || '',
+                acknowledgments: document.getElementById('acknowledgments').value || ''
+            };
+
+            const techStack = detectTechIcons(formData.technologies);
+            const directoryStructure = generateDirectoryStructure();
+
+            let markdown = `# ${formData.projectTitle}
+
+<div align="center">
+
+[![Voltar ao Topo](https://img.shields.io/badge/Voltar%20ao%20Topo-▲-blue)](#${formData.projectTitle.toLowerCase().replace(/\s+/g, '-')})
+
+## Sumário
+
+${generateTableOfContents()}
+
+<div align="center">
+    ${projectImage ? `<img src="${projectImage}" alt="Logo do Projeto" width="240">` : ''}
+</div>
+
+## Sobre
+${formData.description}
+
+## Estrutura do Projeto
+\`\`\`
+${directoryStructure}
+\`\`\`
+
+## Tecnologias
+${formData.technologies}
+
+${techStack ? `\n### Stack Tecnológica\n${techStack}\n` : ''}
+
+## Demonstração
+
+${formData.demoUrl ? `[Demo ao Vivo](${formData.demoUrl})\n` : ''}
+${formData.demoVideo ? `[Vídeo Demonstrativo](${formData.demoVideo})\n` : ''}
+
+${selectedPlatforms.size > 0 ? `### Plataformas de Deploy\n${Array.from(selectedPlatforms).map(p => 
+    `- [${p.charAt(0).toUpperCase() + p.slice(1)}](https://${p}.com)`
+).join('\n')}\n` : ''}
+
+## Configuração
+\`\`\`env
+${formData.envSetup}
+\`\`\`
+
+## Como Contribuir
+${formData.contributing}
+
+## 🤝 Comunidade
+${formData.communityInfo}
+
+### Código de Conduta
+${formData.codeOfConduct}
+
+## Contato
+- Autor: ${formData.authorName}
+- Email: ${formData.authorEmail}
+- GitHub: [${formData.authorName}](${formData.authorLink})
+
+## Changelog
+${formData.changelogEntries}
+
+## Licença
+${formData.license === 'custom' ? document.getElementById('customLicenseText').value : `Este projeto está licenciado sob a ${formData.license} License`}
+
+## Créditos
+
+### Contribuidores
+${formData.contributors}
+
+### Agradecimentos
+${formData.acknowledgments}
+
+${formData.buymeacoffee ? `\n[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](${formData.buymeacoffee})\n` : ''}
+
+---
+
+<div align="center">
+    Feito com 💜 por ${formData.authorName}
+</div>`;
+
+            return markdown;
+        }
+
+        // Visualizar documentação
+        function previewMarkdown() {
+            const preview = document.getElementById('preview');
+            const previewContent = preview.querySelector('.preview-content');
+            preview.style.display = 'block';
+            const markdown = generateMarkdown();
+            previewContent.innerHTML = convertMarkdownToHTML(markdown);
+            preview.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Baixar documentação
+        function downloadMarkdown() {
+            const markdown = generateMarkdown();
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'README.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Atualizar ícones de tecnologia em tempo real
+            document.getElementById('technologies').addEventListener('input', function(e) {
+                const techStackPreview = document.getElementById('techStackPreview');
+                techStackPreview.innerHTML = detectTechIcons(e.target.value);
+            });
+
+            // Atualizar licença personalizada
+            document.getElementById('license').addEventListener('change', function(e) {
+                document.getElementById('customLicense').style.display = 
+                    e.target.value === 'custom' ? 'block' : 'none';
+            });
+        });
+    </script>
 </body>
 </html>
