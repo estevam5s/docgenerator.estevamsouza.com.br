@@ -11,13 +11,17 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <!-- Styles -->
     <link href="styles.css" rel="stylesheet">
+
+    <!-- Highlight.js para syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -29,6 +33,17 @@
             </div>
             <h1>DocGen Pro 3.0</h1>
             <p class="subtitle">Crie documentações profissionais com inteligência artificial</p>
+            <div class="tech-badges">
+                <span class="tech-badge">
+                    <i class="fas fa-brain"></i> AI Powered
+                </span>
+                <span class="tech-badge">
+                    <i class="fas fa-bolt"></i> Real-time
+                </span>
+                <span class="tech-badge">
+                    <i class="fas fa-magic"></i> Auto-detect
+                </span>
+            </div>
         </header>
 
         <!-- Main Form Container -->
@@ -38,14 +53,16 @@
                 <div class="section-title">
                     <i class="fas fa-info-circle"></i>
                     Informações Básicas
+                    <span class="section-badge">Smart Detection</span>
                 </div>
                 
                 <div class="form-group">
                     <label for="projectType" class="required">Tipo do Projeto</label>
                     <select id="projectType" required onchange="handleProjectTypeChange()">
                         <option value="">Selecione o tipo do projeto</option>
-                        <option value="website">Website</option>
-                        <option value="api">API / Web Service</option>
+                        <option value="website">Website / Frontend</option>
+                        <option value="api">API / Backend</option>
+                        <option value="fullstack">Fullstack Application</option>
                         <option value="mobile">Aplicativo Mobile</option>
                         <option value="desktop">Aplicação Desktop</option>
                         <option value="library">Biblioteca/Framework</option>
@@ -54,26 +71,62 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="projectImage" class="required">Logo do Projeto</label>
-                    <div class="image-upload" onclick="document.getElementById('imageInput').click()">
-                        <i class="fas fa-cloud-upload-alt fa-2x"></i>
-                        <p>Clique para enviar a imagem</p>
-                        <input type="file" id="imageInput" accept="image/*" style="display: none" onchange="handleImageUpload(event)">
+                    <label for="projectFiles" class="required">Arquivos do Projeto</label>
+                    <div class="file-upload-container">
+                        <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                            <p>Arraste seus arquivos aqui ou clique para selecionar</p>
+                            <input type="file" id="fileInput" webkitdirectory directory multiple style="display: none" onchange="handleFileUpload(event)">
+                        </div>
+                        <div id="fileTree" class="file-tree hidden">
+                            <div class="file-tree-header">
+                                <h4>Estrutura do Projeto</h4>
+                                <button class="btn-icon" onclick="generateStructure()">
+                                    <i class="fas fa-magic"></i>
+                                    Auto-organizar
+                                </button>
+                            </div>
+                            <div class="file-tree-content"></div>
+                        </div>
                     </div>
-                    <img id="imagePreview" class="image-preview" style="display: none;">
-                    <p class="help-text">Envie um logo ou imagem representativa (recomendado: 240x240px)</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="projectTitle" class="required">Nome do Projeto</label>
-                    <input type="text" id="projectTitle" placeholder="Ex: Meu Projeto Incrível" required>
-                    <p class="help-text">Escolha um nome memorável e descritivo</p>
+                    <label for="projectScreenshots" class="optional">Screenshots do Projeto</label>
+                    <div class="screenshots-upload">
+                        <div class="screenshots-grid" id="screenshotsGrid"></div>
+                        <button class="btn-outline" onclick="document.getElementById('screenshotInput').click()">
+                            <i class="fas fa-camera"></i>
+                            Adicionar Screenshot
+                        </button>
+                        <input type="file" id="screenshotInput" accept="image/*" multiple style="display: none" onchange="handleScreenshotUpload(event)">
+                    </div>
                 </div>
-                
+
+                <!-- Stack Tecnológica Inteligente -->
                 <div class="form-group">
-                    <label for="description" class="required">Descrição</label>
-                    <textarea id="description" rows="4" placeholder="Ex: Uma aplicação web poderosa que ajuda desenvolvedores..." required></textarea>
-                    <p class="help-text">Forneça uma visão geral clara e concisa do seu projeto</p>
+                    <label for="technologies" class="required">Stack Tecnológica</label>
+                    <div class="tech-stack-container">
+                        <div class="tech-categories">
+                            <div class="tech-category" data-category="frontend">
+                                <h4>Frontend</h4>
+                                <div class="tech-grid" id="frontendTechs"></div>
+                            </div>
+                            <div class="tech-category" data-category="backend">
+                                <h4>Backend</h4>
+                                <div class="tech-grid" id="backendTechs"></div>
+                            </div>
+                            <div class="tech-category" data-category="database">
+                                <h4>Database</h4>
+                                <div class="tech-grid" id="databaseTechs"></div>
+                            </div>
+                            <div class="tech-category" data-category="devops">
+                                <h4>DevOps</h4>
+                                <div class="tech-grid" id="devopsTechs"></div>
+                            </div>
+                        </div>
+                        <div class="selected-techs" id="selectedTechs"></div>
+                    </div>
                 </div>
             </section>
 
@@ -85,216 +138,90 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="demoUrl">URL da Demo</label>
-                    <input type="url" id="demoUrl" placeholder="https://seu-projeto.com">
-                    <p class="help-text">Link para uma versão ao vivo do projeto</p>
-                </div>
-
-                <div class="form-group">
-                    <label for="demoVideo">Vídeo de Demonstração</label>
-                    <input type="url" id="demoVideo" placeholder="URL do YouTube/Vimeo">
-                    <p class="help-text">Link para um vídeo demonstrativo do projeto</p>
-                </div>
-
-                <div id="deployPlatforms" class="form-group" style="display: none;">
-                    <label>Plataformas de Deploy</label>
-                    <div class="platform-grid">
-                        <div class="platform-option" onclick="togglePlatform('vercel')">
-                            <i class="fas fa-triangle platform-icon"></i>
-                            <p>Vercel</p>
+                    <label for="deployPlatform">Plataforma de Deploy</label>
+                    <div class="deploy-platforms">
+                        <div class="platform-card" data-platform="vercel" onclick="selectPlatform('vercel')">
+                            <div class="platform-icon">
+                                <i class="fab fa-vercel"></i>
+                            </div>
+                            <span>Vercel</span>
+                            <div class="platform-features">
+                                <span>Edge Functions</span>
+                                <span>Analytics</span>
+                            </div>
                         </div>
-                        <div class="platform-option" onclick="togglePlatform('heroku')">
-                            <i class="fas fa-cloud platform-icon"></i>
-                            <p>Heroku</p>
+                        <div class="platform-card" data-platform="netlify" onclick="selectPlatform('netlify')">
+                            <div class="platform-icon">
+                                <i class="fab fa-netlify"></i>
+                            </div>
+                            <span>Netlify</span>
+                            <div class="platform-features">
+                                <span>Forms</span>
+                                <span>Functions</span>
+                            </div>
                         </div>
-                        <div class="platform-option" onclick="togglePlatform('netlify')">
-                            <i class="fas fa-square platform-icon"></i>
-                            <p>Netlify</p>
+                        <div class="platform-card" data-platform="heroku" onclick="selectPlatform('heroku')">
+                            <div class="platform-icon">
+                                <i class="fab fa-heroku"></i>
+                            </div>
+                            <span>Heroku</span>
+                            <div class="platform-features">
+                                <span>Add-ons</span>
+                                <span>Dynos</span>
+                            </div>
                         </div>
-                        <div class="platform-option" onclick="togglePlatform('digitalocean')">
-                            <i class="fas fa-water platform-icon"></i>
-                            <p>Digital Ocean</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Tecnologias e Configuração -->
-            <section class="form-section" id="tech-setup">
-                <div class="section-title">
-                    <i class="fas fa-cogs"></i>
-                    Tecnologias e Configuração
-                </div>
-
-                <div class="form-group">
-                    <label for="technologies" class="required">Stack Tecnológica</label>
-                    <textarea id="technologies" rows="4" placeholder="- Frontend: React, Redux, Tailwind CSS&#10;- Backend: Node.js, Express&#10;- Banco de Dados: MongoDB" required></textarea>
-                    <div id="techStackPreview" class="tech-stack-preview"></div>
-                    <p class="help-text">Liste as principais tecnologias, frameworks e ferramentas utilizadas</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Método de Implantação</label>
-                    <div class="deployment-methods">
-                        <div class="deployment-method active" onclick="selectDeployment('standard')">
-                            <i class="fas fa-code"></i>
-                            <p>Padrão</p>
-                        </div>
-                        <div class="deployment-method" onclick="selectDeployment('docker')">
-                            <i class="fab fa-docker"></i>
-                            <p>Docker</p>
-                        </div>
-                        <div class="deployment-method" onclick="selectDeployment('makefile')">
-                            <i class="fas fa-file-code"></i>
-                            <p>Makefile</p>
+                        <div class="platform-card" data-platform="digitalocean" onclick="selectPlatform('digitalocean')">
+                            <div class="platform-icon">
+                                <i class="fab fa-digital-ocean"></i>
+                            </div>
+                            <span>Digital Ocean</span>
+                            <div class="platform-features">
+                                <span>Kubernetes</span>
+                                <span>Droplets</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="dockerCommands" class="form-group" style="display: none;">
-                    <label for="dockerInstructions">Comandos Docker</label>
-                    <textarea id="dockerInstructions" rows="4" placeholder="docker-compose up -d&#10;docker build -t meuapp ."></textarea>
-                </div>
-
-                <div id="makefileCommands" class="form-group" style="display: none;">
-                    <label for="makefileInstructions">Comandos Makefile</label>
-                    <textarea id="makefileInstructions" rows="4" placeholder="make install&#10;make build&#10;make run"></textarea>
-                </div>
-
                 <div class="form-group">
-                    <label for="envSetup">Configuração de Ambiente</label>
-                    <textarea id="envSetup" rows="4" placeholder="DATABASE_URL=postgresql://localhost:5432/meudb&#10;API_KEY=sua_chave_api&#10;PORT=3000"></textarea>
-                    <p class="help-text">Adicione variáveis de ambiente e detalhes de configuração</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Deseja incluir exemplos de código?</label>
-                    <div class="code-examples-toggle">
-                        <button onclick="toggleCodeExamples(true)" class="btn-toggle">Sim</button>
-                        <button onclick="toggleCodeExamples(false)" class="btn-toggle">Não</button>
+                    <label for="deployConfig">Configuração de Deploy</label>
+                    <div class="deploy-config" id="deployConfig">
+                        <!-- Será preenchido via JavaScript baseado na plataforma selecionada -->
                     </div>
-                </div>
-
-                <div id="codeExamples" class="form-group" style="display: none;">
-                    <label for="codeSnippets">Exemplos de Código</label>
-                    <textarea id="codeSnippets" rows="8" placeholder="```javascript&#10;// Exemplo de uso&#10;const client = new Client();&#10;```"></textarea>
-                    <p class="help-text">Adicione snippets de código relevantes com syntax highlighting</p>
-                </div>
-            </section>
-
-            <!-- Comunidade e Contribuição -->
-            <section class="form-section" id="community">
-                <div class="section-title">
-                    <i class="fas fa-users"></i>
-                    Comunidade e Contribuição
-                </div>
-
-                <div class="form-group">
-                    <label for="contributing">Como Contribuir</label>
-                    <textarea id="contributing" rows="6" placeholder="1. Faça um fork do repositório&#10;2. Crie um branch para sua feature&#10;3. Faça commit das alterações&#10;4. Faça push para o branch&#10;5. Abra um Pull Request"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="communityInfo">Como Participar da Comunidade</label>
-                    <textarea id="communityInfo" rows="4" placeholder="- Entre no nosso Discord&#10;- Participe das discussões no GitHub&#10;- Assine nossa newsletter"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="codeOfConduct">Código de Conduta</label>
-                    <textarea id="codeOfConduct" rows="4" placeholder="Nós, como membros e contribuidores, nos comprometemos a..."></textarea>
                 </div>
             </section>
 
             <!-- Contato e Suporte -->
             <section class="form-section" id="contact">
                 <div class="section-title">
-                    <i class="fas fa-envelope"></i>
+                    <i class="fas fa-handshake"></i>
                     Contato e Suporte
                 </div>
 
                 <div class="form-group">
-                    <label for="authorName" class="required">Nome do Autor</label>
-                    <input type="text" id="authorName" placeholder="Seu Nome" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="authorEmail">Email de Contato</label>
-                    <input type="email" id="authorEmail" placeholder="seu@email.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="authorLink">Link do Autor</label>
-                    <input type="url" id="authorLink" placeholder="https://github.com/seunome">
-                </div>
-
-                <div class="form-group">
                     <label for="buymeacoffee">Link Buy Me a Coffee</label>
-                    <input type="url" id="buymeacoffee" placeholder="https://www.buymeacoffee.com/seunome">
-                </div>
-            </section>
-
-            <!-- Termos e Licença -->
-            <section class="form-section" id="terms">
-                <div class="section-title">
-                    <i class="fas fa-gavel"></i>
-                    Termos e Licença
-                </div>
-
-                <div class="form-group">
-                    <label for="license">Licença</label>
-                    <select id="license">
-                        <option value="mit">MIT License</option>
-                        <option value="apache">Apache License 2.0</option>
-                        <option value="gpl">GNU GPL v3</option>
-                        <option value="custom">Licença Personalizada</option>
-                    </select>
-                </div>
-
-                <div id="customLicense" class="form-group" style="display: none;">
-                    <label for="customLicenseText">Texto da Licença Personalizada</label>
-                    <textarea id="customLicenseText" rows="6"></textarea>
-                </div>
-            </section>
-
-            <!-- Changelog -->
-            <section class="form-section" id="changelog">
-                <div class="section-title">
-                    <i class="fas fa-history"></i>
-                    Changelog
-                </div>
-                
-                <div class="form-group">
-                    <label for="changelogEntries">Histórico de Alterações</label>
-                    <textarea id="changelogEntries" rows="6" placeholder="## [1.0.0] - 2024-03-20&#10;### Adicionado&#10;- Lançamento inicial&#10;### Alterado&#10;- Atualização X"></textarea>
-                </div>
-            </section>
-
-            <!-- Créditos -->
-            <section class="form-section" id="credits">
-                <div class="section-title">
-                    <i class="fas fa-award"></i>
-                    Créditos
-                </div>
-
-                <div class="form-group">
-                    <label for="contributors">Contribuidores</label>
-                    <textarea id="contributors" rows="4" placeholder="- [Nome](https://github.com/usuario) - Funcionalidade X&#10;- [Nome2](https://github.com/usuario2) - Funcionalidade Y"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="acknowledgments">Agradecimentos</label>
-                    <textarea id="acknowledgments" rows="4" placeholder="Agradecimentos especiais a:&#10;- Pessoa/Empresa A por [contribuição]&#10;- Projeto B por [inspiração]"></textarea>
+                    <div class="coffee-input">
+                        <input type="url" id="buymeacoffee" placeholder="https://www.buymeacoffee.com/seunome">
+                        <div class="coffee-preview" id="coffeePreview">
+                            <i class="fas fa-coffee"></i>
+                            <span>Preview do Botão</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
             <!-- Botões de Ação -->
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="previewMarkdown()">
+            <div class="action-buttons">
+                <button class="btn btn-preview" onclick="previewDocumentation()">
                     <i class="fas fa-eye"></i>
                     Visualizar
                 </button>
-                <button class="btn btn-primary" onclick="downloadMarkdown()">
-                    <i class="fas-download"></i>
+                <button class="btn btn-generate" onclick="generateDocumentation()">
+                    <i class="fas fa-magic"></i>
+                    Gerar Documentação
+                </button>
+                <button class="btn btn-download" onclick="downloadDocumentation()">
+                    <i class="fas fa-download"></i>
                     Baixar
                 </button>
             </div>
@@ -302,359 +229,308 @@
         
         <!-- Container de Visualização -->
         <div id="preview" class="preview-container">
-            <div class="preview-content"></div>
+            <div class="preview-header">
+                <h3>Preview da Documentação</h3>
+                <button class="btn-close" onclick="closePreview()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="preview-content markdown-body"></div>
         </div>
     </div>
 
     <!-- Scripts -->
     <script>
-        // Variáveis globais
-        let projectImage = null;
-        let selectedDeployment = 'standard';
-        let selectedPlatforms = new Set();
-        let codeExamplesEnabled = false;
-
-        // Mapeamento de tecnologias para ícones
-        const techIcons = {
-            'react': 'fab fa-react',
-            'vue': 'fab fa-vuejs',
-            'angular': 'fab fa-angular',
-            'node': 'fab fa-node-js',
-            'javascript': 'fab fa-js',
-            'typescript': 'fab fa-js',
-            'python': 'fab fa-python',
-            'java': 'fab fa-java',
-            'php': 'fab fa-php',
-            'docker': 'fab fa-docker',
-            'aws': 'fab fa-aws',
-            'github': 'fab fa-github',
-            'git': 'fab fa-git-alt',
-            'css': 'fab fa-css3-alt',
-            'html': 'fab fa-html5',
-            'sass': 'fab fa-sass',
-            'bootstrap': 'fab fa-bootstrap',
-            'wordpress': 'fab fa-wordpress',
-            'npm': 'fab fa-npm',
-            'yarn': 'fab fa-yarn',
-            'linux': 'fab fa-linux',
-            'windows': 'fab fa-windows',
-            'android': 'fab fa-android',
-            'apple': 'fab fa-apple',
-            'laravel': 'fab fa-laravel',
-            'mysql': 'fas fa-database',
-            'mongodb': 'fas fa-leaf',
-            'postgresql': 'fas fa-database',
-            'redis': 'fas fa-database'
+        // Configuração das tecnologias
+        const techStack = {
+            frontend: [
+                { name: 'React', icon: 'react', color: '#61DAFB' },
+                { name: 'Vue.js', icon: 'vuejs', color: '#4FC08D' },
+                { name: 'Angular', icon: 'angular', color: '#DD0031' },
+                { name: 'Svelte', icon: 'svelte', color: '#FF3E00' },
+                { name: 'Next.js', icon: 'nextjs', color: '#000000' },
+                { name: 'Tailwind CSS', icon: 'tailwind', color: '#38B2AC' }
+            ],
+            backend: [
+                { name: 'Node.js', icon: 'node-js', color: '#339933' },
+                { name: 'Python', icon: 'python', color: '#3776AB' },
+                { name: 'Java', icon: 'java', color: '#007396' },
+                { name: 'PHP', icon: 'php', color: '#777BB4' },
+                { name: 'Go', icon: 'go', color: '#00ADD8' },
+                { name: 'Ruby', icon: 'ruby', color: '#CC342D' }
+            ],
+            database: [
+                { name: 'MongoDB', icon: 'database', color: '#47A248' },
+                { name: 'PostgreSQL', icon: 'database', color: '#336791' },
+                { name: 'MySQL', icon: 'database', color: '#4479A1' },
+                { name: 'Redis', icon: 'database', color: '#DC382D' }
+            ],
+            devops: [
+                { name: 'Docker', icon: 'docker', color: '#2496ED' },
+                { name: 'Kubernetes', icon: 'dharmachakra', color: '#326CE5' },
+                { name: 'AWS', icon: 'aws', color: '#FF9900' },
+                { name: 'GitHub Actions', icon: 'github', color: '#2088FF' }
+            ]
         };
-
-        // Mapeamento de plataformas de deploy para ícones
-        const deployPlatforms = {
-            'vercel': {
-                icon: 'fas fa-triangle',
-                color: '#000000'
-            },
-            'heroku': {
-                icon: 'fas fa-cloud',
-                color: '#430098'
-            },
-            'netlify': {
-                icon: 'fas fa-square',
-                color: '#00C7B7'
-            },
-            'digitalocean': {
-                icon: 'fas fa-water',
-                color: '#0080FF'
-            }
-        };
-
-        // Manipular mudança no tipo de projeto
-        function handleProjectTypeChange() {
-            const projectType = document.getElementById('projectType').value;
-            const deployPlatforms = document.getElementById('deployPlatforms');
-            
-            if (projectType === 'website' || projectType === 'api') {
-                deployPlatforms.style.display = 'block';
-            } else {
-                deployPlatforms.style.display = 'none';
-            }
-        }
-
-        // Manipular upload de imagem
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    projectImage = e.target.result;
-                    const preview = document.getElementById('imagePreview');
-                    preview.src = projectImage;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Toggle plataforma de deploy
-        function togglePlatform(platform) {
-            const element = event.currentTarget;
-            if (selectedPlatforms.has(platform)) {
-                selectedPlatforms.delete(platform);
-                element.classList.remove('selected');
-            } else {
-                selectedPlatforms.add(platform);
-                element.classList.add('selected');
-            }
-        }
-
-        // Selecionar método de deployment
-        function selectDeployment(method) {
-            selectedDeployment = method;
-            document.querySelectorAll('.deployment-method').forEach(el => {
-                el.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-            
-            document.getElementById('dockerCommands').style.display = method === 'docker' ? 'block' : 'none';
-            document.getElementById('makefileCommands').style.display = method === 'makefile' ? 'block' : 'none';
-        }
-
-        // Toggle exemplos de código
-        function toggleCodeExamples(enabled) {
-            codeExamplesEnabled = enabled;
-            document.getElementById('codeExamples').style.display = enabled ? 'block' : 'none';
-            document.querySelectorAll('.btn-toggle').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-        }
-
-        // Detectar e gerar ícones de tecnologias
-        function detectTechIcons(technologies) {
-            const techList = technologies.toLowerCase();
-            const icons = [];
-            
-            Object.entries(techIcons).forEach(([tech, iconClass]) => {
-                if (techList.includes(tech)) {
-                    icons.push(`<i class="${iconClass}" title="${tech.charAt(0).toUpperCase() + tech.slice(1)}"></i>`);
-                }
-            });
-            
-            return icons.join(' ');
-        }
-
-        // Gerar estrutura de diretórios inteligente
-        function generateDirectoryStructure() {
-            const projectType = document.getElementById('projectType').value;
-            const technologies = document.getElementById('technologies').value.toLowerCase();
-            
-            let structure = '';
-            
-            if (projectType === 'website' || projectType === 'api') {
-                structure += `${document.getElementById('projectTitle').value || 'project'}/\n`;
-                structure += '├── src/\n';
-                
-                if (technologies.includes('react') || technologies.includes('vue') || technologies.includes('angular')) {
-                    structure += '│   ├── components/\n';
-                    structure += '│   ├── pages/\n';
-                    structure += '│   ├── assets/\n';
-                    structure += '│   ├── styles/\n';
-                    structure += '│   ├── utils/\n';
-                    structure += '│   └── services/\n';
-                }
-                
-                if (projectType === 'api') {
-                    structure += '│   ├── controllers/\n';
-                    structure += '│   ├── models/\n';
-                    structure += '│   ├── routes/\n';
-                    structure += '│   ├── middleware/\n';
-                    structure += '│   └── config/\n';
-                }
-                
-                structure += '├── public/\n';
-                structure += '├── tests/\n';
-                structure += '├── docs/\n';
-                structure += '└── README.md\n';
-            }
-            
-            return structure;
-        }
-
-        // Gerar sumário
-        function generateTableOfContents() {
-            const sections = [
-                'Sobre',
-                'Funcionalidades',
-                'Pré-requisitos',
-                'Estrutura do Projeto',
-                'Instalação',
-                'Configuração',
-                'Tecnologias',
-                'Demonstração',
-                'Como Contribuir',
-                'Comunidade',
-                'Contato',
-                'Changelog',
-                'Licença',
-                'Créditos'
-            ];
-
-            return sections.map(section => 
-                `- [${section}](#${section.toLowerCase().replace(/\s+/g, '-')})`
-            ).join('\n');
-        }
-
-        // Converter Markdown para HTML
-        function convertMarkdownToHTML(markdown) {
-            return markdown
-                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
-                .replace(/`{3}(\w+)?\n([\s\S]*?)\n`{3}/gm, '<pre><code class="language-$1">$2</code></pre>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/^\s*[-*+]\s+(.*)/gm, '<li>$1</li>')
-                .replace(/\n\n/g, '<br><br>');
-        }
-
-        // Gerar documentação em Markdown
-        function generateMarkdown() {
-            const formData = {
-                projectTitle: document.getElementById('projectTitle').value || 'Nome do Projeto',
-                description: document.getElementById('description').value || '',
-                technologies: document.getElementById('technologies').value || '',
-                demoUrl: document.getElementById('demoUrl').value || '',
-                demoVideo: document.getElementById('demoVideo').value || '',
-                envSetup: document.getElementById('envSetup').value || '',
-                contributing: document.getElementById('contributing').value || '',
-                communityInfo: document.getElementById('communityInfo').value || '',
-                codeOfConduct: document.getElementById('codeOfConduct').value || '',
-                authorName: document.getElementById('authorName').value || '',
-                authorEmail: document.getElementById('authorEmail').value || '',
-                authorLink: document.getElementById('authorLink').value || '',
-                buymeacoffee: document.getElementById('buymeacoffee').value || '',
-                license: document.getElementById('license').value || 'MIT',
-                changelogEntries: document.getElementById('changelogEntries').value || '',
-                contributors: document.getElementById('contributors').value || '',
-                acknowledgments: document.getElementById('acknowledgments').value || ''
-            };
-
-            const techStack = detectTechIcons(formData.technologies);
-            const directoryStructure = generateDirectoryStructure();
-
-            let markdown = `# ${formData.projectTitle}
-
-<div align="center">
-
-[![Voltar ao Topo](https://img.shields.io/badge/Voltar%20ao%20Topo-▲-blue)](#${formData.projectTitle.toLowerCase().replace(/\s+/g, '-')})
-
-## Sumário
-
-${generateTableOfContents()}
-
-<div align="center">
-    ${projectImage ? `<img src="${projectImage}" alt="Logo do Projeto" width="240">` : ''}
-</div>
-
-## Sobre
-${formData.description}
-
-## Estrutura do Projeto
-\`\`\`
-${directoryStructure}
-\`\`\`
-
-## Tecnologias
-${formData.technologies}
-
-${techStack ? `\n### Stack Tecnológica\n${techStack}\n` : ''}
-
-## Demonstração
-
-${formData.demoUrl ? `[Demo ao Vivo](${formData.demoUrl})\n` : ''}
-${formData.demoVideo ? `[Vídeo Demonstrativo](${formData.demoVideo})\n` : ''}
-
-${selectedPlatforms.size > 0 ? `### Plataformas de Deploy\n${Array.from(selectedPlatforms).map(p => 
-    `- [${p.charAt(0).toUpperCase() + p.slice(1)}](https://${p}.com)`
-).join('\n')}\n` : ''}
-
-## Configuração
-\`\`\`env
-${formData.envSetup}
-\`\`\`
-
-## Como Contribuir
-${formData.contributing}
-
-## 🤝 Comunidade
-${formData.communityInfo}
-
-### Código de Conduta
-${formData.codeOfConduct}
-
-## Contato
-- Autor: ${formData.authorName}
-- Email: ${formData.authorEmail}
-- GitHub: [${formData.authorName}](${formData.authorLink})
-
-## Changelog
-${formData.changelogEntries}
-
-## Licença
-${formData.license === 'custom' ? document.getElementById('customLicenseText').value : `Este projeto está licenciado sob a ${formData.license} License`}
-
-## Créditos
-
-### Contribuidores
-${formData.contributors}
-
-### Agradecimentos
-${formData.acknowledgments}
-
-${formData.buymeacoffee ? `\n[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](${formData.buymeacoffee})\n` : ''}
-
----
-
-<div align="center">
-    Feito com 💜 por ${formData.authorName}
-</div>`;
-
-            return markdown;
-        }
-
-        // Visualizar documentação
-        function previewMarkdown() {
-            const preview = document.getElementById('preview');
-            const previewContent = preview.querySelector('.preview-content');
-            preview.style.display = 'block';
-            const markdown = generateMarkdown();
-            previewContent.innerHTML = convertMarkdownToHTML(markdown);
-            preview.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Baixar documentação
-        function downloadMarkdown() {
-            const markdown = generateMarkdown();
-            const blob = new Blob([markdown], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'README.md';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
 
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
-            // Atualizar ícones de tecnologia em tempo real
-            document.getElementById('technologies').addEventListener('input', function(e) {
-                const techStackPreview = document.getElementById('techStackPreview');
-                techStackPreview.innerHTML = detectTechIcons(e.target.value);
-            });
+            initializeTechStacks();
+            setupFileUpload();
+            setupScreenshotUpload();
+        });
 
-            // Atualizar licença personalizada
-            document.getElementById('license').addEventListener('change', function(e) {
-                document.getElementById('customLicense').style.display = 
-                    e.target.value === 'custom' ? 'block' : 'none';
+        function initializeTechStacks() {
+            Object.entries(techStack).forEach(([category, technologies]) => {
+                const container = document.getElementById(`${category}Techs`);
+                technologies.forEach(tech => {
+                    const techElement = createTechElement(tech);
+                    container.appendChild(techElement);
+                });
             });
+        }
+
+        function createTechElement(tech) {
+            const div = document.createElement('div');
+            div.className = 'tech-item';
+            div.innerHTML = `
+                <i class="fab fa-${tech.icon}" style="color: ${tech.color}"></i>
+                <span>${tech.name}</span>
+            `;
+            div.onclick = () => selectTechnology(tech);
+            return div;
+        }
+
+        function selectTechnology(tech) {
+            const selectedTechs = document.getElementById('selectedTechs');
+            const techElement = document.createElement('div');
+            techElement.className = 'selected-tech';
+            techElement.innerHTML = `
+                <i class="fab fa-${tech.icon}" style="color: ${tech.color}"></i>
+                <span>${tech.name}</span>
+                <button onclick="removeTech(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            selectedTechs.appendChild(techElement);
+        }
+
+        function removeTech(button) {
+            button.parentElement.remove();
+        }
+
+        // Gerenciamento de Arquivos
+        function setupFileUpload() {
+            const dropZone = document.querySelector('.file-upload-area');
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragging');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragging');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragging');
+                handleFiles(e.dataTransfer.files);
+            });
+        }
+
+        function handleFileUpload(event) {
+            handleFiles(event.target.files);
+        }
+
+        function handleFiles(files) {
+            const fileTree = document.getElementById('fileTree');
+            const fileTreeContent = fileTree.querySelector('.file-tree-content');
+            fileTreeContent.innerHTML = '';
+            
+            const structure = {};
+            
+            Array.from(files).forEach(file => {
+                const path = file.webkitRelativePath || file.name;
+                const parts = path.split('/');
+                let current = structure;
+                
+                parts.forEach((part, index) => {
+                    if (index === parts.length - 1) {
+                        current[part] = null;
+                    } else {
+                        current[part] = current[part] || {};
+                        current = current[part];
+                    }
+                });
+            });
+            
+            fileTreeContent.appendChild(renderFileTree(structure));
+            fileTree.classList.remove('hidden');
+            
+            // Auto-detectar tecnologias
+            detectTechnologies(Array.from(files));
+        }
+
+        function renderFileTree(structure, level = 0) {
+            const ul = document.createElement('ul');
+            ul.className = 'file-tree-list';
+            
+            Object.entries(structure).forEach(([name, subStructure]) => {
+                const li = document.createElement('li');
+                const isDirectory = subStructure !== null;
+                
+                li.innerHTML = `
+                    <span class="file-tree-item" style="padding-left: ${level * 20}px">
+                        <i class="fas fa-${isDirectory ? 'folder' : 'file'}"></i>
+                        ${name}
+                    </span>
+                `;
+                
+                if (isDirectory) {
+                    li.appendChild(renderFileTree(subStructure, level + 1));
+                }
+                
+                ul.appendChild(li);
+            });
+            
+            return ul;
+        }
+
+        function detectTechnologies(files) {
+            const detectedTechs = new Set();
+            
+            files.forEach(file => {
+                const ext = file.name.split('.').pop().toLowerCase();
+                switch (ext) {
+                    case 'jsx':
+                    case 'tsx':
+                        detectedTechs.add('React');
+                        break;
+                    case 'vue':
+                        detectedTechs.add('Vue.js');
+                        break;
+                    case 'py':
+                        detectedTechs.add('Python');
+                        break;
+                    case 'java':
+                        detectedTechs.add('Java');
+                        break;
+                    case 'php':
+                        detectedTechs.add('PHP');
+                        break;
+                    case 'go':
+                        detectedTechs.add('Go');
+                        break;
+                    case 'rb':
+                        detectedTechs.add('Ruby');
+                        break;
+                    // Adicione mais detecções conforme necessário
+                }
+            });
+            
+            // Auto-selecionar tecnologias detectadas
+            detectedTechs.forEach(techName => {
+                const tech = Object.values(techStack)
+                    .flat()
+                    .find(t => t.name === techName);
+                if (tech) {
+                    selectTechnology(tech);
+                }
+            });
+        }
+
+        // Screenshots
+        function handleScreenshotUpload(event) {
+            const files = event.target.files;
+            const grid = document.getElementById('screenshotsGrid');
+            
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = 'screenshot-item';
+                    div.innerHTML = `
+                        <img src="${e.target.result}" alt="Screenshot">
+                        <button onclick="removeScreenshot(this)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    grid.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeScreenshot(button) {
+            button.parentElement.remove();
+        }
+
+        // Deploy Platform
+        function selectPlatform(platform) {
+            const cards = document.querySelectorAll('.platform-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            
+            const selectedCard = document.querySelector(`[data-platform="${platform}"]`);
+            selectedCard.classList.add('selected');
+            
+            updateDeployConfig(platform);
+        }
+
+        function updateDeployConfig(platform) {
+            const configContainer = document.getElementById('deployConfig');
+            const configs = {
+                vercel: `
+                    <div class="deploy-step">
+                        <h4>1. Conecte ao GitHub</h4>
+                        <p>Importe seu projeto do GitHub</p>
+                    </div>
+                    <div class="deploy-step">
+                        <h4>2. Configure o Build</h4>
+                        <p>Framework preset: Auto-detected</p>
+                    </div>
+                    <div class="deploy-step">
+                        <h4>3. Deploy</h4>
+                        <p>Seu projeto estará online em segundos</p>
+                    </div>
+                `,
+                netlify: `
+                    <div class="deploy-step">
+                        <h4>1. Conecte seu Repositório</h4>
+                        <p>GitHub, GitLab ou Bitbucket</p>
+                    </div>
+                    <div class="deploy-step">
+                        <h4>2. Configure Build Settings</h4>
+                        <p>Build command: npm run build</p>
+                        <p>Publish directory: build</p>
+                    </div>
+                    <div class="deploy-step">
+                        <h4>3. Deploy</h4>
+                        <p>Deploy automático a cada push</p>
+                    </div>
+                `,
+                // Adicione mais configurações para outras plataformas
+            };
+            
+            configContainer.innerHTML = configs[platform] || '';
+        }
+
+        // Buy Me a Coffee Preview
+        document.getElementById('buymeacoffee').addEventListener('input', function(e) {
+            const preview = document.getElementById('coffeePreview');
+            if (e.target.value) {
+                preview.innerHTML = `
+                    <a href="${e.target.value}" target="_blank" class="coffee-button">
+                        <i class="fas fa-coffee"></i>
+                        Buy me a coffee
+                    </a>
+                `;
+            } else {
+                preview.innerHTML = `
+                    <i class="fas fa-coffee"></i>
+                    <span>Preview do Botão</span>
+                `;
+            }
         });
     </script>
 </body>
