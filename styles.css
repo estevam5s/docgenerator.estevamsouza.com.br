@@ -1,74 +1,78 @@
-/* === Variáveis === */
+/* === Variáveis e Tema === */
 :root {
-    /* Cores Principais */
-    --primary-color: #6366f1;
-    --secondary-color: #8b5cf6;
-    --dark-bg: #0f172a;
-    --card-bg: #1e293b;
-    --text-color: #f1f5f9;
-    --accent-color: #06b6d4;
-    --error-color: #ef4444;
-    --success-color: #22c55e;
-    --warning-color: #eab308;
-    --glass-bg: rgba(30, 41, 59, 0.7);
-
+    /* Cores Base */
+    --primary-color: #1C64F2;
+    --secondary-color: #7C3AED;
+    --accent-color: #06B6D4;
+    --success-color: #10B981;
+    --warning-color: #F59E0B;
+    --error-color: #EF4444;
+    
+    /* Cores de Fundo */
+    --dark-bg: #030712;
+    --card-bg: #111827;
+    --glass-bg: rgba(17, 24, 39, 0.7);
+    
+    /* Texto */
+    --text-primary: #F9FAFB;
+    --text-secondary: #9CA3AF;
+    
+    /* Efeitos */
+    --glass-blur: blur(12px);
+    --neon-glow: 0 0 10px rgba(28, 100, 242, 0.5);
+    
     /* Gradientes */
     --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    --gradient-dark: linear-gradient(135deg, var(--dark-bg) 0%, #312e81 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-
-    /* Sombras */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+    --gradient-dark: linear-gradient(135deg, var(--dark-bg), #1E1B4B);
     
-    /* Transições */
+    /* Animações */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
-    
-    /* Border Radius */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 20px;
-    --radius-xl: 24px;
 }
 
-/* === Reset e Base === */
+/* Reset e Estilos Base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 body {
     background: var(--gradient-dark);
-    color: var(--text-color);
+    color: var(--text-primary);
     min-height: 100vh;
-    padding: 2rem;
     line-height: 1.6;
 }
 
-/* === Container Principal === */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
+/* Header Futurista */
+.header {
     position: relative;
+    padding: 4rem 2rem;
+    text-align: center;
+    overflow: hidden;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    margin-bottom: 3rem;
 }
 
-/* === Header === */
-.header {
-    text-align: center;
-    margin-bottom: 4rem;
-    position: relative;
-    padding: 3rem 2rem;
-    background: var(--glass-bg);
-    border-radius: var(--radius-xl);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    animation: scanline 2s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 .logo-container {
@@ -78,16 +82,16 @@ body {
 
 .logo {
     font-size: 4rem;
+    animation: float 6s ease-in-out infinite;
     position: relative;
     z-index: 2;
-    animation: float 6s ease-in-out infinite;
 }
 
 .logo-glow {
     position: absolute;
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
     filter: blur(30px);
     opacity: 0.3;
     top: 50%;
@@ -96,67 +100,108 @@ body {
     animation: pulse 4s ease-in-out infinite;
 }
 
-/* === AI Helper Button === */
-.helper-button {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    z-index: 1000;
+/* Plataformas de Deploy */
+.deploy-platforms {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
-.btn-floating {
-    background: var(--gradient-primary);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.platform-card {
+    background: var(--glass-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-align: center;
     transition: var(--transition-normal);
-    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
 }
 
-.btn-floating:hover {
-    transform: scale(1.1);
+.platform-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: var(--transition-normal);
 }
 
-.btn-floating i {
-    font-size: 1.5rem;
+.platform-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--neon-glow);
 }
 
-/* === Animações === */
-@keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0); }
-    50% { transform: translateY(-20px) rotate(5deg); }
+.platform-card:hover::before {
+    opacity: 0.1;
 }
 
-@keyframes pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.4; }
+.platform-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Vercel */
+.platform-vercel .platform-icon {
+    color: #ffffff;
 }
 
-/* === Formulário Container === */
+/* Heroku */
+.platform-heroku .platform-icon {
+    color: #430098;
+}
+
+/* Netlify */
+.platform-netlify .platform-icon {
+    color: #00C7B7;
+}
+
+/* DigitalOcean */
+.platform-digitalocean .platform-icon {
+    color: #0080FF;
+}
+
+/* Form Container Futurista */
 .form-container {
     background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-radius: 24px;
     padding: 3rem;
-    border-radius: var(--radius-xl);
-    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 3rem;
+    position: relative;
 }
 
-/* === Seções === */
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+        transparent 0%, 
+        rgba(28, 100, 242, 0.1) 50%, 
+        transparent 100%);
+    z-index: -1;
+    animation: gradient-shift 8s linear infinite;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+}
+
+/* Seções de Formulário */
 .form-section {
     background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--radius-lg);
+    border-radius: 16px;
     padding: 2rem;
     margin-bottom: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -165,138 +210,33 @@ body {
 
 .form-section:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--neon-glow);
 }
 
-.section-title {
-    font-size: 1.5rem;
-    color: var(--accent-color);
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-/* === Grupos de Formulário === */
-.form-group {
-    margin-bottom: 2rem;
-}
-
-label {
-    display: block;
-    margin-bottom: 0.75rem;
-    font-weight: 500;
-    font-size: 1.1rem;
-}
-
-.required::after {
-    content: '*';
-    color: var(--error-color);
-    margin-left: 4px;
-}
-
-.help-text {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    margin-top: 0.5rem;
-}
-
-/* === Campos de Entrada === */
+/* Inputs Futuristas */
 input, textarea, select {
     width: 100%;
     padding: 1rem 1.25rem;
-    border-radius: var(--radius-md);
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(17, 24, 39, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--text-color);
+    border-radius: 12px;
+    color: var(--text-primary);
     font-size: 1rem;
     transition: var(--transition-normal);
 }
 
 input:focus, textarea:focus, select:focus {
     outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.2);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(28, 100, 242, 0.2);
 }
 
-/* === Upload de Imagem === */
-.image-upload {
-    border: 2px dashed rgba(255, 255, 255, 0.2);
-    padding: 2rem;
-    text-align: center;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    transition: var(--transition-normal);
-}
-
-.image-upload:hover {
-    border-color: var(--accent-color);
-    background: rgba(6, 182, 212, 0.05);
-}
-
-.image-preview {
-    max-width: 240px;
-    margin: 1rem auto;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
-}
-
-/* === Plataformas de Deploy === */
-.platform-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1rem;
-}
-
-.platform-card {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-lg);
-    padding: 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: var(--transition-normal);
-}
-
-.platform-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-color);
-    box-shadow: var(--shadow-lg);
-}
-
-.platform-card.selected {
-    background: var(--primary-color);
-    border-color: var(--accent-color);
-}
-
-.platform-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--accent-color);
-}
-
-.platform-details {
-    margin-top: 1rem;
-    display: none;
-}
-
-.platform-card.selected .platform-details {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
-
-/* === Tech Stack === */
-.tech-stack-preview {
+/* Tech Stack Icons */
+.tech-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 1rem;
-    padding: 1.5rem;
-    background: rgba(15, 23, 42, 0.6);
-    border-radius: var(--radius-md);
 }
 
 .tech-icon {
@@ -310,86 +250,83 @@ input:focus, textarea:focus, select:focus {
     color: var(--primary-color);
 }
 
-/* === Botões === */
+/* Botões */
 .btn {
     padding: 1rem 2rem;
-    border-radius: var(--radius-md);
     border: none;
+    border-radius: 12px;
     font-weight: 600;
-    font-size: 1.1rem;
     cursor: pointer;
     transition: var(--transition-normal);
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.btn-primary {
     background: var(--gradient-primary);
     color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.btn-primary:hover {
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: 0.5s;
+}
+
+.btn:hover {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--neon-glow);
 }
 
-.btn-sm {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+.btn:hover::after {
+    left: 100%;
 }
 
-/* === Preview Container === */
+/* Preview Container */
 .preview-container {
     background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    border-radius: 24px;
     padding: 3rem;
-    border-radius: var(--radius-xl);
     margin-top: 3rem;
-    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     display: none;
     animation: fadeIn 0.5s ease;
 }
 
-.preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* === Loading Overlay === */
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(15, 23, 42, 0.9);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 1rem;
-    z-index: 9999;
-}
-
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 3px solid rgba(255, 255, 255, 0.1);
+/* Chat Bot Personalização */
+#dify-chatbot-bubble-button {
     border-radius: 50%;
-    border-top-color: var(--accent-color);
-    animation: spin 1s ease-in-out infinite;
+    box-shadow: var(--neon-glow);
+    transition: var(--transition-normal);
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
+#dify-chatbot-bubble-button:hover {
+    transform: scale(1.1);
 }
 
-/* === Responsividade === */
+#dify-chatbot-bubble-window {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--neon-glow);
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
-    body {
+    .container {
         padding: 1rem;
     }
     
@@ -401,48 +338,28 @@ input:focus, textarea:focus, select:focus {
         padding: 1.5rem;
     }
     
-    .platform-grid {
+    .deploy-platforms {
         grid-template-columns: 1fr;
     }
     
-    .btn-floating {
-        width: 50px;
-        height: 50px;
+    .btn {
+        width: 100%;
     }
     
-    .preview-container {
-        padding: 1.5rem;
-    }
-
-    .preview-content {
-        font-size: 0.9rem;
+    #dify-chatbot-bubble-window {
+        width: 100% !important;
+        height: 90vh !important;
+        max-width: 24rem;
     }
 }
 
-/* === Dark Mode === */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --shadow-color: rgba(0, 0, 0, 0.3);
-    }
-
-    input, textarea, select {
-        background: rgba(15, 23, 42, 0.8);
-    }
+/* Animações */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }
 
-/* === Utilities === */
-.hidden {
-    display: none !important;
-}
-
-.text-center {
-    text-align: center;
-}
-
-.mt-2 {
-    margin-top: 2rem;
-}
-
-.mb-2 {
-    margin-bottom: 2rem;
+@keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.4; }
 }
