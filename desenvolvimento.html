@@ -6,6 +6,7 @@
     <title>DocGen Pro - Next-Gen Documentation Generator</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Dify Chat Integration -->
     <script>
         window.difyChatbotConfig = { token: 'SHSExuFO0XD8jAZj' }
     </script>
@@ -47,12 +48,12 @@
                 radial-gradient(circle at top right, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
             min-height: 100vh;
-            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Container & Layout */
+        /* Main Container */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
             position: relative;
@@ -75,8 +76,8 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             animation: neonPulse 2s infinite;
         }
 
@@ -99,9 +100,9 @@
         }
 
         .title {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -116,39 +117,42 @@
         }
 
         /* Navigation */
-        .nav-menu {
+        .main-nav {
             position: sticky;
             top: 0;
-            z-index: 100;
-            background: rgba(30, 41, 59, 0.8);
+            z-index: 1000;
+            background: rgba(30, 41, 59, 0.9);
             backdrop-filter: blur(10px);
             padding: 1rem;
             border-radius: 12px;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .nav-list {
             display: flex;
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            list-style: none;
         }
 
-        .nav-item {
+        .nav-link {
             padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: var(--text);
+            text-decoration: none;
             background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: var(--text);
-            text-decoration: none;
             position: relative;
             overflow: hidden;
         }
 
-        .nav-item::before {
+        .nav-link::before {
             content: '';
             position: absolute;
             top: 0;
@@ -159,90 +163,33 @@
             transition: 0.5s;
         }
 
-        .nav-item:hover::before {
+        .nav-link:hover::before {
             left: 100%;
         }
 
-        .nav-item:hover {
+        .nav-link:hover {
             background: var(--surface-hover);
             transform: translateY(-2px);
             box-shadow: var(--hover-shadow);
         }
 
-        .nav-item i {
+        .nav-link i {
             color: var(--accent);
             font-size: 1.1rem;
         }
 
-        /* Back to Top Button */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            border: none;
-            box-shadow: var(--shadow);
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .back-to-top:hover {
-            transform: translate(-50%, -5px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        /* Dify Chat Bot Styles */
-        #dify-chatbot-bubble-button {
-            background-color: var(--primary) !important;
-        }
-
-        #dify-chatbot-bubble-window {
-            width: 24rem !important;
-            height: 40rem !important;
-        }
-
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        @keyframes neonPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* Sections */
+        /* Section Styles */
         .section {
             background: var(--surface);
             border-radius: 20px;
-            padding: 2.5rem;
-            margin-bottom: 3rem;
+            padding: 3rem;
+            margin-bottom: 4rem;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
             transition: all 0.3s ease;
+            scroll-margin-top: 100px;
         }
 
         .section:hover {
@@ -285,10 +232,91 @@
             color: transparent;
         }
 
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+        }
+
+        /* File Upload Areas */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent);
+            background: rgba(15, 23, 42, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .upload-area:hover i {
+            transform: scale(1.1);
+        }
+
+        /* Technology Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tech-icon:hover {
+            transform: scale(1.2);
+            color: var(--primary);
+        }
+
         /* Deployment Options */
-        .deployment-options {
+        .deployment-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -298,9 +326,9 @@
             border: 1px solid var(--border);
             border-radius: 16px;
             padding: 2rem;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -324,8 +352,8 @@
 
         .deploy-option:hover {
             transform: translateY(-5px);
-            box-shadow: var(--hover-shadow);
             border-color: var(--accent);
+            box-shadow: var(--hover-shadow);
         }
 
         .deploy-option.active {
@@ -337,107 +365,21 @@
             font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 1rem;
-            transition: all 0.3s ease;
         }
 
-        .deploy-option:hover i {
-            transform: scale(1.2);
-        }
-
-        .deploy-option h4 {
-            color: var(--text);
-            margin-top: 1rem;
-            font-size: 1.1rem;
-        }
-
-        /* File Upload Area */
-        .file-upload {
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 3rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(15, 23, 42, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-upload:hover {
-            border-color: var(--accent);
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        .file-upload i {
-            font-size: 3rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .file-upload:hover i {
-            transform: translateY(-5px);
-        }
-
-        .file-upload p {
-            color: var(--text-secondary);
-            margin-top: 1rem;
-        }
-
-        /* Directory Tree */
-        .directory-tree {
-            font-family: monospace;
-            background: rgba(15, 23, 42, 0.6);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            white-space: pre;
-            overflow-x: auto;
-        }
-
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 2rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.75rem;
-            color: var(--text);
-            font-weight: 500;
-            font-size: 1.1rem;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            color: var(--text);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
-        }
-
-        /* Preview Container */
-        .preview-container {
+        /* Preview Section */
+        .preview-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.9);
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 2rem;
             overflow-y: auto;
-            backdrop-filter: blur(10px);
         }
 
         .preview-content {
@@ -451,11 +393,11 @@
         }
 
         /* Action Buttons */
-        .button-group {
+        .action-buttons {
             display: flex;
             gap: 1rem;
-            margin-top: 2rem;
             justify-content: center;
+            margin-top: 3rem;
         }
 
         .btn {
@@ -500,7 +442,56 @@
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: var(--text);
-            border: 1px solid var(--border);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            border: none;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translate(-50%, -5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         /* Responsive Design */
@@ -509,28 +500,24 @@
                 padding: 1rem;
             }
 
-            .nav-menu {
-                flex-direction: column;
-            }
-
-            .deployment-options {
-                grid-template-columns: 1fr;
-            }
-
-            .button-group {
+            .nav-list {
                 flex-direction: column;
             }
 
             .section {
-                padding: 1.5rem;
+                padding: 2rem;
             }
 
-            .preview-container {
-                padding: 1rem;
+            .deployment-grid {
+                grid-template-columns: 1fr;
             }
 
-            .preview-content {
-                padding: 1.5rem;
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
             }
         }
     </style>
@@ -541,23 +528,25 @@
         <header class="header">
             <div class="logo">📚</div>
             <h1 class="title">DocGen Pro</h1>
-            <p class="subtitle">Create stunning documentation with next-gen features</p>
+            <p class="subtitle">Generate stunning documentation for your projects</p>
         </header>
 
-        <!-- Navigation -->
-        <nav class="nav-menu">
-            <a href="#basics" class="nav-item"><i class="fas fa-home"></i> Basics</a>
-            <a href="#demo" class="nav-item"><i class="fas fa-play-circle"></i> Demo</a>
-            <a href="#tech" class="nav-item"><i class="fas fa-code"></i> Tech</a>
-            <a href="#structure" class="nav-item"><i class="fas fa-folder-tree"></i> Structure</a>
-            <a href="#deploy" class="nav-item"><i class="fas fa-rocket"></i> Deploy</a>
-            <a href="#contact" class="nav-item"><i class="fas fa-envelope"></i> Contact</a>
-            <a href="#license" class="nav-item"><i class="fas fa-gavel"></i> License</a>
-            <a href="#changelog" class="nav-item"><i class="fas fa-history"></i> Changelog</a>
-            <a href="#credits" class="nav-item"><i class="fas fa-award"></i> Credits</a>
+        <!-- Main Navigation -->
+        <nav class="main-nav">
+            <ul class="nav-list">
+                <li><a href="#basics" class="nav-link"><i class="fas fa-home"></i> Basics</a></li>
+                <li><a href="#demo" class="nav-link"><i class="fas fa-play-circle"></i> Demo</a></li>
+                <li><a href="#tech" class="nav-link"><i class="fas fa-code"></i> Tech</a></li>
+                <li><a href="#structure" class="nav-link"><i class="fas fa-folder-tree"></i> Structure</a></li>
+                <li><a href="#deploy" class="nav-link"><i class="fas fa-rocket"></i> Deploy</a></li>
+                <li><a href="#contact" class="nav-link"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="#license" class="nav-link"><i class="fas fa-gavel"></i> License</a></li>
+                <li><a href="#changelog" class="nav-link"><i class="fas fa-history"></i> Changelog</a></li>
+                <li><a href="#credits" class="nav-link"><i class="fas fa-award"></i> Credits</a></li>
+            </ul>
         </nav>
 
-        <!-- Project Basics -->
+        <!-- Project Basics Section -->
         <section id="basics" class="section">
             <div class="section-header">
                 <i class="fas fa-home"></i>
@@ -566,24 +555,24 @@
 
             <div class="form-group">
                 <label>Project Type</label>
-                <div class="project-types">
-                    <div class="project-type" data-type="website">
+                <div class="deployment-grid">
+                    <div class="deploy-option" data-type="website">
                         <i class="fas fa-globe"></i>
                         <h4>Website</h4>
                     </div>
-                    <div class="project-type" data-type="api">
+                    <div class="deploy-option" data-type="api">
                         <i class="fas fa-server"></i>
                         <h4>API / Web Service</h4>
                     </div>
-                    <div class="project-type" data-type="mobile">
+                    <div class="deploy-option" data-type="mobile">
                         <i class="fas fa-mobile-alt"></i>
                         <h4>Mobile App</h4>
                     </div>
-                    <div class="project-type" data-type="desktop">
+                    <div class="deploy-option" data-type="desktop">
                         <i class="fas fa-desktop"></i>
                         <h4>Desktop App</h4>
                     </div>
-                    <div class="project-type" data-type="library">
+                    <div class="deploy-option" data-type="library">
                         <i class="fas fa-book"></i>
                         <h4>Library / Framework</h4>
                     </div>
@@ -592,12 +581,12 @@
 
             <div class="form-group">
                 <label>Project Logo</label>
-                <div class="file-upload" onclick="document.getElementById('logoInput').click()">
+                <div class="upload-area" onclick="document.getElementById('logoInput').click()">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>Click to upload project logo</p>
                     <input type="file" id="logoInput" accept="image/*" style="display: none">
                 </div>
-                <div id="logoPreview"></div>
+                <div id="logoPreview" class="preview-image"></div>
             </div>
 
             <div class="form-group">
@@ -611,7 +600,56 @@
             </div>
         </section>
 
-        <!-- Project Structure -->
+        <!-- Demo Section -->
+        <section id="demo" class="section">
+            <div class="section-header">
+                <i class="fas fa-play-circle"></i>
+                <h2>Demo & Screenshots</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Demo URL</label>
+                <input type="text" id="demoUrl" placeholder="https://your-project-demo.com">
+            </div>
+
+            <div class="form-group">
+                <label>Demo Video URL</label>
+                <input type="text" id="demoVideo" placeholder="https://youtube.com/watch?v=...">
+            </div>
+
+            <div class="form-group">
+                <label>Project Screenshots</label>
+                <div class="upload-area" onclick="document.getElementById('screenshotsInput').click()">
+                    <i class="fas fa-images"></i>
+                    <p>Click to upload screenshots</p>
+                    <input type="file" id="screenshotsInput" accept="image/*" multiple style="display: none">
+                </div>
+                <div id="screenshotsPreview" class="preview-grid"></div>
+            </div>
+        </section>
+
+        <!-- Technologies Section -->
+        <section id="tech" class="section">
+            <div class="section-header">
+                <i class="fas fa-code"></i>
+                <h2>Technologies</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Technologies Used</label>
+                <textarea id="technologies" rows="4" 
+                    placeholder="List your technologies (e.g., React, Node.js, Docker)"></textarea>
+                <div id="detectedTechIcons" class="tech-stack"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Environment Setup</label>
+                <textarea id="envSetup" rows="6" 
+                    placeholder="DATABASE_URL=postgresql://localhost:5432/mydb&#10;API_KEY=your_api_key&#10;PORT=3000"></textarea>
+            </div>
+        </section>
+
+        <!-- Structure Section -->
         <section id="structure" class="section">
             <div class="section-header">
                 <i class="fas fa-folder-tree"></i>
@@ -619,7 +657,7 @@
             </div>
 
             <div class="form-group">
-                <div class="file-upload" onclick="document.getElementById('projectFiles').click()">
+                <div class="upload-area" onclick="document.getElementById('projectFiles').click()">
                     <i class="fas fa-folder-open"></i>
                     <p>Upload project files to generate structure</p>
                     <input type="file" id="projectFiles" webkitdirectory directory multiple style="display: none">
@@ -632,41 +670,44 @@
             </div>
         </section>
 
-        <!-- Deployment -->
+        <!-- Deployment Section -->
         <section id="deploy" class="section">
             <div class="section-header">
                 <i class="fas fa-rocket"></i>
                 <h2>Deployment</h2>
             </div>
 
-            <div class="deployment-options">
-                <div class="deploy-option" data-platform="standard">
-                    <i class="fas fa-server"></i>
-                    <h4>Standard</h4>
-                </div>
-                <div class="deploy-option" data-platform="docker">
-                    <i class="fab fa-docker"></i>
-                    <h4>Docker</h4>
-                </div>
-                <div class="deploy-option" data-platform="vercel">
-                    <i class="fas fa-bolt"></i>
-                    <h4>Vercel</h4>
-                </div>
-                <div class="deploy-option" data-platform="netlify">
-                    <i class="fab fa-netlify"></i>
-                    <h4>Netlify</h4>
-                </div>
-                <div class="deploy-option" data-platform="heroku">
-                    <i class="fas fa-cloud"></i>
-                    <h4>Heroku</h4>
-                </div>
-                <div class="deploy-option" data-platform="digitalocean">
-                    <i class="fab fa-digital-ocean"></i>
-                    <h4>DigitalOcean</h4>
-                </div>
-                <div class="deploy-option" data-platform="makefile">
-                    <i class="fas fa-file-code"></i>
-                    <h4>Makefile</h4>
+            <div class="form-group">
+                <label>Deployment Platform</label>
+                <div class="deployment-grid">
+                    <div class="deploy-option" data-platform="standard">
+                        <i class="fas fa-server"></i>
+                        <h4>Standard</h4>
+                    </div>
+                    <div class="deploy-option" data-platform="docker">
+                        <i class="fab fa-docker"></i>
+                        <h4>Docker</h4>
+                    </div>
+                    <div class="deploy-option" data-platform="vercel">
+                        <i class="fas fa-bolt"></i>
+                        <h4>Vercel</h4>
+                    </div>
+                    <div class="deploy-option" data-platform="netlify">
+                        <i class="fab fa-netlify"></i>
+                        <h4>Netlify</h4>
+                    </div>
+                    <div class="deploy-option" data-platform="heroku">
+                        <i class="fas fa-cloud"></i>
+                        <h4>Heroku</h4>
+                    </div>
+                    <div class="deploy-option" data-platform="digitalocean">
+                        <i class="fab fa-digital-ocean"></i>
+                        <h4>DigitalOcean</h4>
+                    </div>
+                    <div class="deploy-option" data-platform="makefile">
+                        <i class="fas fa-file-code"></i>
+                        <h4>Makefile</h4>
+                    </div>
                 </div>
             </div>
 
@@ -675,12 +716,138 @@
             </div>
         </section>
 
-        <!-- Other sections continue... -->
-        <!-- Will add rest of sections in next part -->
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="section-header">
+                <i class="fas fa-envelope"></i>
+                <h2>Contact & Support</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Author Name</label>
+                <input type="text" id="authorName" placeholder="Your name">
+            </div>
+
+            <div class="form-group">
+                <label>Contact Email</label>
+                <input type="email" id="authorEmail" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Social Links</label>
+                <input type="text" id="githubLink" placeholder="GitHub Profile URL" class="mb-2">
+                <input type="text" id="linkedinLink" placeholder="LinkedIn Profile URL" class="mb-2">
+                <input type="text" id="portfolioLink" placeholder="Portfolio Website URL">
+            </div>
+
+            <div class="form-group">
+                <label>Support Links</label>
+                <input type="text" id="buymeacoffee" placeholder="Buy Me a Coffee URL" class="mb-2">
+                <input type="text" id="patreon" placeholder="Patreon URL">
+            </div>
+        </section>
+
+        <!-- License Section -->
+        <section id="license" class="section">
+            <div class="section-header">
+                <i class="fas fa-gavel"></i>
+                <h2>License</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Choose License</label>
+                <div class="deployment-grid">
+                    <div class="deploy-option license-option" data-license="mit">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>MIT License</h4>
+                    </div>
+                    <div class="deploy-option license-option" data-license="apache">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>Apache 2.0</h4>
+                    </div>
+                    <div class="deploy-option license-option" data-license="gpl">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>GNU GPL v3</h4>
+                    </div>
+                    <div class="deploy-option license-option" data-license="bsd">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>BSD</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>License Text</label>
+                <textarea id="licenseText" rows="8" readonly></textarea>
+            </div>
+        </section>
+
+        <!-- Changelog Section -->
+        <section id="changelog" class="section">
+            <div class="section-header">
+                <i class="fas fa-history"></i>
+                <h2>Changelog</h2>
+            </div>
+
+            <div id="changelogEntries">
+                <div class="changelog-entry">
+                    <div class="changelog-header">
+                        <input type="text" class="version-tag" placeholder="v1.0.0">
+                        <input type="date" class="date">
+                    </div>
+                    <textarea rows="4" placeholder="## Added&#10;- Initial release&#10;## Changed&#10;- Updated dependencies"></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="addChangelogEntry()">
+                <i class="fas fa-plus"></i> Add Version
+            </button>
+        </section>
+
+        <!-- Credits Section -->
+        <section id="credits" class="section">
+            <div class="section-header">
+                <i class="fas fa-award"></i>
+                <h2>Credits & Contributors</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Contributors</label>
+                <textarea id="contributors" rows="4" 
+                    placeholder="- [Name](github-profile) - Role/Contribution"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Special Thanks</label>
+                <textarea id="acknowledgments" rows="4" 
+                    placeholder="Special thanks to..."></textarea>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button class="btn btn-secondary" onclick="previewDocumentation()">
+                <i class="fas fa-eye"></i> Preview
+            </button>
+            <button class="btn btn-primary" onclick="generateDocumentation()">
+                <i class="fas fa-download"></i> Generate README
+            </button>
+        </div>
+
+        <!-- Preview Modal -->
+        <div id="previewModal" class="preview-modal">
+            <div class="preview-content">
+                <div class="preview-header">
+                    <h2>Documentation Preview</h2>
+                    <button class="btn btn-secondary" onclick="closePreview()">Close</button>
+                </div>
+                <div id="previewContent"></div>
+            </div>
+        </div>
 
         <!-- Back to Top Button -->
         <button class="back-to-top" onclick="scrollToTop()">
-            <i class="fas fa-arrow-up"></i> Back to Top
+            <i class="fas fa-arrow-up"></i>
         </button>
     </div>
 
@@ -721,143 +888,102 @@
             'windows': 'fab fa-windows'
         };
 
-        // Deployment platform configurations
-        const platformConfigs = {
+        // Deployment configurations
+        const deploymentConfigs = {
             standard: {
-                icon: 'fas fa-server',
-                template: `# Standard Installation
-npm install
-npm start`
+                template: `# Standard Installation\nnpm install\nnpm start`
             },
             docker: {
-                icon: 'fab fa-docker',
-                template: `# Build Docker Image
-docker build -t your-app-name .
-
-# Run Container
-docker run -d -p 3000:3000 your-app-name`
+                template: `# Build Docker Image\ndocker build -t your-app-name .\n\n# Run Container\ndocker run -d -p 3000:3000 your-app-name`
             },
             vercel: {
-                icon: 'fas fa-bolt',
-                template: `# Deploy to Vercel
-vercel`
+                template: `# Deploy to Vercel\nvercel`
             },
             netlify: {
-                icon: 'fab fa-netlify',
-                template: `# Deploy to Netlify
-netlify deploy --prod`
+                template: `# Deploy to Netlify\nnetlify deploy --prod`
             },
             heroku: {
-                icon: 'fas fa-cloud',
-                template: `# Deploy to Heroku
-git push heroku main`
+                template: `# Deploy to Heroku\ngit push heroku main`
             },
             digitalocean: {
-                icon: 'fab fa-digital-ocean',
-                template: `# Deploy to DigitalOcean App Platform
-doctl apps create --spec app.yaml`
+                template: `# Deploy to DigitalOcean\ndoctl apps create --spec app.yaml`
             },
             makefile: {
-                icon: 'fas fa-file-code',
-                template: `# Makefile Commands
-make install
-make build
-make run`
+                template: `# Makefile Commands\nmake install\nmake build\nmake run`
             }
         };
 
         // License templates
         const licenseTemplates = {
-            mit: `MIT License
-
-Copyright (c) ${new Date().getFullYear()} [fullname]
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software...`,
-            apache: `Apache License, Version 2.0
-
-Licensed under the Apache License, Version 2.0 (the "License")...`,
-            gpl: `GNU GENERAL PUBLIC LICENSE
-Version 3, 29 June 2007...`,
-            bsd: `BSD 3-Clause License
-
-Copyright (c) ${new Date().getFullYear()} [fullname]
-All rights reserved...`
+            mit: `MIT License\n\nCopyright (c) ${new Date().getFullYear()} [fullname]\n\nPermission is hereby granted...`,
+            apache: `Apache License, Version 2.0\n\nLicensed under the Apache License...`,
+            gpl: `GNU GENERAL PUBLIC LICENSE\nVersion 3, 29 June 2007...`,
+            bsd: `BSD 3-Clause License\n\nCopyright (c) ${new Date().getFullYear()} [fullname]\nAll rights reserved...`
         };
 
         // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
+            initializePage();
             loadSavedData();
-            setupScrollListener();
         });
 
         function setupEventListeners() {
-            // Project Type Selection
-            document.querySelectorAll('.project-type').forEach(type => {
-                type.addEventListener('click', () => selectProjectType(type));
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', handleNavigation);
             });
 
-            // File Uploads
+            // File uploads
             document.getElementById('logoInput').addEventListener('change', handleLogoUpload);
             document.getElementById('screenshotsInput').addEventListener('change', handleScreenshotsUpload);
             document.getElementById('projectFiles').addEventListener('change', handleProjectFiles);
 
-            // Technology Detection
-            document.getElementById('technologies').addEventListener('input', detectTechnologies);
-
-            // Deployment Platform Selection
-            document.querySelectorAll('.deploy-option').forEach(option => {
-                option.addEventListener('click', () => selectDeployPlatform(option));
+            // Project type selection
+            document.querySelectorAll('[data-type]').forEach(option => {
+                option.addEventListener('click', () => selectProjectType(option));
             });
 
-            // License Selection
-            document.querySelectorAll('.license-option').forEach(option => {
+            // Deployment selection
+            document.querySelectorAll('[data-platform]').forEach(option => {
+                option.addEventListener('click', () => selectDeployment(option));
+            });
+
+            // License selection
+            document.querySelectorAll('[data-license]').forEach(option => {
                 option.addEventListener('click', () => selectLicense(option));
             });
 
-            // Auto-save inputs
+            // Technology detection
+            document.getElementById('technologies').addEventListener('input', detectTechnologies);
+
+            // Auto-save
             document.querySelectorAll('input, textarea').forEach(element => {
                 element.addEventListener('input', saveFormData);
             });
+
+            // Scroll handling
+            window.addEventListener('scroll', handleScroll);
         }
 
-        // Scroll Functionality
-        function setupScrollListener() {
-            const backToTopButton = document.querySelector('.back-to-top');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTopButton.classList.add('visible');
-                } else {
-                    backToTopButton.classList.remove('visible');
-                }
-            });
+        // Navigation handling
+        function handleNavigation(event) {
+            event.preventDefault();
+            const targetId = event.currentTarget.getAttribute('href').slice(1);
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        // Project Type Selection
-        function selectProjectType(element) {
-            document.querySelectorAll('.project-type').forEach(type => 
-                type.classList.remove('active'));
-            element.classList.add('active');
-            selectedProjectType = element.dataset.type;
-            saveFormData();
-        }
-
-        // File Upload Handlers
+        // File handling
         function handleLogoUpload(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     projectLogo = e.target.result;
-                    document.getElementById('logoPreview').innerHTML = 
-                        `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px; margin-top: 1rem;">`;
+                    updateLogoPreview();
                     saveFormData();
                 };
                 reader.readAsDataURL(file);
@@ -884,7 +1010,7 @@ All rights reserved...`
             saveFormData();
         }
 
-        // Directory Tree Generation
+        // Directory tree generation
         function generateDirectoryTree(files) {
             const tree = {};
             files.forEach(file => {
@@ -917,7 +1043,7 @@ All rights reserved...`
             return result;
         }
 
-        // Technology Detection
+        // Technology detection
         function detectTechnologies() {
             const techInput = document.getElementById('technologies').value.toLowerCase();
             const iconContainer = document.getElementById('detectedTechIcons');
@@ -933,9 +1059,17 @@ All rights reserved...`
             });
         }
 
-        // Deploy Platform Selection
-        function selectDeployPlatform(element) {
-            document.querySelectorAll('.deploy-option').forEach(opt => 
+        // Selection handlers
+        function selectProjectType(element) {
+            document.querySelectorAll('[data-type]').forEach(opt => 
+                opt.classList.remove('active'));
+            element.classList.add('active');
+            selectedProjectType = element.dataset.type;
+            saveFormData();
+        }
+
+        function selectDeployment(element) {
+            document.querySelectorAll('[data-platform]').forEach(opt => 
                 opt.classList.remove('active'));
             element.classList.add('active');
             selectedDeployMethod = element.dataset.platform;
@@ -943,19 +1077,8 @@ All rights reserved...`
             saveFormData();
         }
 
-        function updateDeploymentConfig() {
-            const config = platformConfigs[selectedDeployMethod];
-            if (!config) return;
-
-            document.getElementById('deploymentConfig').innerHTML = `
-                <label>${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Configuration</label>
-                <textarea id="deployConfig" rows="6">${config.template}</textarea>
-            `;
-        }
-
-        // License Selection
         function selectLicense(element) {
-            document.querySelectorAll('.license-option').forEach(opt => 
+            document.querySelectorAll('[data-license]').forEach(opt => 
                 opt.classList.remove('active'));
             element.classList.add('active');
             selectedLicense = element.dataset.license;
@@ -963,7 +1086,34 @@ All rights reserved...`
             saveFormData();
         }
 
-        // Changelog Management
+        // Update UI
+        function updateLogoPreview() {
+            const preview = document.getElementById('logoPreview');
+            preview.innerHTML = projectLogo ? 
+                `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px;">` : '';
+        }
+
+        function updateScreenshotsPreview() {
+            const preview = document.getElementById('screenshotsPreview');
+            preview.innerHTML = screenshots.map((src, index) => `
+                <div class="screenshot-preview">
+                    <img src="${src}" alt="Screenshot ${index + 1}">
+                    <button class="remove-btn" onclick="removeScreenshot(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function updateDeploymentConfig() {
+            const config = deploymentConfigs[selectedDeployMethod];
+            if (!config) return;
+
+            document.getElementById('deploymentConfig').innerHTML = `
+                <label>Configuration</label>
+                <textarea id="deployConfig" rows="6">${config.template}</textarea>
+            `;
+        }
+
+        // Changelog management
         function addChangelogEntry() {
             const entries = document.getElementById('changelogEntries');
             const entry = document.createElement('div');
@@ -973,12 +1123,12 @@ All rights reserved...`
                     <input type="text" class="version-tag" placeholder="v1.0.0">
                     <input type="date" class="date">
                 </div>
-                <textarea rows="4" placeholder="## Added&#10;- New feature&#10;## Changed&#10;- Updates"></textarea>
+                <textarea rows="4" placeholder="## Added\n- New feature\n## Changed\n- Updates"></textarea>
             `;
             entries.appendChild(entry);
         }
 
-        // Documentation Generation
+        // Documentation generation
         function generateDocumentation() {
             const markdown = generateMarkdown();
             downloadMarkdown(markdown);
@@ -992,51 +1142,38 @@ ${projectLogo ? `<div align="center"><img src="${projectLogo}" alt="Project Logo
 
 [![Back to Top](https://img.shields.io/badge/Back%20to%20Top-↑-blue)](#${data.title.toLowerCase().replace(/\s+/g, '-')})
 
-## 📋 About
+## About
 ${data.description}
 
-## 🎮 Demo
+## Demo
 ${data.demoUrl ? `- [Live Demo](${data.demoUrl})` : ''}
 ${data.demoVideo ? `- [Video Demo](${data.demoVideo})` : ''}
 
-${screenshots.length ? `## 📸 Screenshots
-${screenshots.map((src, index) => `![Screenshot ${index + 1}](${src})`).join('\n')}` : ''}
+${screenshots.length ? `## Screenshots\n${screenshots.map((src, index) => `![Screenshot ${index + 1}](${src})`).join('\n')}` : ''}
 
-## 💻 Technologies
+## Technologies
 ${data.technologies}
 
-## 🚀 Deployment
-${generateDeploymentSection()}
-
-## 🔧 Prerequisites
-${data.prerequisites}
-
-## 📁 Project Structure
+## Project Structure
 \`\`\`
 ${document.getElementById('directoryTree').textContent}
 \`\`\`
 
-## ⚙️ Installation
-${data.installation}
+## Installation
+${generateDeploymentSection()}
 
-## 📫 Contact
+## Contact
 - Author: ${data.authorName}
 - Email: ${data.authorEmail}
 ${data.githubLink ? `- GitHub: [Profile](${data.githubLink})` : ''}
 
-## 👥 Contributors
-${data.contributors}
-
-## 📝 License
+## License
 ${document.getElementById('licenseText').value}
-
-## 📜 Changelog
-${generateChangelogSection()}
 
 [↑ Back to Top](#${data.title.toLowerCase().replace(/\s+/g, '-')})`;
         }
 
-        // Preview Handler
+        // Preview handling
         function previewDocumentation() {
             const preview = document.getElementById('previewModal');
             const content = document.getElementById('previewContent');
@@ -1052,9 +1189,9 @@ ${generateChangelogSection()}
         function convertMarkdownToHTML(markdown) {
             return markdown
                 .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                .replace(/^## (.*$)/gm, '<h2>$2</h2>')
-                .replace(/^### (.*$)/gm, '<h3>$3</h3>')
-                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; border-radius: 8px; margin: 1rem 0;">')
+                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%;">')
                 .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
                 .replace(/`{3}([\s\S]*?)`{3}/g, '<pre><code>$1</code></pre>')
                 .replace(/`([^`]+)`/g, '<code>$1</code>')
@@ -1063,17 +1200,23 @@ ${generateChangelogSection()}
                 .replace(/\n\n/g, '<br><br>');
         }
 
-        function downloadMarkdown(markdown) {
-            const blob = new Blob([markdown], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'README.md';
-            a.click();
-            URL.revokeObjectURL(url);
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
 
-        // Save & Load Data
+        function handleScroll() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        }
+
+        // Save & Load
         function saveFormData() {
             const data = gatherFormData();
             localStorage.setItem('docgenData', JSON.stringify(data));
@@ -1089,20 +1232,17 @@ ${generateChangelogSection()}
 
         function gatherFormData() {
             return {
+                title: document.getElementById('projectTitle').value,
+                description: document.getElementById('projectDescription').value,
+                technologies: document.getElementById('technologies').value,
+                authorName: document.getElementById('authorName').value,
+                authorEmail: document.getElementById('authorEmail').value,
+                githubLink: document.getElementById('githubLink').value,
                 projectLogo,
                 screenshots,
                 selectedProjectType,
                 selectedLicense,
-                selectedDeployMethod,
-                title: document.getElementById('projectTitle').value,
-                description: document.getElementById('projectDescription').value,
-                technologies: document.getElementById('technologies').value,
-                installation: document.getElementById('installCommands').value,
-                prerequisites: document.getElementById('prerequisites').value,
-                authorName: document.getElementById('authorName').value,
-                authorEmail: document.getElementById('authorEmail').value,
-                githubLink: document.getElementById('githubLink').value,
-                contributors: document.getElementById('contributors').value
+                selectedDeployMethod
             };
         }
 
@@ -1121,94 +1261,16 @@ ${generateChangelogSection()}
                 screenshots = data.screenshots;
                 updateScreenshotsPreview();
             }
-            if (data.selectedProjectType) {
-                const projectType = document.querySelector(`[data-type="${data.selectedProjectType}"]`);
-                if (projectType) selectProjectType(projectType);
-            }
-
-            if (data.selectedLicense) {
-                const license = document.querySelector(`[data-license="${data.selectedLicense}"]`);
-                if (license) selectLicense(license);
-            }
-
-            if (data.selectedDeployMethod) {
-                const method = document.querySelector(`[data-platform="${data.selectedDeployMethod}"]`);
-                if (method) selectDeployPlatform(method);
-            }
 
             detectTechnologies();
         }
 
-        function updateLogoPreview() {
-            if (projectLogo) {
-                document.getElementById('logoPreview').innerHTML = 
-                    `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px; margin-top: 1rem;">`;
-            }
-        }
-
-        function generateChangelogSection() {
-            const entries = document.querySelectorAll('.changelog-entry');
-            let changelog = '';
-            
-            entries.forEach(entry => {
-                const version = entry.querySelector('.version-tag').value;
-                const date = entry.querySelector('.date').value;
-                const changes = entry.querySelector('textarea').value;
-                
-                if (version && changes) {
-                    changelog += `### ${version} (${date || 'Unreleased'})\n${changes}\n\n`;
-                }
-            });
-            
-            return changelog;
-        }
-
-        function generateDeploymentSection() {
-            const config = platformConfigs[selectedDeployMethod];
-            if (!config) return '';
-
-            const deployConfig = document.getElementById('deployConfig')?.value || config.template;
-            
-            return `### ${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Deployment
-\`\`\`bash
-${deployConfig}
-\`\`\``;
-        }
-
-        // URL Hash Navigation
-        window.addEventListener('hashchange', handleHashChange);
-
-        function handleHashChange() {
-            const hash = window.location.hash.slice(1);
-            if (hash) {
-                const section = document.getElementById(hash);
-                if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        }
-
-        // Back to Top Button
-        const backToTopBtn = document.createElement('button');
-        backToTopBtn.className = 'back-to-top';
-        backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-        backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-        document.body.appendChild(backToTopBtn);
-
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadSavedData();
+        // Initialize page
+        function initializePage() {
             detectTechnologies();
-            handleHashChange();
-        });
+            updateDeploymentConfig();
+            handleScroll();
+        }
     </script>
 </body>
 </html>
