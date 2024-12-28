@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocGen Pro - Advanced Documentation Generator</title>
+    <title>DocGen Pro - Next-Gen Documentation Generator</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        window.difyChatbotConfig = { token: 'SHSExuFO0XD8jAZj' }
+    </script>
+    <script src="https://udify.app/embed.min.js" id="SHSExuFO0XD8jAZj" defer></script>
     <style>
         /* Theme Variables */
         :root {
@@ -23,6 +27,7 @@
             --warning: #f59e0b;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            --neon-glow: 0 0 10px rgba(34, 211, 238, 0.5);
         }
 
         /* Base Styles */
@@ -31,6 +36,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
         }
 
         body {
@@ -40,56 +46,91 @@
             background-image: 
                 radial-gradient(circle at top right, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            position: relative;
         }
 
-        /* Layout */
+        /* Container & Layout */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
         }
 
         /* Header */
         .header {
             text-align: center;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
             position: relative;
             background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
             border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: neonPulse 2s infinite;
         }
 
         .logo {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
             animation: float 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
         }
 
         .title {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 1rem;
             background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: var(--neon-glow);
         }
 
         .subtitle {
             color: var(--text-secondary);
             font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         /* Navigation */
         .nav-menu {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
             display: flex;
             justify-content: center;
             gap: 1rem;
-            margin: 2rem 0;
             flex-wrap: wrap;
-            background: var(--surface);
-            padding: 1rem;
-            border-radius: 12px;
             box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
 
         .nav-item {
@@ -97,31 +138,116 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
         }
 
         .nav-item:hover {
             background: var(--surface-hover);
             transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
         .nav-item i {
             color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: none;
+            box-shadow: var(--shadow);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translate(-50%, -5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Dify Chat Bot Styles */
+        #dify-chatbot-bubble-button {
+            background-color: var(--primary) !important;
+        }
+
+        #dify-chatbot-bubble-window {
+            width: 24rem !important;
+            height: 40rem !important;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         /* Sections */
         .section {
             background: var(--surface);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
             border: 1px solid var(--border);
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
         }
 
         .section::before {
@@ -137,62 +263,141 @@
         .section-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
         }
 
         .section-header i {
-            font-size: 2rem;
-            color: var(--accent);
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .section-header h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             background: linear-gradient(45deg, var(--text), var(--text-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
-        /* Project Type Selector */
-        .project-types {
+        /* Deployment Options */
+        .deployment-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .project-type {
-            background: rgba(255, 255, 255, 0.05);
+        .deploy-option {
+            background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .project-type:hover {
-            background: var(--surface-hover);
-            transform: translateY(-2px);
+        .deploy-option::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+            transform: rotate(45deg);
         }
 
-        .project-type.active {
+        .deploy-option:hover::before {
+            top: 100%;
+            left: 100%;
+        }
+
+        .deploy-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
             border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(124, 58, 237, 0.1));
         }
 
-        .project-type i {
-            font-size: 2rem;
+        .deploy-option.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+            border-color: var(--accent);
+        }
+
+        .deploy-option i {
+            font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .deploy-option:hover i {
+            transform: scale(1.2);
+        }
+
+        .deploy-option h4 {
+            color: var(--text);
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* File Upload Area */
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent);
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .file-upload:hover i {
+            transform: translateY(-5px);
+        }
+
+        .file-upload p {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        /* Directory Tree */
+        .directory-tree {
+            font-family: monospace;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            white-space: pre;
+            overflow-x: auto;
         }
 
         /* Form Elements */
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         label {
@@ -200,6 +405,7 @@
             margin-bottom: 0.75rem;
             color: var(--text);
             font-weight: 500;
+            font-size: 1.1rem;
         }
 
         input, textarea, select {
@@ -207,7 +413,7 @@
             padding: 1rem;
             background: rgba(15, 23, 42, 0.6);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             color: var(--text);
             font-size: 1rem;
             transition: all 0.3s ease;
@@ -219,166 +425,32 @@
             box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
         }
 
-        /* File Upload Area */
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
+        /* Preview Container */
+        .preview-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.9);
+            z-index: 1000;
             padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(15, 23, 42, 0.3);
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
         }
 
-        .upload-area:hover {
-            border-color: var(--accent);
-            background: rgba(15, 23, 42, 0.5);
-        }
-
-        .upload-area i {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        /* Image Preview Grid */
-        .image-preview-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .image-preview {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .image-preview img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .image-preview .remove-image {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: var(--error);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* License Selection */
-        .license-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .license-option {
-            background: rgba(15, 23, 42, 0.6);
+        .preview-content {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+            box-shadow: var(--shadow);
         }
 
-        .license-option:hover {
-            transform: translateY(-2px);
-            background: var(--surface-hover);
-        }
-
-        .license-option.active {
-            border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
-        }
-
-        .license-option i {
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        /* Tech Stack */
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .tech-icon {
-            font-size: 2rem;
-            color: var(--accent);
-            transition: transform 0.3s ease;
-        }
-
-        .tech-icon:hover {
-            transform: scale(1.2);
-        }
-
-        /* Deployment Methods */
-        .deployment-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .deploy-method {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .deploy-method:hover {
-            transform: translateY(-2px);
-        }
-
-        .deploy-method.active {
-            border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
-        }
-
-        /* Changelog */
-        .changelog-entry {
-            background: rgba(15, 23, 42, 0.3);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .changelog-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .version-tag {
-            background: var(--primary);
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.875rem;
-        }
-
-        /* Buttons */
+        /* Action Buttons */
         .button-group {
             display: flex;
             gap: 1rem;
@@ -389,13 +461,35 @@
         .btn {
             padding: 1rem 2rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--hover-shadow);
         }
 
         .btn-primary {
@@ -406,17 +500,7 @@
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: var(--text);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--hover-shadow);
-        }
-
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            border: 1px solid var(--border);
         }
 
         /* Responsive Design */
@@ -425,9 +509,11 @@
                 padding: 1rem;
             }
 
-            .project-types,
-            .license-options,
-            .deployment-methods {
+            .nav-menu {
+                flex-direction: column;
+            }
+
+            .deployment-options {
                 grid-template-columns: 1fr;
             }
 
@@ -436,6 +522,14 @@
             }
 
             .section {
+                padding: 1.5rem;
+            }
+
+            .preview-container {
+                padding: 1rem;
+            }
+
+            .preview-content {
                 padding: 1.5rem;
             }
         }
@@ -447,38 +541,23 @@
         <header class="header">
             <div class="logo">📚</div>
             <h1 class="title">DocGen Pro</h1>
-            <p class="subtitle">Create professional documentation in minutes</p>
+            <p class="subtitle">Create stunning documentation with next-gen features</p>
         </header>
 
-        <!-- Navigation Menu -->
+        <!-- Navigation -->
         <nav class="nav-menu">
-            <div class="nav-item" data-section="basics">
-                <i class="fas fa-home"></i> Basics
-            </div>
-            <div class="nav-item" data-section="demo">
-                <i class="fas fa-play-circle"></i> Demo
-            </div>
-            <div class="nav-item" data-section="tech">
-                <i class="fas fa-code"></i> Tech
-            </div>
-            <div class="nav-item" data-section="deployment">
-                <i class="fas fa-rocket"></i> Deploy
-            </div>
-            <div class="nav-item" data-section="contact">
-                <i class="fas fa-envelope"></i> Contact
-            </div>
-            <div class="nav-item" data-section="license">
-                <i class="fas fa-gavel"></i> License
-            </div>
-            <div class="nav-item" data-section="changelog">
-                <i class="fas fa-history"></i> Changelog
-            </div>
-            <div class="nav-item" data-section="credits">
-                <i class="fas fa-award"></i> Credits
-            </div>
+            <a href="#basics" class="nav-item"><i class="fas fa-home"></i> Basics</a>
+            <a href="#demo" class="nav-item"><i class="fas fa-play-circle"></i> Demo</a>
+            <a href="#tech" class="nav-item"><i class="fas fa-code"></i> Tech</a>
+            <a href="#structure" class="nav-item"><i class="fas fa-folder-tree"></i> Structure</a>
+            <a href="#deploy" class="nav-item"><i class="fas fa-rocket"></i> Deploy</a>
+            <a href="#contact" class="nav-item"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="#license" class="nav-item"><i class="fas fa-gavel"></i> License</a>
+            <a href="#changelog" class="nav-item"><i class="fas fa-history"></i> Changelog</a>
+            <a href="#credits" class="nav-item"><i class="fas fa-award"></i> Credits</a>
         </nav>
 
-        <!-- Project Basics Section -->
+        <!-- Project Basics -->
         <section id="basics" class="section">
             <div class="section-header">
                 <i class="fas fa-home"></i>
@@ -513,7 +592,7 @@
 
             <div class="form-group">
                 <label>Project Logo</label>
-                <div class="upload-area" onclick="document.getElementById('logoInput').click()">
+                <div class="file-upload" onclick="document.getElementById('logoInput').click()">
                     <i class="fas fa-cloud-upload-alt"></i>
                     <p>Click to upload project logo</p>
                     <input type="file" id="logoInput" accept="image/*" style="display: none">
@@ -532,187 +611,77 @@
             </div>
         </section>
 
-        <!-- Demo Section -->
-        <section id="demo" class="section">
+        <!-- Project Structure -->
+        <section id="structure" class="section">
             <div class="section-header">
-                <i class="fas fa-play-circle"></i>
-                <h2>Demonstration & Screenshots</h2>
+                <i class="fas fa-folder-tree"></i>
+                <h2>Project Structure</h2>
             </div>
 
             <div class="form-group">
-                <label>Demo URL</label>
-                <input type="text" id="demoUrl" placeholder="https://your-project-demo.com">
-            </div>
-
-            <div class="form-group">
-                <label>Demo Video URL</label>
-                <input type="text" id="demoVideo" placeholder="https://youtube.com/watch?v=...">
-            </div>
-
-            <div class="form-group">
-                <label>Project Screenshots</label>
-                <div class="upload-area" onclick="document.getElementById('screenshotsInput').click()">
-                    <i class="fas fa-images"></i>
-                    <p>Click to upload screenshots</p>
-                    <input type="file" id="screenshotsInput" accept="image/*" multiple style="display: none">
+                <div class="file-upload" onclick="document.getElementById('projectFiles').click()">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Upload project files to generate structure</p>
+                    <input type="file" id="projectFiles" webkitdirectory directory multiple style="display: none">
                 </div>
-                <div id="screenshotsPreview" class="image-preview-grid"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Directory Tree</label>
+                <div id="directoryTree" class="directory-tree"></div>
             </div>
         </section>
 
-        <!-- Technologies Section -->
-        <section id="tech" class="section">
+        <!-- Deployment -->
+        <section id="deploy" class="section">
             <div class="section-header">
-                <i class="fas fa-code"></i>
-                <h2>Technologies & Setup</h2>
+                <i class="fas fa-rocket"></i>
+                <h2>Deployment</h2>
             </div>
 
-            <div class="form-group">
-                <label>Technologies Used</label>
-                <textarea id="technologies" rows="4" placeholder="List your technologies (e.g., React, Node.js, Docker)"></textarea>
-                <div id="detectedTechIcons" class="tech-stack"></div>
-            </div>
-
-            <div class="form-group">
-                <label>Deployment Method</label>
-                <div class="deployment-methods">
-                    <div class="deploy-method" data-method="standard">
-                        <i class="fas fa-server"></i>
-                        <h4>Standard</h4>
-                    </div>
-                    <div class="deploy-method" data-method="docker">
-                        <i class="fab fa-docker"></i>
-                        <h4>Docker</h4>
-                    </div>
-                    <div class="deploy-method" data-method="makefile">
-                        <i class="fas fa-file-code"></i>
-                        <h4>Makefile</h4>
-                    </div>
+            <div class="deployment-options">
+                <div class="deploy-option" data-platform="standard">
+                    <i class="fas fa-server"></i>
+                    <h4>Standard</h4>
+                </div>
+                <div class="deploy-option" data-platform="docker">
+                    <i class="fab fa-docker"></i>
+                    <h4>Docker</h4>
+                </div>
+                <div class="deploy-option" data-platform="vercel">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Vercel</h4>
+                </div>
+                <div class="deploy-option" data-platform="netlify">
+                    <i class="fab fa-netlify"></i>
+                    <h4>Netlify</h4>
+                </div>
+                <div class="deploy-option" data-platform="heroku">
+                    <i class="fas fa-cloud"></i>
+                    <h4>Heroku</h4>
+                </div>
+                <div class="deploy-option" data-platform="digitalocean">
+                    <i class="fab fa-digital-ocean"></i>
+                    <h4>DigitalOcean</h4>
+                </div>
+                <div class="deploy-option" data-platform="makefile">
+                    <i class="fas fa-file-code"></i>
+                    <h4>Makefile</h4>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Environment Setup</label>
-                <textarea id="envSetup" rows="6" placeholder="# Environment Variables Example&#10;DATABASE_URL=postgresql://localhost:5432/mydb&#10;API_KEY=your_api_key&#10;PORT=3000"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Installation Commands</label>
-                <textarea id="installCommands" rows="6" placeholder="# Installation steps&#10;npm install&#10;npm run build&#10;npm start"></textarea>
+            <div id="deploymentConfig" class="form-group">
+                <!-- Deployment configuration will be inserted here -->
             </div>
         </section>
 
-        <!-- Contact & Support Section -->
-        <section id="contact" class="section">
-            <div class="section-header">
-                <i class="fas fa-envelope"></i>
-                <h2>Contact & Support</h2>
-            </div>
+        <!-- Other sections continue... -->
+        <!-- Will add rest of sections in next part -->
 
-            <div class="form-group">
-                <label>Author Name</label>
-                <input type="text" id="authorName" placeholder="Your name">
-            </div>
-
-            <div class="form-group">
-                <label>Contact Email</label>
-                <input type="email" id="authorEmail" placeholder="your@email.com">
-            </div>
-
-            <div class="form-group">
-                <label>Author Links</label>
-                <input type="text" id="githubLink" placeholder="GitHub Profile URL">
-                <input type="text" id="linkedinLink" placeholder="LinkedIn Profile URL">
-                <input type="text" id="portfolioLink" placeholder="Portfolio Website URL">
-            </div>
-        </section>
-
-        <!-- License Section -->
-        <section id="license" class="section">
-            <div class="section-header">
-                <i class="fas fa-gavel"></i>
-                <h2>License & Terms</h2>
-            </div>
-
-            <div class="license-options">
-                <div class="license-option" data-license="mit">
-                    <i class="fas fa-file-contract"></i>
-                    <h4>MIT</h4>
-                </div>
-                <div class="license-option" data-license="apache">
-                    <i class="fas fa-file-contract"></i>
-                    <h4>Apache 2.0</h4>
-                </div>
-                <div class="license-option" data-license="gpl">
-                    <i class="fas fa-file-contract"></i>
-                    <h4>GNU GPL v3</h4>
-                </div>
-                <div class="license-option" data-license="bsd">
-                    <i class="fas fa-file-contract"></i>
-                    <h4>BSD</h4>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>License Text</label>
-                <textarea id="licenseText" rows="8" readonly></textarea>
-            </div>
-        </section>
-
-        <!-- Changelog Section -->
-        <section id="changelog" class="section">
-            <div class="section-header">
-                <i class="fas fa-history"></i>
-                <h2>Changelog</h2>
-            </div>
-
-            <div id="changelogEntries">
-                <div class="changelog-entry">
-                    <div class="changelog-header">
-                        <span class="version-tag">v1.0.0</span>
-                        <span class="date">2024-03-20</span>
-                    </div>
-                    <textarea rows="4" placeholder="## Added&#10;- Initial release&#10;- Feature A&#10;- Feature B"></textarea>
-                </div>
-            </div>
-
-            <button class="btn btn-secondary" onclick="addChangelogEntry()">
-                <i class="fas fa-plus"></i> Add Version
-            </button>
-        </section>
-
-        <!-- Credits Section -->
-        <section id="credits" class="section">
-            <div class="section-header">
-                <i class="fas fa-award"></i>
-                <h2>Credits & Contributors</h2>
-            </div>
-
-            <div class="form-group">
-                <label>Contributors</label>
-                <textarea id="contributors" rows="4" placeholder="- [Name](github-profile) - Role/Contribution"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label>Acknowledgments</label>
-                <textarea id="acknowledgments" rows="4" placeholder="Special thanks to..."></textarea>
-            </div>
-        </section>
-
-        <!-- Action Buttons -->
-        <div class="button-group">
-            <button class="btn btn-secondary" onclick="previewDocumentation()">
-                <i class="fas fa-eye"></i> Preview
-            </button>
-            <button class="btn btn-primary" onclick="generateDocumentation()">
-                <i class="fas fa-download"></i> Generate README
-            </button>
-        </div>
-
-        <!-- Preview Modal -->
-        <div id="previewModal" class="preview-container">
-            <div id="previewContent"></div>
-        </div>
+        <!-- Back to Top Button -->
+        <button class="back-to-top" onclick="scrollToTop()">
+            <i class="fas fa-arrow-up"></i> Back to Top
+        </button>
     </div>
 
     <script>
@@ -752,21 +721,66 @@
             'windows': 'fab fa-windows'
         };
 
+        // Deployment platform configurations
+        const platformConfigs = {
+            standard: {
+                icon: 'fas fa-server',
+                template: `# Standard Installation
+npm install
+npm start`
+            },
+            docker: {
+                icon: 'fab fa-docker',
+                template: `# Build Docker Image
+docker build -t your-app-name .
+
+# Run Container
+docker run -d -p 3000:3000 your-app-name`
+            },
+            vercel: {
+                icon: 'fas fa-bolt',
+                template: `# Deploy to Vercel
+vercel`
+            },
+            netlify: {
+                icon: 'fab fa-netlify',
+                template: `# Deploy to Netlify
+netlify deploy --prod`
+            },
+            heroku: {
+                icon: 'fas fa-cloud',
+                template: `# Deploy to Heroku
+git push heroku main`
+            },
+            digitalocean: {
+                icon: 'fab fa-digital-ocean',
+                template: `# Deploy to DigitalOcean App Platform
+doctl apps create --spec app.yaml`
+            },
+            makefile: {
+                icon: 'fas fa-file-code',
+                template: `# Makefile Commands
+make install
+make build
+make run`
+            }
+        };
+
         // License templates
         const licenseTemplates = {
             mit: `MIT License
 
-Copyright (c) [year] [fullname]
+Copyright (c) ${new Date().getFullYear()} [fullname]
 
-Permission is hereby granted, free of charge...`,
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software...`,
             apache: `Apache License, Version 2.0
 
-Licensed under the Apache License, Version 2.0...`,
+Licensed under the Apache License, Version 2.0 (the "License")...`,
             gpl: `GNU GENERAL PUBLIC LICENSE
 Version 3, 29 June 2007...`,
             bsd: `BSD 3-Clause License
 
-Copyright (c) [year] [fullname]
+Copyright (c) ${new Date().getFullYear()} [fullname]
 All rights reserved...`
         };
 
@@ -774,6 +788,7 @@ All rights reserved...`
         document.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
             loadSavedData();
+            setupScrollListener();
         });
 
         function setupEventListeners() {
@@ -785,13 +800,14 @@ All rights reserved...`
             // File Uploads
             document.getElementById('logoInput').addEventListener('change', handleLogoUpload);
             document.getElementById('screenshotsInput').addEventListener('change', handleScreenshotsUpload);
+            document.getElementById('projectFiles').addEventListener('change', handleProjectFiles);
 
             // Technology Detection
             document.getElementById('technologies').addEventListener('input', detectTechnologies);
 
-            // Deployment Method Selection
-            document.querySelectorAll('.deploy-method').forEach(method => {
-                method.addEventListener('click', () => selectDeployMethod(method));
+            // Deployment Platform Selection
+            document.querySelectorAll('.deploy-option').forEach(option => {
+                option.addEventListener('click', () => selectDeployPlatform(option));
             });
 
             // License Selection
@@ -799,14 +815,28 @@ All rights reserved...`
                 option.addEventListener('click', () => selectLicense(option));
             });
 
-            // Navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => scrollToSection(item.dataset.section));
-            });
-
-            // Save data on input
+            // Auto-save inputs
             document.querySelectorAll('input, textarea').forEach(element => {
                 element.addEventListener('input', saveFormData);
+            });
+        }
+
+        // Scroll Functionality
+        function setupScrollListener() {
+            const backToTopButton = document.querySelector('.back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         }
 
@@ -847,20 +877,44 @@ All rights reserved...`
             });
         }
 
-        function updateScreenshotsPreview() {
-            const preview = document.getElementById('screenshotsPreview');
-            preview.innerHTML = screenshots.map((src, index) => `
-                <div class="image-preview">
-                    <img src="${src}" alt="Screenshot ${index + 1}">
-                    <button class="remove-image" onclick="removeScreenshot(${index})">×</button>
-                </div>
-            `).join('');
+        function handleProjectFiles(event) {
+            const files = Array.from(event.target.files);
+            const tree = generateDirectoryTree(files);
+            document.getElementById('directoryTree').textContent = formatDirectoryTree(tree);
+            saveFormData();
         }
 
-        function removeScreenshot(index) {
-            screenshots.splice(index, 1);
-            updateScreenshotsPreview();
-            saveFormData();
+        // Directory Tree Generation
+        function generateDirectoryTree(files) {
+            const tree = {};
+            files.forEach(file => {
+                const parts = file.webkitRelativePath.split('/');
+                let current = tree;
+                parts.forEach((part, index) => {
+                    if (index === parts.length - 1) {
+                        current[part] = null;
+                    } else {
+                        current[part] = current[part] || {};
+                        current = current[part];
+                    }
+                });
+            });
+            return tree;
+        }
+
+        function formatDirectoryTree(tree, prefix = '') {
+            let result = '';
+            const entries = Object.entries(tree);
+            entries.forEach(([key, value], index) => {
+                const isLast = index === entries.length - 1;
+                const connector = isLast ? '└── ' : '├── ';
+                result += prefix + connector + key + '\n';
+                if (value !== null) {
+                    const newPrefix = prefix + (isLast ? '    ' : '│   ');
+                    result += formatDirectoryTree(value, newPrefix);
+                }
+            });
+            return result;
         }
 
         // Technology Detection
@@ -879,64 +933,49 @@ All rights reserved...`
             });
         }
 
-        // Deployment Method Selection
-        function selectDeployMethod(element) {
-            document.querySelectorAll('.deploy-method').forEach(method => 
-                method.classList.remove('active'));
+        // Deploy Platform Selection
+        function selectDeployPlatform(element) {
+            document.querySelectorAll('.deploy-option').forEach(opt => 
+                opt.classList.remove('active'));
             element.classList.add('active');
-            selectedDeployMethod = element.dataset.method;
+            selectedDeployMethod = element.dataset.platform;
             updateDeploymentConfig();
             saveFormData();
         }
 
         function updateDeploymentConfig() {
-            const commands = {
-                standard: `# Standard Installation
-npm install
-npm start`,
-                docker: `# Build Docker Image
-docker build -t project-name .
-docker run -p 3000:3000 project-name`,
-                makefile: `# Makefile Commands
-make install
-make build
-make run`
-            };
+            const config = platformConfigs[selectedDeployMethod];
+            if (!config) return;
 
-            document.getElementById('installCommands').value = commands[selectedDeployMethod] || '';
+            document.getElementById('deploymentConfig').innerHTML = `
+                <label>${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Configuration</label>
+                <textarea id="deployConfig" rows="6">${config.template}</textarea>
+            `;
         }
 
         // License Selection
         function selectLicense(element) {
-            document.querySelectorAll('.license-option').forEach(option => 
-                option.classList.remove('active'));
+            document.querySelectorAll('.license-option').forEach(opt => 
+                opt.classList.remove('active'));
             element.classList.add('active');
             selectedLicense = element.dataset.license;
             document.getElementById('licenseText').value = licenseTemplates[selectedLicense];
             saveFormData();
         }
 
-        // Changelog
+        // Changelog Management
         function addChangelogEntry() {
             const entries = document.getElementById('changelogEntries');
-            const newEntry = document.createElement('div');
-            newEntry.className = 'changelog-entry';
-            newEntry.innerHTML = `
+            const entry = document.createElement('div');
+            entry.className = 'changelog-entry';
+            entry.innerHTML = `
                 <div class="changelog-header">
-                    <input type="text" placeholder="Version" class="version-tag">
+                    <input type="text" class="version-tag" placeholder="v1.0.0">
                     <input type="date" class="date">
                 </div>
                 <textarea rows="4" placeholder="## Added&#10;- New feature&#10;## Changed&#10;- Updates"></textarea>
             `;
-            entries.appendChild(newEntry);
-        }
-
-        // Navigation
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
+            entries.appendChild(entry);
         }
 
         // Documentation Generation
@@ -946,74 +985,55 @@ make run`
         }
 
         function generateMarkdown() {
-            const data = {
-                title: document.getElementById('projectTitle').value,
-                description: document.getElementById('projectDescription').value,
-                demoUrl: document.getElementById('demoUrl').value,
-                demoVideo: document.getElementById('demoVideo').value,
-                technologies: document.getElementById('technologies').value,
-                envSetup: document.getElementById('envSetup').value,
-                installCommands: document.getElementById('installCommands').value,
-                authorName: document.getElementById('authorName').value,
-                authorEmail: document.getElementById('authorEmail').value,
-                githubLink: document.getElementById('githubLink').value,
-                contributors: document.getElementById('contributors').value,
-                acknowledgments: document.getElementById('acknowledgments').value
-            };
-
+            const data = gatherFormData();
             return `# ${data.title}
 
-${projectLogo ? `<div align="center"><img src="${projectLogo}" alt="Project Logo" width="240"></div>\n\n` : ''}
+${projectLogo ? `<div align="center"><img src="${projectLogo}" alt="Project Logo" width="240"></div>\n` : ''}
 
-## About
+[![Back to Top](https://img.shields.io/badge/Back%20to%20Top-↑-blue)](#${data.title.toLowerCase().replace(/\s+/g, '-')})
+
+## 📋 About
 ${data.description}
 
-## Project Type
-${selectedProjectType.charAt(0).toUpperCase() + selectedProjectType.slice(1)}
-
-## Demo
+## 🎮 Demo
 ${data.demoUrl ? `- [Live Demo](${data.demoUrl})` : ''}
 ${data.demoVideo ? `- [Video Demo](${data.demoVideo})` : ''}
 
-${screenshots.length ? `
-## Screenshots
-${screenshots.map((src, index) => `![Screenshot ${index + 1}](${src})`).join('\n')}
-` : ''}
+${screenshots.length ? `## 📸 Screenshots
+${screenshots.map((src, index) => `![Screenshot ${index + 1}](${src})`).join('\n')}` : ''}
 
-## Technologies
+## 💻 Technologies
 ${data.technologies}
 
-## Setup & Installation
+## 🚀 Deployment
 ${generateDeploymentSection()}
 
-## Environment Setup
-\`\`\`env
-${data.envSetup}
+## 🔧 Prerequisites
+${data.prerequisites}
+
+## 📁 Project Structure
+\`\`\`
+${document.getElementById('directoryTree').textContent}
 \`\`\`
 
-## Contact
+## ⚙️ Installation
+${data.installation}
+
+## 📫 Contact
 - Author: ${data.authorName}
 - Email: ${data.authorEmail}
-${data.githubLink ? `- GitHub: [${data.authorName}](${data.githubLink})` : ''}
+${data.githubLink ? `- GitHub: [Profile](${data.githubLink})` : ''}
 
-## Contributors
+## 👥 Contributors
 ${data.contributors}
 
-## Acknowledgments
-${data.acknowledgments}
-
-## License
+## 📝 License
 ${document.getElementById('licenseText').value}
 
-[↑ Back to Top](#${data.title.toLowerCase().replace(/\s+/g, '-')})`;
-        }
+## 📜 Changelog
+${generateChangelogSection()}
 
-        function generateDeploymentSection() {
-            const commands = document.getElementById('installCommands').value;
-            return `### ${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Installation
-\`\`\`bash
-${commands}
-\`\`\``;
+[↑ Back to Top](#${data.title.toLowerCase().replace(/\s+/g, '-')})`;
         }
 
         // Preview Handler
@@ -1022,14 +1042,18 @@ ${commands}
             const content = document.getElementById('previewContent');
             preview.style.display = 'block';
             content.innerHTML = convertMarkdownToHTML(generateMarkdown());
-            preview.scrollIntoView({ behavior: 'smooth' });
         }
 
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // Utilities
         function convertMarkdownToHTML(markdown) {
             return markdown
                 .replace(/^# (.*$)/gm, '<h1>$1</h1>')
-                .replace(/^## (.*$)/gm, '<h2>$1</h2>')
-                .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gm, '<h2>$2</h2>')
+                .replace(/^### (.*$)/gm, '<h3>$3</h3>')
                 .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; border-radius: 8px; margin: 1rem 0;">')
                 .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
                 .replace(/`{3}([\s\S]*?)`{3}/g, '<pre><code>$1</code></pre>')
@@ -1039,7 +1063,6 @@ ${commands}
                 .replace(/\n\n/g, '<br><br>');
         }
 
-        // Download Handler
         function downloadMarkdown(markdown) {
             const blob = new Blob([markdown], { type: 'text/markdown' });
             const url = URL.createObjectURL(blob);
@@ -1050,18 +1073,9 @@ ${commands}
             URL.revokeObjectURL(url);
         }
 
-        // Local Storage
+        // Save & Load Data
         function saveFormData() {
-            const data = {
-                projectTitle: document.getElementById('projectTitle').value,
-                projectDescription: document.getElementById('projectDescription').value,
-                technologies: document.getElementById('technologies').value,
-                selectedProjectType,
-                selectedLicense,
-                selectedDeployMethod,
-                projectLogo,
-                screenshots
-            };
+            const data = gatherFormData();
             localStorage.setItem('docgenData', JSON.stringify(data));
         }
 
@@ -1070,6 +1084,29 @@ ${commands}
             if (!saved) return;
 
             const data = JSON.parse(saved);
+            restoreFormData(data);
+        }
+
+        function gatherFormData() {
+            return {
+                projectLogo,
+                screenshots,
+                selectedProjectType,
+                selectedLicense,
+                selectedDeployMethod,
+                title: document.getElementById('projectTitle').value,
+                description: document.getElementById('projectDescription').value,
+                technologies: document.getElementById('technologies').value,
+                installation: document.getElementById('installCommands').value,
+                prerequisites: document.getElementById('prerequisites').value,
+                authorName: document.getElementById('authorName').value,
+                authorEmail: document.getElementById('authorEmail').value,
+                githubLink: document.getElementById('githubLink').value,
+                contributors: document.getElementById('contributors').value
+            };
+        }
+
+        function restoreFormData(data) {
             Object.entries(data).forEach(([key, value]) => {
                 const element = document.getElementById(key);
                 if (element) element.value = value;
@@ -1077,15 +1114,13 @@ ${commands}
 
             if (data.projectLogo) {
                 projectLogo = data.projectLogo;
-                document.getElementById('logoPreview').innerHTML = 
-                    `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px; margin-top: 1rem;">`;
+                updateLogoPreview();
             }
 
             if (data.screenshots) {
                 screenshots = data.screenshots;
                 updateScreenshotsPreview();
             }
-
             if (data.selectedProjectType) {
                 const projectType = document.querySelector(`[data-type="${data.selectedProjectType}"]`);
                 if (projectType) selectProjectType(projectType);
@@ -1097,12 +1132,83 @@ ${commands}
             }
 
             if (data.selectedDeployMethod) {
-                const method = document.querySelector(`[data-method="${data.selectedDeployMethod}"]`);
-                if (method) selectDeployMethod(method);
+                const method = document.querySelector(`[data-platform="${data.selectedDeployMethod}"]`);
+                if (method) selectDeployPlatform(method);
             }
 
             detectTechnologies();
         }
+
+        function updateLogoPreview() {
+            if (projectLogo) {
+                document.getElementById('logoPreview').innerHTML = 
+                    `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px; margin-top: 1rem;">`;
+            }
+        }
+
+        function generateChangelogSection() {
+            const entries = document.querySelectorAll('.changelog-entry');
+            let changelog = '';
+            
+            entries.forEach(entry => {
+                const version = entry.querySelector('.version-tag').value;
+                const date = entry.querySelector('.date').value;
+                const changes = entry.querySelector('textarea').value;
+                
+                if (version && changes) {
+                    changelog += `### ${version} (${date || 'Unreleased'})\n${changes}\n\n`;
+                }
+            });
+            
+            return changelog;
+        }
+
+        function generateDeploymentSection() {
+            const config = platformConfigs[selectedDeployMethod];
+            if (!config) return '';
+
+            const deployConfig = document.getElementById('deployConfig')?.value || config.template;
+            
+            return `### ${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Deployment
+\`\`\`bash
+${deployConfig}
+\`\`\``;
+        }
+
+        // URL Hash Navigation
+        window.addEventListener('hashchange', handleHashChange);
+
+        function handleHashChange() {
+            const hash = window.location.hash.slice(1);
+            if (hash) {
+                const section = document.getElementById(hash);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+
+        // Back to Top Button
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.className = 'back-to-top';
+        backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.body.appendChild(backToTopBtn);
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+            detectTechnologies();
+            handleHashChange();
+        });
     </script>
 </body>
 </html>
