@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocGen Pro - Next-Gen Documentation Generator</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        window.difyChatbotConfig = { token: 'SHSExuFO0XD8jAZj' }
+    </script>
+    <script src="https://udify.app/embed.min.js" id="SHSExuFO0XD8jAZj" defer></script>
+    <style>
+        /* Theme Variables */
+        :root {
+            --primary: #4f46e5;
+            --secondary: #7c3aed;
+            --accent: #22d3ee;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #283548;
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: rgba(148, 163, 184, 0.1);
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            --neon-glow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at top right, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Container & Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            animation: neonPulse 2s infinite;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--neon-glow);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Navigation */
+        .nav-menu {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .nav-item {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .nav-item i {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: none;
+            box-shadow: var(--shadow);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translate(-50%, -5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        /* Dify Chat Bot Styles */
+        #dify-chatbot-bubble-button {
+            background-color: var(--primary) !important;
+        }
+
+        #dify-chatbot-bubble-window {
+            width: 24rem !important;
+            height: 40rem !important;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Sections */
+        .section {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-header i {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--text), var(--text-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Deployment Options */
+        .deployment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .deploy-option {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .deploy-option::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+            transform: rotate(45deg);
+        }
+
+        .deploy-option:hover::before {
+            top: 100%;
+            left: 100%;
+        }
+
+        .deploy-option:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--accent);
+        }
+
+        .deploy-option.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+            border-color: var(--accent);
+        }
+
+        .deploy-option i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .deploy-option:hover i {
+            transform: scale(1.2);
+        }
+
+        .deploy-option h4 {
+            color: var(--text);
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        /* File Upload Area */
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload:hover {
+            border-color: var(--accent);
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .file-upload:hover i {
+            transform: translateY(-5px);
+        }
+
+        .file-upload p {
+            color: var(--text-secondary);
+            margin-top: 1rem;
+        }
+
+        /* Directory Tree */
+        .directory-tree {
+            font-family: monospace;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
+        }
+
+        /* Preview Container */
+        .preview-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.9);
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-content {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: var(--surface);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        /* Action Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+            }
+
+            .deployment-options {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .preview-container {
+                padding: 1rem;
+            }
+
+            .preview-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">📚</div>
+            <h1 class="title">DocGen Pro</h1>
+            <p class="subtitle">Create stunning documentation with next-gen features</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-menu">
+            <a href="#basics" class="nav-item"><i class="fas fa-home"></i> Basics</a>
+            <a href="#demo" class="nav-item"><i class="fas fa-play-circle"></i> Demo</a>
+            <a href="#tech" class="nav-item"><i class="fas fa-code"></i> Tech</a>
+            <a href="#structure" class="nav-item"><i class="fas fa-folder-tree"></i> Structure</a>
+            <a href="#deploy" class="nav-item"><i class="fas fa-rocket"></i> Deploy</a>
+            <a href="#contact" class="nav-item"><i class="fas fa-envelope"></i> Contact</a>
+            <a href="#license" class="nav-item"><i class="fas fa-gavel"></i> License</a>
+            <a href="#changelog" class="nav-item"><i class="fas fa-history"></i> Changelog</a>
+            <a href="#credits" class="nav-item"><i class="fas fa-award"></i> Credits</a>
+        </nav>
+
+        <!-- Project Basics -->
+        <section id="basics" class="section">
+            <div class="section-header">
+                <i class="fas fa-home"></i>
+                <h2>Project Basics</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Project Type</label>
+                <div class="project-types">
+                    <div class="project-type" data-type="website">
+                        <i class="fas fa-globe"></i>
+                        <h4>Website</h4>
+                    </div>
+                    <div class="project-type" data-type="api">
+                        <i class="fas fa-server"></i>
+                        <h4>API / Web Service</h4>
+                    </div>
+                    <div class="project-type" data-type="mobile">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Mobile App</h4>
+                    </div>
+                    <div class="project-type" data-type="desktop">
+                        <i class="fas fa-desktop"></i>
+                        <h4>Desktop App</h4>
+                    </div>
+                    <div class="project-type" data-type="library">
+                        <i class="fas fa-book"></i>
+                        <h4>Library / Framework</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Project Logo</label>
+                <div class="file-upload" onclick="document.getElementById('logoInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload project logo</p>
+                    <input type="file" id="logoInput" accept="image/*" style="display: none">
+                </div>
+                <div id="logoPreview"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Project Title</label>
+                <input type="text" id="projectTitle" placeholder="Your awesome project name">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="projectDescription" rows="4" placeholder="Describe your project..."></textarea>
+            </div>
+        </section>
+
+        <!-- Project Structure -->
+        <section id="structure" class="section">
+            <div class="section-header">
+                <i class="fas fa-folder-tree"></i>
+                <h2>Project Structure</h2>
+            </div>
+
+            <div class="form-group">
+                <div class="file-upload" onclick="document.getElementById('projectFiles').click()">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Upload project files to generate structure</p>
+                    <input type="file" id="projectFiles" webkitdirectory directory multiple style="display: none">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Directory Tree</label>
+                <div id="directoryTree" class="directory-tree"></div>
+            </div>
+        </section>
+
+        <!-- Deployment -->
+        <section id="deploy" class="section">
+            <div class="section-header">
+                <i class="fas fa-rocket"></i>
+                <h2>Deployment</h2>
+            </div>
+
+            <div class="deployment-options">
+                <div class="deploy-option" data-platform="standard">
+                    <i class="fas fa-server"></i>
+                    <h4>Standard</h4>
+                </div>
+                <div class="deploy-option" data-platform="docker">
+                    <i class="fab fa-docker"></i>
+                    <h4>Docker</h4>
+                </div>
+                <div class="deploy-option" data-platform="vercel">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Vercel</h4>
+                </div>
+                <div class="deploy-option" data-platform="netlify">
+                    <i class="fab fa-netlify"></i>
+                    <h4>Netlify</h4>
+                </div>
+                <div class="deploy-option" data-platform="heroku">
+                    <i class="fas fa-cloud"></i>
+                    <h4>Heroku</h4>
+                </div>
+                <div class="deploy-option" data-platform="digitalocean">
+                    <i class="fab fa-digital-ocean"></i>
+                    <h4>DigitalOcean</h4>
+                </div>
+                <div class="deploy-option" data-platform="makefile">
+                    <i class="fas fa-file-code"></i>
+                    <h4>Makefile</h4>
+                </div>
+            </div>
+
+            <div id="deploymentConfig" class="form-group">
+                <!-- Deployment configuration will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Other sections continue... -->
+        <!-- Will add rest of sections in next part -->
+
+        <!-- Back to Top Button -->
+        <button class="back-to-top" onclick="scrollToTop()">
+            <i class="fas fa-arrow-up"></i> Back to Top
+        </button>
+    </div>
+
+    <!-- JavaScript will follow in the next part... -->
