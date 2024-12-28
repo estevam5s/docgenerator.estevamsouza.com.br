@@ -684,4 +684,531 @@
         </button>
     </div>
 
-    <!-- JavaScript will follow in the next part... -->
+    <script>
+        // Global variables
+        let projectLogo = null;
+        let screenshots = [];
+        let selectedProjectType = '';
+        let selectedLicense = '';
+        let selectedDeployMethod = 'standard';
+
+        // Technology icons mapping
+        const techIcons = {
+            'react': 'fab fa-react',
+            'vue': 'fab fa-vuejs',
+            'angular': 'fab fa-angular',
+            'node': 'fab fa-node',
+            'javascript': 'fab fa-js',
+            'typescript': 'fab fa-js',
+            'python': 'fab fa-python',
+            'java': 'fab fa-java',
+            'php': 'fab fa-php',
+            'laravel': 'fab fa-laravel',
+            'docker': 'fab fa-docker',
+            'aws': 'fab fa-aws',
+            'github': 'fab fa-github',
+            'git': 'fab fa-git-alt',
+            'css': 'fab fa-css3-alt',
+            'html': 'fab fa-html5',
+            'sass': 'fab fa-sass',
+            'bootstrap': 'fab fa-bootstrap',
+            'wordpress': 'fab fa-wordpress',
+            'npm': 'fab fa-npm',
+            'yarn': 'fab fa-yarn',
+            'android': 'fab fa-android',
+            'apple': 'fab fa-apple',
+            'linux': 'fab fa-linux',
+            'windows': 'fab fa-windows'
+        };
+
+        // Deployment platform configurations
+        const platformConfigs = {
+            standard: {
+                icon: 'fas fa-server',
+                template: `# Standard Installation
+npm install
+npm start`
+            },
+            docker: {
+                icon: 'fab fa-docker',
+                template: `# Build Docker Image
+docker build -t your-app-name .
+
+# Run Container
+docker run -d -p 3000:3000 your-app-name`
+            },
+            vercel: {
+                icon: 'fas fa-bolt',
+                template: `# Deploy to Vercel
+vercel`
+            },
+            netlify: {
+                icon: 'fab fa-netlify',
+                template: `# Deploy to Netlify
+netlify deploy --prod`
+            },
+            heroku: {
+                icon: 'fas fa-cloud',
+                template: `# Deploy to Heroku
+git push heroku main`
+            },
+            digitalocean: {
+                icon: 'fab fa-digital-ocean',
+                template: `# Deploy to DigitalOcean App Platform
+doctl apps create --spec app.yaml`
+            },
+            makefile: {
+                icon: 'fas fa-file-code',
+                template: `# Makefile Commands
+make install
+make build
+make run`
+            }
+        };
+
+        // License templates
+        const licenseTemplates = {
+            mit: `MIT License
+
+Copyright (c) ${new Date().getFullYear()} [fullname]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software...`,
+            apache: `Apache License, Version 2.0
+
+Licensed under the Apache License, Version 2.0 (the "License")...`,
+            gpl: `GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007...`,
+            bsd: `BSD 3-Clause License
+
+Copyright (c) ${new Date().getFullYear()} [fullname]
+All rights reserved...`
+        };
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            loadSavedData();
+            setupScrollListener();
+        });
+
+        function setupEventListeners() {
+            // Project Type Selection
+            document.querySelectorAll('.project-type').forEach(type => {
+                type.addEventListener('click', () => selectProjectType(type));
+            });
+
+            // File Uploads
+            document.getElementById('logoInput').addEventListener('change', handleLogoUpload);
+            document.getElementById('screenshotsInput').addEventListener('change', handleScreenshotsUpload);
+            document.getElementById('projectFiles').addEventListener('change', handleProjectFiles);
+
+            // Technology Detection
+            document.getElementById('technologies').addEventListener('input', detectTechnologies);
+
+            // Deployment Platform Selection
+            document.querySelectorAll('.deploy-option').forEach(option => {
+                option.addEventListener('click', () => selectDeployPlatform(option));
+            });
+
+            // License Selection
+            document.querySelectorAll('.license-option').forEach(option => {
+                option.addEventListener('click', () => selectLicense(option));
+            });
+
+            // Auto-save inputs
+            document.querySelectorAll('input, textarea').forEach(element => {
+                element.addEventListener('input', saveFormData);
+            });
+        }
+
+        // Scroll Functionality
+        function setupScrollListener() {
+            const backToTopButton = document.querySelector('.back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Project Type Selection
+        function selectProjectType(element) {
+            document.querySelectorAll('.project-type').forEach(type => 
+                type.classList.remove('active'));
+            element.classList.add('active');
+            selectedProjectType = element.dataset.type;
+            saveFormData();
+        }
+
+        // File Upload Handlers
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    projectLogo = e.target.result;
+                    document.getElementById('logoPreview').innerHTML = 
+                        `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px; margin-top: 1rem;">`;
+                    saveFormData();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function handleScreenshotsUpload(event) {
+            const files = Array.from(event.target.files);
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    screenshots.push(e.target.result);
+                    updateScreenshotsPreview();
+                    saveFormData();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function handleProjectFiles(event) {
+            const files = Array.from(event.target.files);
+            const tree = generateDirectoryTree(files);
+            document.getElementById('directoryTree').textContent = formatDirectoryTree(tree);
+            saveFormData();
+        }
+
+        // Directory Tree Generation
+        function generateDirectoryTree(files) {
+            const tree = {};
+            files.forEach(file => {
+                const parts = file.webkitRelativePath.split('/');
+                let current = tree;
+                parts.forEach((part, index) => {
+                    if (index === parts.length - 1) {
+                        current[part] = null;
+                    } else {
+                        current[part] = current[part] || {};
+                        current = current[part];
+                    }
+                });
+            });
+            return tree;
+        }
+
+        function formatDirectoryTree(tree, prefix = '') {
+            let result = '';
+            const entries = Object.entries(tree);
+            entries.forEach(([key, value], index) => {
+                const isLast = index === entries.length - 1;
+                const connector = isLast ? '└── ' : '├── ';
+                result += prefix + connector + key + '\n';
+                if (value !== null) {
+                    const newPrefix = prefix + (isLast ? '    ' : '│   ');
+                    result += formatDirectoryTree(value, newPrefix);
+                }
+            });
+            return result;
+        }
+
+        // Technology Detection
+        function detectTechnologies() {
+            const techInput = document.getElementById('technologies').value.toLowerCase();
+            const iconContainer = document.getElementById('detectedTechIcons');
+            iconContainer.innerHTML = '';
+
+            Object.entries(techIcons).forEach(([tech, iconClass]) => {
+                if (techInput.includes(tech)) {
+                    const icon = document.createElement('i');
+                    icon.className = `${iconClass} tech-icon`;
+                    icon.title = tech.charAt(0).toUpperCase() + tech.slice(1);
+                    iconContainer.appendChild(icon);
+                }
+            });
+        }
+
+        // Deploy Platform Selection
+        function selectDeployPlatform(element) {
+            document.querySelectorAll('.deploy-option').forEach(opt => 
+                opt.classList.remove('active'));
+            element.classList.add('active');
+            selectedDeployMethod = element.dataset.platform;
+            updateDeploymentConfig();
+            saveFormData();
+        }
+
+        function updateDeploymentConfig() {
+            const config = platformConfigs[selectedDeployMethod];
+            if (!config) return;
+
+            document.getElementById('deploymentConfig').innerHTML = `
+                <label>${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Configuration</label>
+                <textarea id="deployConfig" rows="6">${config.template}</textarea>
+            `;
+        }
+
+        // License Selection
+        function selectLicense(element) {
+            document.querySelectorAll('.license-option').forEach(opt => 
+                opt.classList.remove('active'));
+            element.classList.add('active');
+            selectedLicense = element.dataset.license;
+            document.getElementById('licenseText').value = licenseTemplates[selectedLicense];
+            saveFormData();
+        }
+
+        // Changelog Management
+        function addChangelogEntry() {
+            const entries = document.getElementById('changelogEntries');
+            const entry = document.createElement('div');
+            entry.className = 'changelog-entry';
+            entry.innerHTML = `
+                <div class="changelog-header">
+                    <input type="text" class="version-tag" placeholder="v1.0.0">
+                    <input type="date" class="date">
+                </div>
+                <textarea rows="4" placeholder="## Added&#10;- New feature&#10;## Changed&#10;- Updates"></textarea>
+            `;
+            entries.appendChild(entry);
+        }
+
+        // Documentation Generation
+        function generateDocumentation() {
+            const markdown = generateMarkdown();
+            downloadMarkdown(markdown);
+        }
+
+        function generateMarkdown() {
+            const data = gatherFormData();
+            return `# ${data.title}
+
+${projectLogo ? `<div align="center"><img src="${projectLogo}" alt="Project Logo" width="240"></div>\n` : ''}
+
+[![Back to Top](https://img.shields.io/badge/Back%20to%20Top-↑-blue)](#${data.title.toLowerCase().replace(/\s+/g, '-')})
+
+## 📋 About
+${data.description}
+
+## 🎮 Demo
+${data.demoUrl ? `- [Live Demo](${data.demoUrl})` : ''}
+${data.demoVideo ? `- [Video Demo](${data.demoVideo})` : ''}
+
+${screenshots.length ? `## 📸 Screenshots
+${screenshots.map((src, index) => `![Screenshot ${index + 1}](${src})`).join('\n')}` : ''}
+
+## 💻 Technologies
+${data.technologies}
+
+## 🚀 Deployment
+${generateDeploymentSection()}
+
+## 🔧 Prerequisites
+${data.prerequisites}
+
+## 📁 Project Structure
+\`\`\`
+${document.getElementById('directoryTree').textContent}
+\`\`\`
+
+## ⚙️ Installation
+${data.installation}
+
+## 📫 Contact
+- Author: ${data.authorName}
+- Email: ${data.authorEmail}
+${data.githubLink ? `- GitHub: [Profile](${data.githubLink})` : ''}
+
+## 👥 Contributors
+${data.contributors}
+
+## 📝 License
+${document.getElementById('licenseText').value}
+
+## 📜 Changelog
+${generateChangelogSection()}
+
+[↑ Back to Top](#${data.title.toLowerCase().replace(/\s+/g, '-')})`;
+        }
+
+        // Preview Handler
+        function previewDocumentation() {
+            const preview = document.getElementById('previewModal');
+            const content = document.getElementById('previewContent');
+            preview.style.display = 'block';
+            content.innerHTML = convertMarkdownToHTML(generateMarkdown());
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        // Utilities
+        function convertMarkdownToHTML(markdown) {
+            return markdown
+                .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                .replace(/^## (.*$)/gm, '<h2>$2</h2>')
+                .replace(/^### (.*$)/gm, '<h3>$3</h3>')
+                .replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; border-radius: 8px; margin: 1rem 0;">')
+                .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                .replace(/`{3}([\s\S]*?)`{3}/g, '<pre><code>$1</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/^\s*[-*+]\s+(.*)/gm, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+                .replace(/\n\n/g, '<br><br>');
+        }
+
+        function downloadMarkdown(markdown) {
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'README.md';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Save & Load Data
+        function saveFormData() {
+            const data = gatherFormData();
+            localStorage.setItem('docgenData', JSON.stringify(data));
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem('docgenData');
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+            restoreFormData(data);
+        }
+
+        function gatherFormData() {
+            return {
+                projectLogo,
+                screenshots,
+                selectedProjectType,
+                selectedLicense,
+                selectedDeployMethod,
+                title: document.getElementById('projectTitle').value,
+                description: document.getElementById('projectDescription').value,
+                technologies: document.getElementById('technologies').value,
+                installation: document.getElementById('installCommands').value,
+                prerequisites: document.getElementById('prerequisites').value,
+                authorName: document.getElementById('authorName').value,
+                authorEmail: document.getElementById('authorEmail').value,
+                githubLink: document.getElementById('githubLink').value,
+                contributors: document.getElementById('contributors').value
+            };
+        }
+
+        function restoreFormData(data) {
+            Object.entries(data).forEach(([key, value]) => {
+                const element = document.getElementById(key);
+                if (element) element.value = value;
+            });
+
+            if (data.projectLogo) {
+                projectLogo = data.projectLogo;
+                updateLogoPreview();
+            }
+
+            if (data.screenshots) {
+                screenshots = data.screenshots;
+                updateScreenshotsPreview();
+            }
+            if (data.selectedProjectType) {
+                const projectType = document.querySelector(`[data-type="${data.selectedProjectType}"]`);
+                if (projectType) selectProjectType(projectType);
+            }
+
+            if (data.selectedLicense) {
+                const license = document.querySelector(`[data-license="${data.selectedLicense}"]`);
+                if (license) selectLicense(license);
+            }
+
+            if (data.selectedDeployMethod) {
+                const method = document.querySelector(`[data-platform="${data.selectedDeployMethod}"]`);
+                if (method) selectDeployPlatform(method);
+            }
+
+            detectTechnologies();
+        }
+
+        function updateLogoPreview() {
+            if (projectLogo) {
+                document.getElementById('logoPreview').innerHTML = 
+                    `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px; margin-top: 1rem;">`;
+            }
+        }
+
+        function generateChangelogSection() {
+            const entries = document.querySelectorAll('.changelog-entry');
+            let changelog = '';
+            
+            entries.forEach(entry => {
+                const version = entry.querySelector('.version-tag').value;
+                const date = entry.querySelector('.date').value;
+                const changes = entry.querySelector('textarea').value;
+                
+                if (version && changes) {
+                    changelog += `### ${version} (${date || 'Unreleased'})\n${changes}\n\n`;
+                }
+            });
+            
+            return changelog;
+        }
+
+        function generateDeploymentSection() {
+            const config = platformConfigs[selectedDeployMethod];
+            if (!config) return '';
+
+            const deployConfig = document.getElementById('deployConfig')?.value || config.template;
+            
+            return `### ${selectedDeployMethod.charAt(0).toUpperCase() + selectedDeployMethod.slice(1)} Deployment
+\`\`\`bash
+${deployConfig}
+\`\`\``;
+        }
+
+        // URL Hash Navigation
+        window.addEventListener('hashchange', handleHashChange);
+
+        function handleHashChange() {
+            const hash = window.location.hash.slice(1);
+            if (hash) {
+                const section = document.getElementById(hash);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+
+        // Back to Top Button
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.className = 'back-to-top';
+        backToTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.body.appendChild(backToTopBtn);
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+            detectTechnologies();
+            handleHashChange();
+        });
+    </script>
+</body>
+</html>
