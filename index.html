@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocGen Pro - Next-Gen Documentation Generator</title>
+    <title>DocGen Pro - Documentation Generator</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Dify Chat Integration -->
     <script>
         window.difyChatbotConfig = { token: 'SHSExuFO0XD8jAZj' }
     </script>
@@ -23,15 +22,12 @@
             --text: #f8fafc;
             --text-secondary: #94a3b8;
             --border: rgba(148, 163, 184, 0.1);
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             --neon-glow: 0 0 10px rgba(34, 211, 238, 0.5);
         }
 
-        /* Base Styles */
+        /* Reset & Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -48,72 +44,14 @@
                 radial-gradient(circle at top right, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.1) 0%, transparent 50%);
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* Main Container */
+        /* Container */
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 1rem;
             position: relative;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 4rem 2rem;
-            margin-bottom: 3rem;
-            position: relative;
-            background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            animation: neonPulse 2s infinite;
-        }
-
-        .logo {
-            font-size: 4rem;
-            margin-bottom: 1.5rem;
-            animation: float 6s ease-in-out infinite;
-            position: relative;
-        }
-
-        .logo::after {
-            content: '';
-            position: absolute;
-            width: 150%;
-            height: 150%;
-            top: -25%;
-            left: -25%;
-            background: radial-gradient(circle, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        .title {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: var(--neon-glow);
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
         }
 
         /* Navigation */
@@ -121,13 +59,23 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(10px);
             padding: 1rem;
             border-radius: 12px;
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
         }
 
         .nav-list {
@@ -148,23 +96,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: 0.5s;
-        }
-
-        .nav-link:hover::before {
-            left: 100%;
         }
 
         .nav-link:hover {
@@ -175,19 +106,85 @@
 
         .nav-link i {
             color: var(--accent);
-            font-size: 1.1rem;
         }
 
-        /* Section Styles */
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+            }
+
+            .nav-list {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .nav-list.active {
+                display: flex;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(180deg, var(--surface) 0%, transparent 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            animation: neonPulse 2s infinite;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: var(--neon-glow);
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Sections */
         .section {
             background: var(--surface);
             border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 4rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
             transition: all 0.3s ease;
             scroll-margin-top: 100px;
         }
@@ -197,53 +194,35 @@
             box-shadow: var(--hover-shadow);
         }
 
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
         .section-header {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1.5rem;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
             border-bottom: 1px solid var(--border);
         }
 
         .section-header i {
-            font-size: 2.5rem;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 2rem;
+            color: var(--accent);
         }
 
         .section-header h2 {
-            font-size: 2rem;
-            background: linear-gradient(45deg, var(--text), var(--text-secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-size: 1.8rem;
+            color: var(--text);
         }
 
         /* Form Elements */
         .form-group {
             margin-bottom: 2rem;
-            position: relative;
         }
 
         label {
             display: block;
-            margin-bottom: 1rem;
-            color: var(--text);
+            margin-bottom: 0.75rem;
             font-weight: 500;
-            font-size: 1.1rem;
+            color: var(--text);
         }
 
         input, textarea, select {
@@ -263,133 +242,93 @@
             box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2);
         }
 
-        /* File Upload Areas */
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 16px;
-            padding: 3rem 2rem;
+        /* Option Grids */
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(15, 23, 42, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .upload-area:hover {
+        .option-item:hover {
+            transform: translateY(-3px);
             border-color: var(--accent);
-            background: rgba(15, 23, 42, 0.5);
-            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
         }
 
-        .upload-area i {
-            font-size: 3rem;
+        .option-item.active {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
+            border-color: var(--accent);
+        }
+
+        .option-item i {
+            font-size: 2rem;
             color: var(--accent);
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
             transition: transform 0.3s ease;
         }
 
-        .upload-area:hover i {
+        .option-item:hover i {
             transform: scale(1.1);
         }
 
-        /* Technology Stack */
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .tech-icon {
-            font-size: 2.5rem;
-            color: var(--accent);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .tech-icon:hover {
-            transform: scale(1.2);
-            color: var(--primary);
-        }
-
-        /* Deployment Options */
-        .deployment-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .deploy-option {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid var(--border);
+        /* File Upload */
+        .upload-area {
+            border: 2px dashed var(--border);
             border-radius: 16px;
             padding: 2rem;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: rgba(15, 23, 42, 0.3);
         }
 
-        .deploy-option::before {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: 0.5s;
-            transform: rotate(45deg);
-        }
-
-        .deploy-option:hover::before {
-            top: 100%;
-            left: 100%;
-        }
-
-        .deploy-option:hover {
-            transform: translateY(-5px);
+        .upload-area:hover {
             border-color: var(--accent);
-            box-shadow: var(--hover-shadow);
+            background: rgba(15, 23, 42, 0.5);
         }
 
-        .deploy-option.active {
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.2), rgba(124, 58, 237, 0.2));
-            border-color: var(--accent);
-        }
-
-        .deploy-option i {
+        .upload-area i {
             font-size: 2.5rem;
             color: var(--accent);
             margin-bottom: 1rem;
         }
 
         /* Preview Section */
-        .preview-modal {
+        .preview-section {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 2rem;
-            overflow-y: auto;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .preview-section.active {
+            display: block;
         }
 
         .preview-content {
-            max-width: 900px;
-            margin: 2rem auto;
             background: var(--surface);
-            padding: 3rem;
-            border-radius: 20px;
+            border-radius: 16px;
+            padding: 2rem;
             border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            margin-top: 1rem;
+        }
+
+        .preview-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1rem 0;
         }
 
         /* Action Buttons */
@@ -397,7 +336,7 @@
             display: flex;
             gap: 1rem;
             justify-content: center;
-            margin-top: 3rem;
+            margin: 2rem 0;
         }
 
         .btn {
@@ -430,7 +369,7 @@
         }
 
         .btn:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: var(--hover-shadow);
         }
 
@@ -442,30 +381,28 @@
         .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: var(--text);
+            border: 1px solid var(--border);
         }
 
-        /* Back to Top Button */
+        /* Back to Top */
         .back-to-top {
             position: fixed;
             bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 2rem;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
-            padding: 1rem;
-            border-radius: 50%;
-            cursor: pointer;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 999;
             border: none;
-            box-shadow: var(--shadow);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 100;
         }
 
         .back-to-top.visible {
@@ -474,19 +411,61 @@
         }
 
         .back-to-top:hover {
-            transform: translate(-50%, -5px);
+            transform: translateY(-5px);
             box-shadow: var(--hover-shadow);
         }
 
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
+        /* Image Previews */
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+        .image-preview {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .remove-image:hover {
+            background: rgb(239, 68, 68);
+            transform: scale(1.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         @keyframes neonPulse {
@@ -497,18 +476,18 @@
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
+                padding: 0.5rem;
             }
 
-            .nav-list {
-                flex-direction: column;
+            .header {
+                padding: 2rem 1rem;
             }
 
             .section {
-                padding: 2rem;
+                padding: 1.5rem;
             }
 
-            .deployment-grid {
+            .option-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -519,6 +498,11 @@
             .btn {
                 width: 100%;
             }
+
+            .back-to-top {
+                right: 1rem;
+                bottom: 1rem;
+            }
         }
     </style>
 </head>
@@ -528,11 +512,14 @@
         <header class="header">
             <div class="logo">📚</div>
             <h1 class="title">DocGen Pro</h1>
-            <p class="subtitle">Generate stunning documentation for your projects</p>
+            <p class="subtitle">Create stunning project documentation in minutes</p>
         </header>
 
-        <!-- Main Navigation -->
+        <!-- Navigation -->
         <nav class="main-nav">
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
             <ul class="nav-list">
                 <li><a href="#basics" class="nav-link"><i class="fas fa-home"></i> Basics</a></li>
                 <li><a href="#demo" class="nav-link"><i class="fas fa-play-circle"></i> Demo</a></li>
@@ -555,24 +542,24 @@
 
             <div class="form-group">
                 <label>Project Type</label>
-                <div class="deployment-grid">
-                    <div class="deploy-option" data-type="website">
+                <div class="option-grid">
+                    <div class="option-item" data-type="website">
                         <i class="fas fa-globe"></i>
                         <h4>Website</h4>
                     </div>
-                    <div class="deploy-option" data-type="api">
+                    <div class="option-item" data-type="api">
                         <i class="fas fa-server"></i>
                         <h4>API / Web Service</h4>
                     </div>
-                    <div class="deploy-option" data-type="mobile">
+                    <div class="option-item" data-type="mobile">
                         <i class="fas fa-mobile-alt"></i>
                         <h4>Mobile App</h4>
                     </div>
-                    <div class="deploy-option" data-type="desktop">
+                    <div class="option-item" data-type="desktop">
                         <i class="fas fa-desktop"></i>
                         <h4>Desktop App</h4>
                     </div>
-                    <div class="deploy-option" data-type="library">
+                    <div class="option-item" data-type="library">
                         <i class="fas fa-book"></i>
                         <h4>Library / Framework</h4>
                     </div>
@@ -586,7 +573,7 @@
                     <p>Click to upload project logo</p>
                     <input type="file" id="logoInput" accept="image/*" style="display: none">
                 </div>
-                <div id="logoPreview" class="preview-image"></div>
+                <div id="logoPreview"></div>
             </div>
 
             <div class="form-group">
@@ -624,7 +611,7 @@
                     <p>Click to upload screenshots</p>
                     <input type="file" id="screenshotsInput" accept="image/*" multiple style="display: none">
                 </div>
-                <div id="screenshotsPreview" class="preview-grid"></div>
+                <div id="screenshotsPreview" class="image-preview-grid"></div>
             </div>
         </section>
 
@@ -637,15 +624,13 @@
 
             <div class="form-group">
                 <label>Technologies Used</label>
-                <textarea id="technologies" rows="4" 
-                    placeholder="List your technologies (e.g., React, Node.js, Docker)"></textarea>
+                <textarea id="technologies" rows="4" placeholder="List your technologies (e.g., React, Node.js, Docker)"></textarea>
                 <div id="detectedTechIcons" class="tech-stack"></div>
             </div>
 
             <div class="form-group">
                 <label>Environment Setup</label>
-                <textarea id="envSetup" rows="6" 
-                    placeholder="DATABASE_URL=postgresql://localhost:5432/mydb&#10;API_KEY=your_api_key&#10;PORT=3000"></textarea>
+                <textarea id="envSetup" rows="6" placeholder="DATABASE_URL=postgresql://localhost:5432/mydb&#10;API_KEY=your_api_key&#10;PORT=3000"></textarea>
             </div>
         </section>
 
@@ -662,10 +647,6 @@
                     <p>Upload project files to generate structure</p>
                     <input type="file" id="projectFiles" webkitdirectory directory multiple style="display: none">
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label>Directory Tree</label>
                 <div id="directoryTree" class="directory-tree"></div>
             </div>
         </section>
@@ -679,32 +660,32 @@
 
             <div class="form-group">
                 <label>Deployment Platform</label>
-                <div class="deployment-grid">
-                    <div class="deploy-option" data-platform="standard">
+                <div class="option-grid">
+                    <div class="option-item" data-platform="standard">
                         <i class="fas fa-server"></i>
                         <h4>Standard</h4>
                     </div>
-                    <div class="deploy-option" data-platform="docker">
+                    <div class="option-item" data-platform="docker">
                         <i class="fab fa-docker"></i>
                         <h4>Docker</h4>
                     </div>
-                    <div class="deploy-option" data-platform="vercel">
+                    <div class="option-item" data-platform="vercel">
                         <i class="fas fa-bolt"></i>
                         <h4>Vercel</h4>
                     </div>
-                    <div class="deploy-option" data-platform="netlify">
+                    <div class="option-item" data-platform="netlify">
                         <i class="fab fa-netlify"></i>
                         <h4>Netlify</h4>
                     </div>
-                    <div class="deploy-option" data-platform="heroku">
+                    <div class="option-item" data-platform="heroku">
                         <i class="fas fa-cloud"></i>
                         <h4>Heroku</h4>
                     </div>
-                    <div class="deploy-option" data-platform="digitalocean">
+                    <div class="option-item" data-platform="digitalocean">
                         <i class="fab fa-digital-ocean"></i>
                         <h4>DigitalOcean</h4>
                     </div>
-                    <div class="deploy-option" data-platform="makefile">
+                    <div class="option-item" data-platform="makefile">
                         <i class="fas fa-file-code"></i>
                         <h4>Makefile</h4>
                     </div>
@@ -742,7 +723,7 @@
 
             <div class="form-group">
                 <label>Support Links</label>
-                <input type="text" id="buymeacoffee" placeholder="Buy Me a Coffee URL" class="mb-2">
+                <input type="text" id="buymeacoffee" placeholder="Buy Me a Coffee URL">
                 <input type="text" id="patreon" placeholder="Patreon URL">
             </div>
         </section>
@@ -756,20 +737,20 @@
 
             <div class="form-group">
                 <label>Choose License</label>
-                <div class="deployment-grid">
-                    <div class="deploy-option license-option" data-license="mit">
+                <div class="option-grid">
+                    <div class="option-item" data-license="mit">
                         <i class="fas fa-file-contract"></i>
                         <h4>MIT License</h4>
                     </div>
-                    <div class="deploy-option license-option" data-license="apache">
+                    <div class="option-item" data-license="apache">
                         <i class="fas fa-file-contract"></i>
                         <h4>Apache 2.0</h4>
                     </div>
-                    <div class="deploy-option license-option" data-license="gpl">
+                    <div class="option-item" data-license="gpl">
                         <i class="fas fa-file-contract"></i>
                         <h4>GNU GPL v3</h4>
                     </div>
-                    <div class="deploy-option license-option" data-license="bsd">
+                    <div class="option-item" data-license="bsd">
                         <i class="fas fa-file-contract"></i>
                         <h4>BSD</h4>
                     </div>
@@ -790,7 +771,7 @@
             </div>
 
             <div id="changelogEntries">
-                <div class="changelog-entry">
+                <div class="changelog-entry form-group">
                     <div class="changelog-header">
                         <input type="text" class="version-tag" placeholder="v1.0.0">
                         <input type="date" class="date">
@@ -813,36 +794,32 @@
 
             <div class="form-group">
                 <label>Contributors</label>
-                <textarea id="contributors" rows="4" 
-                    placeholder="- [Name](github-profile) - Role/Contribution"></textarea>
+                <textarea id="contributors" rows="4" placeholder="- [Name](github-profile) - Role/Contribution"></textarea>
             </div>
 
             <div class="form-group">
                 <label>Special Thanks</label>
-                <textarea id="acknowledgments" rows="4" 
-                    placeholder="Special thanks to..."></textarea>
+                <textarea id="acknowledgments" rows="4" placeholder="Special thanks to..."></textarea>
             </div>
+        </section>
+
+        <!-- Preview Section -->
+        <section id="preview" class="section preview-section">
+            <div class="section-header">
+                <i class="fas fa-eye"></i>
+                <h2>Documentation Preview</h2>
+            </div>
+            <div id="previewContent" class="preview-content"></div>
         </section>
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <button class="btn btn-secondary" onclick="previewDocumentation()">
-                <i class="fas fa-eye"></i> Preview
+            <button class="btn btn-secondary" onclick="togglePreview()">
+                <i class="fas fa-eye"></i> Toggle Preview
             </button>
             <button class="btn btn-primary" onclick="generateDocumentation()">
                 <i class="fas fa-download"></i> Generate README
             </button>
-        </div>
-
-        <!-- Preview Modal -->
-        <div id="previewModal" class="preview-modal">
-            <div class="preview-content">
-                <div class="preview-header">
-                    <h2>Documentation Preview</h2>
-                    <button class="btn btn-secondary" onclick="closePreview()">Close</button>
-                </div>
-                <div id="previewContent"></div>
-            </div>
         </div>
 
         <!-- Back to Top Button -->
@@ -881,35 +858,44 @@
             'bootstrap': 'fab fa-bootstrap',
             'wordpress': 'fab fa-wordpress',
             'npm': 'fab fa-npm',
-            'yarn': 'fab fa-yarn',
-            'android': 'fab fa-android',
-            'apple': 'fab fa-apple',
-            'linux': 'fab fa-linux',
-            'windows': 'fab fa-windows'
+            'yarn': 'fab fa-yarn'
         };
 
         // Deployment configurations
         const deploymentConfigs = {
             standard: {
-                template: `# Standard Installation\nnpm install\nnpm start`
+                template: `# Standard Installation
+npm install
+npm start`
             },
             docker: {
-                template: `# Build Docker Image\ndocker build -t your-app-name .\n\n# Run Container\ndocker run -d -p 3000:3000 your-app-name`
+                template: `# Build Docker Image
+docker build -t your-app-name .
+
+# Run Container
+docker run -d -p 3000:3000 your-app-name`
             },
             vercel: {
-                template: `# Deploy to Vercel\nvercel`
+                template: `# Deploy to Vercel
+vercel`
             },
             netlify: {
-                template: `# Deploy to Netlify\nnetlify deploy --prod`
+                template: `# Deploy to Netlify
+netlify deploy --prod`
             },
             heroku: {
-                template: `# Deploy to Heroku\ngit push heroku main`
+                template: `# Deploy to Heroku
+git push heroku main`
             },
             digitalocean: {
-                template: `# Deploy to DigitalOcean\ndoctl apps create --spec app.yaml`
+                template: `# Deploy to DigitalOcean
+doctl apps create --spec app.yaml`
             },
             makefile: {
-                template: `# Makefile Commands\nmake install\nmake build\nmake run`
+                template: `# Makefile Commands
+make install
+make build
+make run`
             }
         };
 
@@ -918,18 +904,23 @@
             mit: `MIT License\n\nCopyright (c) ${new Date().getFullYear()} [fullname]\n\nPermission is hereby granted...`,
             apache: `Apache License, Version 2.0\n\nLicensed under the Apache License...`,
             gpl: `GNU GENERAL PUBLIC LICENSE\nVersion 3, 29 June 2007...`,
-            bsd: `BSD 3-Clause License\n\nCopyright (c) ${new Date().getFullYear()} [fullname]\nAll rights reserved...`
+            bsd: `BSD 3-Clause License\n\nCopyright (c) ${new Date().getFullYear()} [fullname]...`
         };
 
-        // Event Listeners
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
             initializePage();
             loadSavedData();
         });
 
+        // Setup Event Listeners
         function setupEventListeners() {
-            // Navigation
+            // Mobile navigation
+            const navToggle = document.querySelector('.nav-toggle');
+            navToggle.addEventListener('click', toggleNavigation);
+
+            // Navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', handleNavigation);
             });
@@ -944,7 +935,7 @@
                 option.addEventListener('click', () => selectProjectType(option));
             });
 
-            // Deployment selection
+            // Deployment platform selection
             document.querySelectorAll('[data-platform]').forEach(option => {
                 option.addEventListener('click', () => selectDeployment(option));
             });
@@ -966,6 +957,12 @@
             window.addEventListener('scroll', handleScroll);
         }
 
+        // Mobile Navigation
+        function toggleNavigation() {
+            const navList = document.querySelector('.nav-list');
+            navList.classList.toggle('active');
+        }
+
         // Navigation handling
         function handleNavigation(event) {
             event.preventDefault();
@@ -974,6 +971,8 @@
             if (targetSection) {
                 targetSection.scrollIntoView({ behavior: 'smooth' });
             }
+            // Close mobile navigation if open
+            document.querySelector('.nav-list').classList.remove('active');
         }
 
         // File handling
@@ -1010,53 +1009,27 @@
             saveFormData();
         }
 
-        // Directory tree generation
-        function generateDirectoryTree(files) {
-            const tree = {};
-            files.forEach(file => {
-                const parts = file.webkitRelativePath.split('/');
-                let current = tree;
-                parts.forEach((part, index) => {
-                    if (index === parts.length - 1) {
-                        current[part] = null;
-                    } else {
-                        current[part] = current[part] || {};
-                        current = current[part];
-                    }
-                });
-            });
-            return tree;
+        // Update UI
+        function updateLogoPreview() {
+            const preview = document.getElementById('logoPreview');
+            preview.innerHTML = projectLogo ? 
+                `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px;">` : '';
         }
 
-        function formatDirectoryTree(tree, prefix = '') {
-            let result = '';
-            const entries = Object.entries(tree);
-            entries.forEach(([key, value], index) => {
-                const isLast = index === entries.length - 1;
-                const connector = isLast ? '└── ' : '├── ';
-                result += prefix + connector + key + '\n';
-                if (value !== null) {
-                    const newPrefix = prefix + (isLast ? '    ' : '│   ');
-                    result += formatDirectoryTree(value, newPrefix);
-                }
-            });
-            return result;
+        function updateScreenshotsPreview() {
+            const preview = document.getElementById('screenshotsPreview');
+            preview.innerHTML = screenshots.map((src, index) => `
+                <div class="image-preview">
+                    <img src="${src}" alt="Screenshot ${index + 1}">
+                    <button class="remove-image" onclick="removeScreenshot(${index})">×</button>
+                </div>
+            `).join('');
         }
 
-        // Technology detection
-        function detectTechnologies() {
-            const techInput = document.getElementById('technologies').value.toLowerCase();
-            const iconContainer = document.getElementById('detectedTechIcons');
-            iconContainer.innerHTML = '';
-
-            Object.entries(techIcons).forEach(([tech, iconClass]) => {
-                if (techInput.includes(tech)) {
-                    const icon = document.createElement('i');
-                    icon.className = `${iconClass} tech-icon`;
-                    icon.title = tech.charAt(0).toUpperCase() + tech.slice(1);
-                    iconContainer.appendChild(icon);
-                }
-            });
+        function removeScreenshot(index) {
+            screenshots.splice(index, 1);
+            updateScreenshotsPreview();
+            saveFormData();
         }
 
         // Selection handlers
@@ -1086,49 +1059,37 @@
             saveFormData();
         }
 
-        // Update UI
-        function updateLogoPreview() {
-            const preview = document.getElementById('logoPreview');
-            preview.innerHTML = projectLogo ? 
-                `<img src="${projectLogo}" alt="Project Logo" style="max-width: 200px;">` : '';
+        // Technology detection
+        function detectTechnologies() {
+            const techInput = document.getElementById('technologies').value.toLowerCase();
+            const iconContainer = document.getElementById('detectedTechIcons');
+            iconContainer.innerHTML = '';
+
+            Object.entries(techIcons).forEach(([tech, iconClass]) => {
+                if (techInput.includes(tech)) {
+                    const icon = document.createElement('i');
+                    icon.className = `${iconClass} tech-icon`;
+                    icon.title = tech.charAt(0).toUpperCase() + tech.slice(1);
+                    iconContainer.appendChild(icon);
+                }
+            });
         }
 
-        function updateScreenshotsPreview() {
-            const preview = document.getElementById('screenshotsPreview');
-            preview.innerHTML = screenshots.map((src, index) => `
-                <div class="screenshot-preview">
-                    <img src="${src}" alt="Screenshot ${index + 1}">
-                    <button class="remove-btn" onclick="removeScreenshot(${index})">×</button>
-                </div>
-            `).join('');
+        // Preview handling
+        function togglePreview() {
+            const previewSection = document.getElementById('preview');
+            const previewContent = document.getElementById('previewContent');
+            
+            if (previewSection.classList.contains('active')) {
+                previewSection.classList.remove('active');
+            } else {
+                previewContent.innerHTML = convertMarkdownToHTML(generateMarkdown());
+                previewSection.classList.add('active');
+                previewSection.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
-        function updateDeploymentConfig() {
-            const config = deploymentConfigs[selectedDeployMethod];
-            if (!config) return;
-
-            document.getElementById('deploymentConfig').innerHTML = `
-                <label>Configuration</label>
-                <textarea id="deployConfig" rows="6">${config.template}</textarea>
-            `;
-        }
-
-        // Changelog management
-        function addChangelogEntry() {
-            const entries = document.getElementById('changelogEntries');
-            const entry = document.createElement('div');
-            entry.className = 'changelog-entry';
-            entry.innerHTML = `
-                <div class="changelog-header">
-                    <input type="text" class="version-tag" placeholder="v1.0.0">
-                    <input type="date" class="date">
-                </div>
-                <textarea rows="4" placeholder="## Added\n- New feature\n## Changed\n- Updates"></textarea>
-            `;
-            entries.appendChild(entry);
-        }
-
-        // Documentation generation
+        // Document generation
         function generateDocumentation() {
             const markdown = generateMarkdown();
             downloadMarkdown(markdown);
@@ -1154,12 +1115,6 @@ ${screenshots.length ? `## Screenshots\n${screenshots.map((src, index) => `![Scr
 ## Technologies
 ${data.technologies}
 
-## Project Structure
-\`\`\`
-${document.getElementById('directoryTree').textContent}
-\`\`\`
-
-## Installation
 ${generateDeploymentSection()}
 
 ## Contact
@@ -1173,16 +1128,14 @@ ${document.getElementById('licenseText').value}
 [↑ Back to Top](#${data.title.toLowerCase().replace(/\s+/g, '-')})`;
         }
 
-        // Preview handling
-        function previewDocumentation() {
-            const preview = document.getElementById('previewModal');
-            const content = document.getElementById('previewContent');
-            preview.style.display = 'block';
-            content.innerHTML = convertMarkdownToHTML(generateMarkdown());
-        }
-
-        function closePreview() {
-            document.getElementById('previewModal').style.display = 'none';
+        function downloadMarkdown(markdown) {
+            const blob = new Blob([markdown], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'README.md';
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         // Utilities
@@ -1209,66 +1162,75 @@ ${document.getElementById('licenseText').value}
 
         function handleScroll() {
             const backToTop = document.querySelector('.back-to-top');
-            if (window.pageYOffset > 300) {
-                backToTop.classList.add('visible');
-            } else {
-                backToTop.classList.remove('visible');
-            }
-        }
-
-        // Save & Load
-        function saveFormData() {
-            const data = gatherFormData();
-            localStorage.setItem('docgenData', JSON.stringify(data));
-        }
-
-        function loadSavedData() {
-            const saved = localStorage.getItem('docgenData');
-            if (!saved) return;
-
-            const data = JSON.parse(saved);
-            restoreFormData(data);
+            backToTop.classList.toggle('visible', window.pageYOffset > 300);
         }
 
         function gatherFormData() {
             return {
-                title: document.getElementById('projectTitle').value,
-                description: document.getElementById('projectDescription').value,
+                title: document.getElementById('projectTitle').value || 'Project Title',
+                description: document.getElementById('projectDescription').value || 'Project description',
+                demoUrl: document.getElementById('demoUrl').value,
+                demoVideo: document.getElementById('demoVideo').value,
                 technologies: document.getElementById('technologies').value,
                 authorName: document.getElementById('authorName').value,
                 authorEmail: document.getElementById('authorEmail').value,
-                githubLink: document.getElementById('githubLink').value,
+                githubLink: document.getElementById('githubLink').value
+            };
+        }
+
+        function saveFormData() {
+            const data = {
+                ...gatherFormData(),
                 projectLogo,
                 screenshots,
                 selectedProjectType,
                 selectedLicense,
                 selectedDeployMethod
             };
+            localStorage.setItem('docgenData', JSON.stringify(data));
         }
 
-        function restoreFormData(data) {
-            Object.entries(data).forEach(([key, value]) => {
-                const element = document.getElementById(key);
-                if (element) element.value = value;
-            });
+        function loadSavedData() {
+            const saved = localStorage.getItem('docgenData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.entries(data).forEach(([key, value]) => {
+                    const element = document.getElementById(key);
+                    if (element) element.value = value;
+                });
 
-            if (data.projectLogo) {
-                projectLogo = data.projectLogo;
-                updateLogoPreview();
+                if (data.projectLogo) {
+                    projectLogo = data.projectLogo;
+                    updateLogoPreview();
+                }
+
+                if (data.screenshots) {
+                    screenshots = data.screenshots;
+                    updateScreenshotsPreview();
+                }
+
+                if (data.selectedProjectType) {
+                    const element = document.querySelector(`[data-type="${data.selectedProjectType}"]`);
+                    if (element) selectProjectType(element);
+                }
+
+                if (data.selectedLicense) {
+                    const element = document.querySelector(`[data-license="${data.selectedLicense}"]`);
+                    if (element) selectLicense(element);
+                }
+
+                if (data.selectedDeployMethod) {
+                    const element = document.querySelector(`[data-platform="${data.selectedDeployMethod}"]`);
+                    if (element) selectDeployment(element);
+                }
+
+                detectTechnologies();
             }
-
-            if (data.screenshots) {
-                screenshots = data.screenshots;
-                updateScreenshotsPreview();
-            }
-
-            detectTechnologies();
         }
 
-        // Initialize page
+        // Initialize the page
         function initializePage() {
             detectTechnologies();
-            updateDeploymentConfig();
             handleScroll();
         }
     </script>
