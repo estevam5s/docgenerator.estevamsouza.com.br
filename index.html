@@ -527,8 +527,275 @@
             </ul>
         </nav>
 
-        <!-- Sections continue with existing content -->
-        <!-- ... (previous sections remain the same) ... -->
+        <!-- Project Basics Section -->
+        <section id="basics" class="section">
+            <div class="section-header">
+                <i class="fas fa-home"></i>
+                <h2>Project Basics</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Project Type</label>
+                <div class="option-grid">
+                    <div class="option-item" data-type="website">
+                        <i class="fas fa-globe"></i>
+                        <h4>Website</h4>
+                    </div>
+                    <div class="option-item" data-type="api">
+                        <i class="fas fa-server"></i>
+                        <h4>API / Web Service</h4>
+                    </div>
+                    <div class="option-item" data-type="mobile">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Mobile App</h4>
+                    </div>
+                    <div class="option-item" data-type="desktop">
+                        <i class="fas fa-desktop"></i>
+                        <h4>Desktop App</h4>
+                    </div>
+                    <div class="option-item" data-type="library">
+                        <i class="fas fa-book"></i>
+                        <h4>Library / Framework</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Project Logo</label>
+                <div class="upload-area" onclick="document.getElementById('logoInput').click()">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Click to upload project logo</p>
+                    <input type="file" id="logoInput" accept="image/*" style="display: none">
+                </div>
+                <div id="logoPreview"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Project Title</label>
+                <input type="text" id="projectTitle" placeholder="Your awesome project name">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="projectDescription" rows="4" placeholder="Describe your project..."></textarea>
+            </div>
+        </section>
+
+        <!-- Demo Section -->
+        <section id="demo" class="section">
+            <div class="section-header">
+                <i class="fas fa-play-circle"></i>
+                <h2>Demo & Screenshots</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Demo URL</label>
+                <input type="text" id="demoUrl" placeholder="https://your-project-demo.com">
+            </div>
+
+            <div class="form-group">
+                <label>Demo Video URL</label>
+                <input type="text" id="demoVideo" placeholder="https://youtube.com/watch?v=...">
+            </div>
+
+            <div class="form-group">
+                <label>Project Screenshots</label>
+                <div class="upload-area" onclick="document.getElementById('screenshotsInput').click()">
+                    <i class="fas fa-images"></i>
+                    <p>Click to upload screenshots</p>
+                    <input type="file" id="screenshotsInput" accept="image/*" multiple style="display: none">
+                </div>
+                <div id="screenshotsPreview" class="image-preview-grid"></div>
+            </div>
+        </section>
+
+        <!-- Technologies Section -->
+        <section id="tech" class="section">
+            <div class="section-header">
+                <i class="fas fa-code"></i>
+                <h2>Technologies</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Technologies Used</label>
+                <textarea id="technologies" rows="4" placeholder="List your technologies (e.g., React, Node.js, Docker)"></textarea>
+                <div id="detectedTechIcons" class="tech-stack"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Environment Setup</label>
+                <textarea id="envSetup" rows="6" placeholder="DATABASE_URL=postgresql://localhost:5432/mydb&#10;API_KEY=your_api_key&#10;PORT=3000"></textarea>
+            </div>
+        </section>
+
+        <!-- Structure Section -->
+        <section id="structure" class="section">
+            <div class="section-header">
+                <i class="fas fa-folder-tree"></i>
+                <h2>Project Structure</h2>
+            </div>
+
+            <div class="form-group">
+                <div class="upload-area" onclick="document.getElementById('projectFiles').click()">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Upload project files to generate structure</p>
+                    <input type="file" id="projectFiles" webkitdirectory directory multiple style="display: none">
+                </div>
+                <div id="directoryTree" class="directory-tree"></div>
+            </div>
+        </section>
+
+        <!-- Deployment Section -->
+        <section id="deploy" class="section">
+            <div class="section-header">
+                <i class="fas fa-rocket"></i>
+                <h2>Deployment</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Deployment Platform</label>
+                <div class="option-grid">
+                    <div class="option-item" data-platform="standard">
+                        <i class="fas fa-server"></i>
+                        <h4>Standard</h4>
+                    </div>
+                    <div class="option-item" data-platform="docker">
+                        <i class="fab fa-docker"></i>
+                        <h4>Docker</h4>
+                    </div>
+                    <div class="option-item" data-platform="vercel">
+                        <i class="fas fa-bolt"></i>
+                        <h4>Vercel</h4>
+                    </div>
+                    <div class="option-item" data-platform="netlify">
+                        <i class="fab fa-netlify"></i>
+                        <h4>Netlify</h4>
+                    </div>
+                    <div class="option-item" data-platform="heroku">
+                        <i class="fas fa-cloud"></i>
+                        <h4>Heroku</h4>
+                    </div>
+                    <div class="option-item" data-platform="digitalocean">
+                        <i class="fab fa-digital-ocean"></i>
+                        <h4>DigitalOcean</h4>
+                    </div>
+                    <div class="option-item" data-platform="makefile">
+                        <i class="fas fa-file-code"></i>
+                        <h4>Makefile</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div id="deploymentConfig" class="form-group">
+                <!-- Deployment configuration will be inserted here -->
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="section-header">
+                <i class="fas fa-envelope"></i>
+                <h2>Contact & Support</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Author Name</label>
+                <input type="text" id="authorName" placeholder="Your name">
+            </div>
+
+            <div class="form-group">
+                <label>Contact Email</label>
+                <input type="email" id="authorEmail" placeholder="your@email.com">
+            </div>
+
+            <div class="form-group">
+                <label>Social Links</label>
+                <input type="text" id="githubLink" placeholder="GitHub Profile URL" class="mb-2">
+                <input type="text" id="linkedinLink" placeholder="LinkedIn Profile URL" class="mb-2">
+                <input type="text" id="portfolioLink" placeholder="Portfolio Website URL">
+            </div>
+
+            <div class="form-group">
+                <label>Support Links</label>
+                <input type="text" id="buymeacoffee" placeholder="Buy Me a Coffee URL">
+                <input type="text" id="patreon" placeholder="Patreon URL">
+            </div>
+        </section>
+
+        <!-- License Section -->
+        <section id="license" class="section">
+            <div class="section-header">
+                <i class="fas fa-gavel"></i>
+                <h2>License</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Choose License</label>
+                <div class="option-grid">
+                    <div class="option-item" data-license="mit">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>MIT License</h4>
+                    </div>
+                    <div class="option-item" data-license="apache">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>Apache 2.0</h4>
+                    </div>
+                    <div class="option-item" data-license="gpl">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>GNU GPL v3</h4>
+                    </div>
+                    <div class="option-item" data-license="bsd">
+                        <i class="fas fa-file-contract"></i>
+                        <h4>BSD</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>License Text</label>
+                <textarea id="licenseText" rows="8" readonly></textarea>
+            </div>
+        </section>
+
+        <!-- Changelog Section -->
+        <section id="changelog" class="section">
+            <div class="section-header">
+                <i class="fas fa-history"></i>
+                <h2>Changelog</h2>
+            </div>
+
+            <div id="changelogEntries">
+                <div class="changelog-entry form-group">
+                    <div class="changelog-header">
+                        <input type="text" class="version-tag" placeholder="v1.0.0">
+                        <input type="date" class="date">
+                    </div>
+                    <textarea rows="4" placeholder="## Added&#10;- Initial release&#10;## Changed&#10;- Updated dependencies"></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="addChangelogEntry()">
+                <i class="fas fa-plus"></i> Add Version
+            </button>
+        </section>
+
+        <!-- Credits Section -->
+        <section id="credits" class="section">
+            <div class="section-header">
+                <i class="fas fa-award"></i>
+                <h2>Credits & Contributors</h2>
+            </div>
+
+            <div class="form-group">
+                <label>Contributors</label>
+                <textarea id="contributors" rows="4" placeholder="- [Name](github-profile) - Role/Contribution"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Special Thanks</label>
+                <textarea id="acknowledgments" rows="4" placeholder="Special thanks to..."></textarea>
+            </div>
+        </section>
 
         <!-- Preview Section -->
         <section id="preview" class="section preview-section">
