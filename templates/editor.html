@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocGen - Editor de Documentação</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/highlight.js/styles/github.min.css') }}">
+</head>
+<body class="theme-{{ project.get('theme', 'default') }}">
+    <div class="editor-container">
+        <!-- Barra lateral com navegação entre seções -->
+        <div class="sidebar">
+            <div class="logo-small">DocGen</div>
+            
+            <nav class="section-nav">
+                <ul>
+                    {% for section_id, section in template.items() %}
+                    <li {% if section_id == current_section %}class="active"{% endif %}>
+                        <a href="{{ url_for('editor', section=section_id) }}">
+                            {{ section.title }}
+                            {% if section_id in project.sections %}
+                            <span class="section-status complete">✓</span>
+                            {% else %}
+                            <span class="section-status incomplete">○</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+            
+            <div class="theme-selector">
+                <label for="theme-select">Tema:</label>
+                <select id="theme-select" onchange="changeTheme(this.value)">
+                    <option value="default" {% if project.get('theme') == 'default' %}selected{% endif %}>Padrão</option>
+                    <option value="dark" {% if project.get('theme') == 'dark' %}selected{% endif %}>Escuro</option>
+                    <option value="light" {% if project.get('theme') == 'light' %}selected{% endif %}>Claro</option>
+                    <option value="blue" {% if project.get('theme') == 'blue' %}selected{% endif %}>Azul</option>
+                    <option value="green" {% if project.get('theme') == 'green' %}selected{% endif %}>Verde</option>
+                </select>
+            </div>
+            
+            <div class="export-actions">
+                <button id="export-btn" class="btn btn-primary">Exportar README.md</button>
+                <button id="preview-btn" class="btn btn-secondary">Visualizar</button>
+            </div>
+        </div>
+        
+        <!-- Conteúdo principal dividido em dois painéis -->
+        <div class="main-content">
+            <!-- Painel de edição (formulário) -->
+            <div class="edit-panel">
+                <h2>{{ template[current_section].title }}</h2>
+                
+                <form id="section-form" data-section="{{ current_section }}">
+                    {% for field in template[current_section].fields %}
+                    <div class="form-group 
+                        {% if field.get('conditional') %}conditional-field{% endif %}"
+                        {% if field.get('conditional') %}
+                        data-condition-field="{{ field['conditional']['field'] }}"
+                        data-condition-value="{{ field['conditional']['value'] }}"
+                        {% endif %}
+                    >
+                        <label for="{{ field.id }}">{{ field.label }}</label>
+                        
+                        {% if field.type == 'text' %}
+                        <input type="text" 
+                               id="{{ field.id }}" 
+                               name="{{ field.id }}" 
+                               placeholder="{{ field.placeholder }}"
+                               {% if field.required %}required{% endif %}
+                               value="{{ project.sections.get(current_section, {}).get(field.id, '') }}">
+                        
+                        {% elif field.type == 'textarea' %}
+                        <textarea id="{{ field.id }}"
+                                  name="{{ field.id }}"
+                                  placeholder="{{ field.placeholder }}"
+                                  rows="5"
+                                  {% if field.required %}required{% endif %}>{{ project.sections.get(current_section, {}).get(field.id, '') }}</textarea>
+                        
+                        {% elif field.type == 'select' %}
+                        <select id="{{ field.id }}" 
+                                name="{{ field.id }}"
+                                {% if field.required %}required{% endif %}>
+                            <option value="">Selecione...</option>
+                            {% for option in field.options %}
+                            <option value="{{ option }}" 
+                                {% if project.sections.get(current_section, {}).get(field.id) == option %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        
+                        {% elif field.type == 'radio' %}
+                        <div class="radio-group">
+                            {% for option in field.options %}
+                            <div class="radio-option">
+                                <input type="radio" 
+                                       id="{{ field.id }}_{{ option }}" 
+                                       name="{{ field.id }}" 
+                                       value="{{ option }}"
+                                       {% if project.sections.get(current_section, {}).get(field.id) == option %}checked{% endif %}
+                                       {% if field.required and loop.first and not project.sections.get(current_section, {}).get(field.id) %}checked{% endif %}>
+                                <label for="{{ field.id }}_{{ option }}">{{ option }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        {% elif field.type == 'checkbox' %}
+                        <div class="checkbox-group">
+                            {% for option in field.options %}
+                            <div class="checkbox-option">
+                                <input type="checkbox" 
+                                       id="{{ field.id }}_{{ option }}" 
+                                       name="{{ field.id }}" 
+                                       value="{{ option }}"
+                                       {% if option in project.sections.get(current_section, {}).get(field.id, []) %}checked{% endif %}>
+                                <label for="{{ field.id }}_{{ option }}">{{ option }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        {% elif field.type == 'file' %}
+                        <div class="file-upload">
+                            <input type="file" 
+                                   id="{{ field.id }}"
+                                   name="{{ field.id }}"
+                                   {% if field.accept %}accept="{{ field.accept }}"{% endif %}>
+                            <label for="{{ field.id }}" class="file-label">Escolher arquivo</label>
+                            <span class="file-name">Nenhum arquivo selecionado</span>
+                        </div>
+                        
+                        {% elif field.type == 'tags' %}
+                        <div class="tags-input-container">
+                            <input type="text" 
+                                   id="{{ field.id }}_input" 
+                                   placeholder="{{ field.placeholder }}"
+                                   class="tags-input">
+                            <input type="hidden" 
+                                   id="{{ field.id }}" 
+                                   name="{{ field.id }}"
+                                   value="{{ project.sections.get(current_section, {}).get(field.id, '') }}">
+                            <div class="tags-container" id="{{ field.id }}_tags"></div>
+                        </div>
+                        
+                        {% endif %}
+                        
+                        {% if field.help_text %}
+                        <div class="field-help">{{ field.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Salvar e Continuar</button>
+                        <button type="button" class="btn btn-outline preview-toggle">Ver Preview</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Painel de preview -->
+            <div class="preview-panel">
+                <div class="preview-header">
+                    <h2>Preview em Tempo Real</h2>
+                    <div class="preview-actions">
+                        <button class="btn btn-outline preview-toggle">Editar</button>
+                    </div>
+                </div>
+                
+                <div class="markdown-preview" id="markdown-preview">
+                    <!-- O preview do markdown será carregado aqui via JavaScript -->
+                    <div class="loading-preview">
+                        <p>Preencha os campos para visualizar o preview...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de exportação -->
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Exportar README.md</h2>
+            
+            <div class="export-options">
+                <div class="form-group">
+                    <label for="filename">Nome do arquivo:</label>
+                    <input type="text" id="filename" value="README.md">
+                </div>
+                
+                <div class="markdown-content">
+                    <pre><code id="export-markdown"></code></pre>
+                </div>
+                
+                <div class="export-actions">
+                    <button id="copy-markdown" class="btn btn-secondary">Copiar</button>
+                    <button id="download-markdown" class="btn btn-primary">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='vendor/marked.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/highlight.js/highlight.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/preview.js') }}"></script>
+    <script>
+        // Inicialização do editor
+        document.addEventListener('DOMContentLoaded', function() {
+            initEditor('{{ current_section }}');
+            
+            // Carrega o preview inicial se houver dados
+            updatePreview();
+        });
+        
+        function changeTheme(theme) {
+            document.body.className = '';
+            document.body.classList.add('theme-' + theme);
+            
+            // Salva a preferência via AJAX
+            fetch('/update_theme', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'theme=' + theme
+            });
+        }
+    </script>
+</body>
+</html>

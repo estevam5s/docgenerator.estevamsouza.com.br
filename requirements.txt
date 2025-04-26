@@ -1,0 +1,13 @@
+Flask
+Flask-WTF
+WTForms
+Markdown
+pygments
+python-dotenv
+Flask-Assets
+cssmin
+jsmin
+Flask-Cors
+Pillow
+PyYAML
+gunicorn

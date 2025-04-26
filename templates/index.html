@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocGen - Gerador de Documentação Profissional</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+</head>
+<body class="theme-default">
+    <div class="welcome-container">
+        <div class="welcome-content">
+            <div class="logo-container">
+                <div class="logo">DocGen</div>
+                <div class="logo-subtitle">Criação de Documentação Profissional</div>
+            </div>
+            
+            <div class="welcome-text">
+                <h1>Bem-vindo ao DocGen</h1>
+                <p>Crie documentações profissionais para seus projetos no GitHub com facilidade e elegância.</p>
+                <p>Selecione o tipo de projeto para começar:</p>
+            </div>
+            
+            <div class="project-type-selection">
+                <form action="{{ url_for('setup_project') }}" method="post">
+                    <div class="project-types">
+                        {% for type_id, type_name in project_types.items() %}
+                        <div class="project-type-card">
+                            <input type="radio" name="project_type" id="{{ type_id }}" value="{{ type_id }}" {% if loop.first %}checked{% endif %}>
+                            <label for="{{ type_id }}">
+                                <div class="type-icon type-{{ type_id }}"></div>
+                                <span class="type-name">{{ type_name }}</span>
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button type="submit" class="btn btn-primary">Continuar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="features-preview">
+                <h2>Recursos Disponíveis</h2>
+                <ul>
+                    <li><span class="feature-icon">✏️</span> Edição e visualização em tempo real</li>
+                    <li><span class="feature-icon">🔍</span> Análise automática da estrutura do projeto</li>
+                    <li><span class="feature-icon">📊</span> Geração de badges e ícones de tecnologias</li>
+                    <li><span class="feature-icon">🎨</span> Temas e personalizações visuais</li>
+                    <li><span class="feature-icon">📁</span> Exportação direta para Markdown</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 DocGen - Sistema de Geração de Documentação Profissional</p>
+    </footer>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
