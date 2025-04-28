@@ -11,3 +11,4 @@ Flask-Cors
 Pillow
 PyYAML
 gunicorn
+flask_session

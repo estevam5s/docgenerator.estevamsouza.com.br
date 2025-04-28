@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplos de Documentação - DocGen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+</head>
+<body class="theme-default">
+    <header class="main-header">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo">DocGen</div>
+                <div class="logo-subtitle">Documentação Profissional</div>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Início</a></li>
+                    <li><a href="{{ url_for('view_examples') }}" class="active">Exemplos</a></li>
+                    <li><a href="{{ url_for('index') }}#about">Sobre</a></li>
+                    <li><a href="{{ url_for('index') }}#how-it-works">Como Funciona</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="examples-header">
+            <h1>Exemplos de Documentação</h1>
+            <p class="subtitle">Veja como sua documentação pode ficar com o DocGen</p>
+        </div>
+
+        <div class="examples-grid">
+            {% for example in examples %}
+            <div class="example-card">
+                <div class="example-image">
+                    <img src="{{ url_for('static', filename='img/' + example.image) }}" alt="{{ example.name }}" onerror="this.src='{{ url_for('static', filename='img/placeholder.png') }}'; this.onerror='';">
+                </div>
+                <div class="example-content">
+                    <h2>{{ example.name }}</h2>
+                    <span class="example-tag">{{ example.type }}</span>
+                    <p>{{ example.description }}</p>
+                    <div class="example-actions">
+                        <a href="{{ example.demo_link }}" class="btn btn-primary">Ver Demonstração</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="no-examples" {% if examples %}style="display: none;"{% endif %}>
+            <div class="empty-state">
+                <div class="empty-icon">📄</div>
+                <h2>Sem exemplos disponíveis</h2>
+                <p>No momento, não temos exemplos para mostrar. Por favor, volte mais tarde.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Voltar para a Página Inicial</a>
+            </div>
+        </div>
+
+        <div class="examples-cta">
+            <h2>Pronto para criar sua própria documentação?</h2>
+            <p>Com o DocGen, você pode criar documentações tão impressionantes quanto estas em apenas alguns minutos.</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-large">Começar Agora</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">DocGen</div>
+                    <p>Sistema de Geração de Documentação Profissional</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>DocGen</h4>
+                        <ul>
+                            <li><a href="{{ url_for('index') }}">Início</a></li>
+                            <li><a href="{{ url_for('view_examples') }}">Exemplos</a></li>
+                            <li><a href="{{ url_for('index') }}#about">Sobre</a></li>
+                            <li><a href="{{ url_for('index') }}#how-it-works">Como Funciona</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Recursos</h4>
+                        <ul>
+                            <li><a href="#">Guia de Uso</a></li>
+                            <li><a href="#">Melhores Práticas</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ current_year }} {{ get_app_name() }} - v{{ get_version() }}</p>
+                <p>Feito com ❤️ para a comunidade de desenvolvedores</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

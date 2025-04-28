@@ -3,62 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DocGen - Ferramenta de geração de documentação profissional para projetos de software. Crie READMEs impressionantes para GitHub com facilidade.">
+    <meta name="keywords" content="documentação, markdown, github, readme, projeto, software, documentação técnica">
+    <meta name="author" content="DocGen">
     <title>DocGen - Gerador de Documentação Profissional</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/themes.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
 </head>
 <body class="theme-default">
-    <div class="welcome-container">
-        <div class="welcome-content">
+    <header class="main-header">
+        <div class="container">
             <div class="logo-container">
                 <div class="logo">DocGen</div>
-                <div class="logo-subtitle">Criação de Documentação Profissional</div>
+                <div class="logo-subtitle">Documentação Profissional</div>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}" class="active">Início</a></li>
+                    <li><a href="{{ url_for('view_examples') }}">Exemplos</a></li>
+                    <li><a href="#about">Sobre</a></li>
+                    <li><a href="#how-it-works">Como Funciona</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="welcome-container">
+        <div class="welcome-content">
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h1>Crie Documentações Profissionais com Facilidade</h1>
+                    <p class="lead">Transforme seu projeto em uma documentação atraente, completa e profissional em minutos.</p>
+                    <p class="highlight">Ideal para desenvolvedores, equipes e estudantes que desejam uma documentação de qualidade para seus projetos.</p>
+                </div>
+                <div class="hero-image">
+                    <img src="{{ url_for('static', filename='img/docgen-preview.png') }}" alt="Prévia do DocGen" onerror="this.src='{{ url_for('static', filename='img/placeholder.png') }}'; this.onerror='';">
+                </div>
             </div>
             
             <div class="welcome-text">
-                <h1>Bem-vindo ao DocGen</h1>
-                <p>Crie documentações profissionais para seus projetos no GitHub com facilidade e elegância.</p>
-                <p>Selecione o tipo de projeto para começar:</p>
+                <h2>Bem-vindo ao DocGen</h2>
+                <p>Crie documentações profissionais para seus projetos no GitHub com facilidade e elegância. Nossa ferramenta analisa seu código e gera um README completo, com todas as informações essenciais que um bom projeto deve ter.</p>
+                <p>Selecione o tipo de projeto para começar ou explore nossos <a href="{{ url_for('view_examples') }}">exemplos de documentação</a> para ver como ficará o resultado final.</p>
             </div>
             
             <div class="project-type-selection">
+                <h2>Escolha seu Tipo de Projeto</h2>
                 <form action="{{ url_for('setup_project') }}" method="post">
                     <div class="project-types">
                         {% for type_id, type_name in project_types.items() %}
                         <div class="project-type-card">
                             <input type="radio" name="project_type" id="{{ type_id }}" value="{{ type_id }}" {% if loop.first %}checked{% endif %}>
                             <label for="{{ type_id }}">
-                                <div class="type-icon type-{{ type_id }}"></div>
+                                <div class="type-icon">
+                                    <img src="{{ url_for('static', filename='img/icons/' + type_id + '.svg') }}" alt="{{ type_name }}" onerror="this.style.display='none'">
+                                </div>
                                 <span class="type-name">{{ type_name }}</span>
+                                <p class="type-description">{{ get_project_description(type_id) }}</p>
                             </label>
                         </div>
                         {% endfor %}
                     </div>
                     
+                    <div class="example-option">
+                        <label>
+                            <input type="checkbox" name="use_example" value="true"> 
+                            Começar com um exemplo pré-preenchido
+                        </label>
+                        <div class="tooltip">
+                            <span class="tooltip-icon">?</span>
+                            <span class="tooltip-text">Inicializa o projeto com dados de exemplo para facilitar o entendimento do fluxo.</span>
+                        </div>
+                    </div>
+                    
                     <div class="action-buttons">
-                        <button type="submit" class="btn btn-primary">Continuar</button>
+                        <button type="submit" class="btn btn-primary">Começar Agora</button>
                     </div>
                 </form>
             </div>
             
+            <section id="how-it-works" class="how-it-works">
+                <h2>Como Funciona</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Selecione o Tipo</h3>
+                            <p>Escolha o tipo de projeto que melhor se adequa ao seu caso (backend, frontend, mobile, etc).</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Preencha os Detalhes</h3>
+                            <p>Adicione informações sobre seu projeto, tecnologias utilizadas e funcionalidades principais.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Faça Upload da Estrutura</h3>
+                            <p>Opcionalmente, faça upload de um arquivo ZIP com a estrutura do seu projeto para análise automática.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Gere e Personalize</h3>
+                            <p>Visualize a documentação gerada em tempo real e ajuste conforme necessário.</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h3>Exporte e Utilize</h3>
+                            <p>Exporte o arquivo Markdown finalizado e adicione-o ao seu repositório GitHub.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
             <div class="features-preview">
                 <h2>Recursos Disponíveis</h2>
-                <ul>
-                    <li><span class="feature-icon">✏️</span> Edição e visualização em tempo real</li>
-                    <li><span class="feature-icon">🔍</span> Análise automática da estrutura do projeto</li>
-                    <li><span class="feature-icon">📊</span> Geração de badges e ícones de tecnologias</li>
-                    <li><span class="feature-icon">🎨</span> Temas e personalizações visuais</li>
-                    <li><span class="feature-icon">📁</span> Exportação direta para Markdown</li>
-                </ul>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">✏️</span>
+                        <h3>Editor em Tempo Real</h3>
+                        <p>Visualize as alterações no seu documento enquanto edita, com preview em Markdown e HTML.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🔍</span>
+                        <h3>Análise de Estrutura</h3>
+                        <p>Upload de ZIP com seu projeto para análise automática da estrutura de arquivos e dependências.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">📊</span>
+                        <h3>Badges e Ícones</h3>
+                        <p>Gere automaticamente badges para licenças, status de build, versões e tecnologias utilizadas.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🎨</span>
+                        <h3>Temas Personalizáveis</h3>
+                        <p>Escolha entre diversos temas visuais ou personalize o estilo da sua documentação.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">📁</span>
+                        <h3>Exportação Markdown</h3>
+                        <p>Exporte a documentação final em formato Markdown pronto para uso no GitHub.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🔄</span>
+                        <h3>Templates Específicos</h3>
+                        <p>Templates otimizados para cada tipo de projeto, com seções e estruturas relevantes.</p>
+                    </div>
+                </div>
             </div>
+            
+            <section id="about" class="about-section">
+                <h2>Sobre o DocGen</h2>
+                <div class="about-content">
+                    <p>O DocGen foi desenvolvido para resolver um problema comum entre desenvolvedores: a criação de documentação de qualidade para projetos de software. Muitos projetos excelentes são subvalorizados devido à falta de uma documentação clara e profissional.</p>
+                    <p>Nossa ferramenta visa simplificar esse processo, fornecendo um sistema guiado para criar READMEs impressionantes que destacam os pontos fortes do seu projeto e facilitam sua adoção por outros desenvolvedores.</p>
+                    <p>Versão atual: <strong>{{ get_version() }}</strong></p>
+                </div>
+            </section>
+            
+            <section class="testimonials">
+                <h2>O que Dizem Nossos Usuários</h2>
+                <div class="testimonial-carousel">
+                    <div class="testimonial">
+                        <p class="quote">"O DocGen transformou completamente a maneira como documentamos nossos projetos. Em minutos, conseguimos gerar uma documentação profissional que antes levaria horas."</p>
+                        <p class="author">— Maria Silva, Desenvolvedora Full Stack</p>
+                    </div>
+                    <div class="testimonial">
+                        <p class="quote">"Como professor de desenvolvimento de software, recomendo o DocGen para todos os meus alunos. É uma ferramenta incrível para ensinar boas práticas de documentação."</p>
+                        <p class="author">— Prof. Carlos Oliveira, Universidade Tecnológica</p>
+                    </div>
+                    <div class="testimonial">
+                        <p class="quote">"Nossos projetos de código aberto receberam muito mais contribuições depois que começamos a usar o DocGen para criar READMEs padronizados e informativos."</p>
+                        <p class="author">— João Pereira, Líder de Projetos Open Source</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <div class="cta-section">
+        <div class="container">
+            <h2>Pronto para Transformar sua Documentação?</h2>
+            <p>Crie READMEs profissionais e impressionantes em minutos com o DocGen.</p>
+            <a href="#" class="btn btn-primary btn-large" onclick="scrollToProjectSelection(); return false;">Começar Agora</a>
         </div>
     </div>
     
     <footer>
-        <p>&copy; 2025 DocGen - Sistema de Geração de Documentação Profissional</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <div class="footer-logo">DocGen</div>
+                    <p>Sistema de Geração de Documentação Profissional</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>DocGen</h4>
+                        <ul>
+                            <li><a href="{{ url_for('index') }}">Início</a></li>
+                            <li><a href="{{ url_for('view_examples') }}">Exemplos</a></li>
+                            <li><a href="#about">Sobre</a></li>
+                            <li><a href="#how-it-works">Como Funciona</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Recursos</h4>
+                        <ul>
+                            <li><a href="#">Guia de Uso</a></li>
+                            <li><a href="#">Melhores Práticas</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ current_year }} {{ get_app_name() }} - v{{ get_version() }}</p>
+                <p>Feito com ❤️ para a comunidade de desenvolvedores</p>
+            </div>
+        </div>
     </footer>
     
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+        function scrollToProjectSelection() {
+            const projectSelection = document.querySelector('.project-type-selection');
+            if (projectSelection) {
+                projectSelection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Inicializar carrossel de depoimentos (exemplo simples)
+        let currentTestimonial = 0;
+        const testimonials = document.querySelectorAll('.testimonial');
+        
+        function showTestimonial(index) {
+            testimonials.forEach((testimonial, i) => {
+                testimonial.style.display = i === index ? 'block' : 'none';
+            });
+        }
+        
+        function nextTestimonial() {
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            showTestimonial(currentTestimonial);
+        }
+        
+        // Inicializar carrossel
+        showTestimonial(0);
+        // Alternar testemunhos a cada 8 segundos
+        setInterval(nextTestimonial, 8000);
+    </script>
 </body>
 </html>
